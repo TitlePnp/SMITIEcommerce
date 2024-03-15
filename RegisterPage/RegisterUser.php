@@ -10,8 +10,8 @@
         $email = "";
     }
 
-    $stmt = $connectDB->prepare("INSERT INTO `customer`(`CusID`, `CusFName`, `CusLName`, `Sex`, `Tel`, `Address`, `Role`) VALUES 
-    ('[value-1]','','','','','','User')");
+    $stmt = $connectDB->prepare("INSERT INTO `customer`(`CusID`, `CusFName`, `CusLName`, `Sex`, `Tel`, `Address`) VALUES 
+    ('[value-1]','','','','','')");
     $stmt->execute();
 
     $sql = "SELECT CusID FROM `customer` ORDER BY CusID DESC LIMIT 1";
