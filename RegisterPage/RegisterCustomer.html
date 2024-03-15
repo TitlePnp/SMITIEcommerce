@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Register Customer</title>
+  <!-- <link rel="stylesheet" type="text/css" href="RegisterCustomer.css" /> -->
+  <link rel="stylesheet" type="text/css" href="RegisterCustomer.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+  <!-- <div class="image-banner">
+
+  </div> -->
+  <div class="contentwrapper">
+    <div class="leftside">
+      <h1>SMITI SHOP</h1>
+      <img src="../Pictures/Banner.png" alt="Banner" />
+    </div>
+    <div class="rightside">
+      <h1>Sign up</h1>
+      <form method="POST" action="./RegisterUser.php">
+        <div class="inputField">
+          <input type="text" name="username" placeholder="Username" required />
+          <span id="usrnameError" style="color: red; display: none;">Invalid user format</span>
+        </div>
+
+        <div class="inputField">
+          <input type="text" name="email" placeholder="Email" required />
+          <span id="emailError" style="color: red; display: none;">Invalid email format</span>
+        </div>
+
+        <div class="inputFieldPassword">
+          <input type="password" name="password" onchange="SecureCheck()" placeholder="Password" required />
+        </div>
+
+        <div class="secure_indicator">
+          <span class="weak" id="weakpass"></span>
+          <span class="medium" id="mediumpass"></span>
+          <span class="strong" id="strongpass"></span>
+        </div>
+
+        <div class="indicatortext">
+          <p id="indicatorpasstext">*Pls fill at least 8 character</p>
+        </div>
+
+        <div class="inputField">
+          <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" required />
+          <span id="confirmPasswordError" style="color: red; display: none;">Invalid confirmPasswordError format</span>
+        </div>
+
+        <!-- <div class="remember-forget">
+          <label><input type="checkbox" name="rememberuser"></input>Remeber Me</label>
+          <a href="#">Forgot Password?</a>
+        </div> -->
+
+        <button type="button" onclick="CheckFormat()" class="btn">Sign Up</button>
+
+        <span class="seperateLine">Or</span>
+
+
+        <div class="googleAuthen">
+          <button type="submit"><i class='bx bxl-google'></i>Sign up with Google</button>
+        </div>
+
+        <div class="linkLogin">
+          <p>Already have an account? <a href="../LoginPage/LoginCustomer.html">Sign in</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function CheckFormat() {
+      var email = document.forms[0].email.value;
+      var password = document.forms[0].password.value;
+      var confirmpasswordValue = document.forms[0].confirmpassword.value;
+      var username = document.forms[0].username.value;
+
+      var indicatorpasstext = document.getElementById('indicatorpasstext');
+      var confirmpassword = document.getElementById('confirmpassword');
+      var confirmPasswordError = document.getElementById('confirmPasswordError');
+      var emailError = document.getElementById('emailError');
+      var usernameError = document.getElementById('usrnameError');
+      var emailFormat = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      var usernameStatus = false;
+
+      if (username == "") {
+        usernameError.style.display = 'block';
+        usernameError.textContent = "*Please fill username";
+      } else {
+        usernameError.style.display = 'none';
+      }
+
+      if (email == "") {
+        emailError.style.display = 'block';
+        emailError.textContent = "*Please fill email";
+      } else if (!emailFormat.test(email)) {
+        emailError.style.display = 'block';
+        emailError.textContent = "*Invalid email format, pls fill again";
+      }
+      else {
+        emailError.style.display = 'none';
+      }
+
+      if (password == "") {
+        indicatorpasstext.style.color = 'red';
+        indicatorpasstext.style.textAlign = 'left';
+        indicatorpasstext.textContent = "*Please fill password";
+      }
+
+      if (confirmpasswordValue == "") {
+        confirmPasswordError.style.display = 'block';
+        confirmPasswordError.textContent = "*Please fill Confirm Password";
+      }
+      else if (password != confirmpasswordValue) {
+        confirmpassword.style.borderColor = "red";
+        confirmPasswordError.style.display = 'block';
+        confirmPasswordError.textContent = "*Password not match, pls fill again";
+      }
+      else {
+        confirmPasswordError.style.display = 'none';
+      }
+
+      if (username != "" && email != "" && emailFormat.test(email) && password != "" && confirmpasswordValue != "" && password == confirmpasswordValue && password.length >= 8) {
+        $.ajax({
+          url: './checkUserAccount.php',
+          type: 'POST',
+          data: { username: username },
+          success: function (response) {
+            if (response == 'exists') {
+              usernameStatus = false;
+              usernameError.style.display = 'block';
+              usernameError.textContent = "*Username already exists, pls fill again";
+
+            } else if (response == 'not exists') {
+              usernameStatus = true;
+              document.forms[0].submit();
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error: ' + textStatus, errorThrown);
+          }
+        });
+      }
+    }
+
+    // อันนี้เป็นการเช็คความ Strong ชอง Password โดยใช้ Entropy แบบ Google แต่ไม่ได้บังคับแค่ต้องมี 8 ตัวอักษรขึ้นไปเท่านั้น
+    function SecureCheck() {
+      var passwordInput = document.getElementsByName('password')[0].value;
+      var uniqueSymbols = new Set(passwordInput).size;
+      var passwordLength = passwordInput.length;
+      var entropy = Math.log2(Math.pow(uniqueSymbols, passwordLength));
+      // คำนวณค่า Entropy ของ Password ตามสูตรคือ log2(จำนวนสัญลักษณ์ที่ไม่ซ้ำกัน ^ ความยาวของ Password)
+
+      var weakpass = document.getElementById('weakpass');
+      var mediumpass = document.getElementById('mediumpass');
+      var strongpass = document.getElementById('strongpass');
+
+      var indicatorpasstext = document.getElementById('indicatorpasstext');
+      var indicatortext = document.getElementsByClassName('indicatortext')[0];
+
+      // Reset สีที่แถบ indicator
+      weakpass.style.backgroundColor = '';
+      mediumpass.style.backgroundColor = '';
+      strongpass.style.backgroundColor = '';
+      indicatorpasstext.textContent = '';
+
+      if (passwordInput.length < 8) {
+        indicatorpasstext.style.color = 'red';
+        indicatorpasstext.style.textAlign = 'left';
+        indicatorpasstext.textContent = "*Password must be at least 8 characters";
+      }
+      else {
+        if (entropy < 36) { // ค่า Entropy น้อยกว่า 36 จะถือว่าเป็น Weak Password
+          weakpass.style.backgroundColor = 'red';
+          indicatorpasstext.style.textAlign = 'center';
+          indicatorpasstext.style.color = 'black';
+          indicatorpasstext.textContent = 'Weak password';
+        }
+        else if (entropy < 75) {  // ค่า Entropy น้อยกว่า 75 จะถือว่าเป็น Medium Password
+          mediumpass.style.backgroundColor = 'orange';
+          indicatorpasstext.style.color = 'black';
+          indicatorpasstext.textContent = 'Medium password';
+        }
+        else { // ค่า Entropy มากกว่า 75 จะถือว่าเป็น Strong Password
+          strongpass.style.backgroundColor = 'green';
+          indicatorpasstext.style.color = 'black';
+          indicatorpasstext.textContent = 'Strong password';
+        }
+      }
+    }
+
+    //อันนี้อันเก่า
+
+    // function SecureCheck() {
+    //   var passwordInput = document.getElementsByName('password')[0].value;
+    //   var weakpass = document.getElementById('weakpass');
+    //   var mediumpass = document.getElementById('mediumpass');
+    //   var strongpass = document.getElementById('strongpass');
+    //   var indicatorpasstext = document.getElementById('indicatorpasstext');
+    //   var indicatortext = document.getElementsByClassName('indicatortext')[0];
+
+    //   // Reset indicators
+    //   weakpass.style.backgroundColor = '';
+    //   mediumpass.style.backgroundColor = '';
+    //   strongpass.style.backgroundColor = '';
+    //   indicatorpasstext.textContent = '';
+
+    //   var strength = 0;
+
+    //   if (passwordInput.match(/[a-z]+/)) {
+    //     strength += 1;
+    //   }
+
+    //   if (passwordInput.match(/[A-Z]+/)) {
+    //     strength += 1;
+    //   }
+
+    //   if (passwordInput.match(/[0-9]+/)) {
+    //     strength += 1;
+    //   }
+
+    //   if (passwordInput.match(/[\W]+/)) {
+    //     strength += 1;
+    //   }
+
+    //   if (passwordInput.length >= 8) {
+    //     strength += 1;
+    //   }
+
+    //   switch (strength) {
+    //     case 0:
+    //     case 1:
+    //     case 2:
+    //       if (passwordInput.length < 8) {
+    //         indicatorpasstext.style.color = 'red';
+    //         indicatorpasstext.style.textAlign = 'left';
+    //         indicatorpasstext.textContent = "*Password must be at least 8 characters";
+    //       }
+    //       else {
+    //         weakpass.style.backgroundColor = 'red';
+    //         indicatorpasstext.style.textAlign = 'center';
+    //         indicatorpasstext.style.color = 'black';
+    //         indicatorpasstext.textContent = 'Weak password';
+    //       }
+    //       break;
+    //     case 3:
+    //     case 4:
+    //       if (passwordInput.length < 8) {
+    //         indicatorpasstext.style.color = 'red';
+    //         indicatorpasstext.style.textAlign = 'left';
+    //         indicatorpasstext.textContent = "*Password must be at least 8 characters";
+    //       }
+    //       else {
+    //         mediumpass.style.backgroundColor = 'orange';
+    //         indicatorpasstext.style.color = 'black';
+    //         indicatorpasstext.textContent = 'Medium password';
+    //       }
+    //       break;
+    //     case 5:
+    //       if (passwordInput.length < 8) {
+    //         indicatorpasstext.style.color = 'red';
+    //         indicatorpasstext.style.textAlign = 'left';
+    //         indicatorpasstext.textContent = "*Password must be at least 8 characters";
+    //       }
+    //       else {
+    //         strongpass.style.backgroundColor = 'green';
+    //         indicatorpasstext.style.color = 'black';
+    //         indicatorpasstext.textContent = 'Strong password';
+    //       }
+    //       break;
+    //   }
+    // }
+  </script>
+</body>
+
+</html>

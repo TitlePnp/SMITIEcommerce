@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="server_response"></div>
+<button onclick="get_token()">Get Token</button>
+<button onclick="get_user_data_from_token()">Get User Data</button>
+
+<script>
+var token="";
+var server="http://localhost:8765/SMitiShop/Test/Token.php";
+
+function get_token() {
+    $.ajax({
+        url:server,
+        type:"post",
+        data:{action:"get_token",user:"MR.robot", ROLE: "Client"},
+        success:function(response) {
+            token=response.trim();
+            $("#server_response").html("<b>Token:</b>"+token);
+        }
+    });
+}
+
+function get_user_data_from_token() {
+    $.ajax({
+        url:server,
+        type:"post",
+        data:{action:"get_user",token:token},
+        success:function(response) {
+            $("#server_response").html("<b>User Data:</b>"+response);
+        }
+    });
+}
+</script>
+
+</body>
+</html>

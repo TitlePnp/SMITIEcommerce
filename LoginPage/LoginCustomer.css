@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+* {
+    box-sizing: border-box;
+    font-family: Kodchasan;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #2c2175;
+}
+
+.contentwrapper {
+    display: flex;
+    background-color: white;
+    width: 50%;
+    border-radius: 10px;
+    padding: 20px;
+    flex-direction: row;
+    /* align-items: flex-end; */
+}
+
+.contentwrapper .leftside {
+    width: 50%;
+    /* background-color: red; */
+    /* content: ""; */
+}
+
+.contentwrapper .rightside {
+    width: 50%;
+    padding: 25px;
+    /* background-color: blueviolet; */
+}
+
+.contentwrapper .rightside h1{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.contentwrapper .rightside .inputField   {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 20px;
+}
+
+.contentwrapper .rightside .inputField input {
+    width: 100%;
+    height: 100%;
+    padding-left: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #7a7a7a;
+}
+
+.contentwrapper .rightside .inputField span {
+    font-size: 12px;
+}
+
+.contentwrapper .rightside input::placeholder {
+    width: 100%;
+    height: 100%;
+}
+
+.contentwrapper .rightside .remember-forget {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0px 5px;
+    font-size: 14px;
+}
+
+.contentwrapper .rightside .remember-forget input {
+    accent-color: black;
+}
+
+.contentwrapper .rightside .remember-forget a {
+    color: black;
+    text-decoration: none;
+}
+.contentwrapper .rightside .remember-forget a:hover {
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.contentwrapper .rightside button {
+    width: 100%;
+    height: 45px;
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.contentwrapper .rightside button:hover {
+    background-color: white;
+    color: black;
+    border: 3px solid black;
+    font-weight: 600;
+    box-shadow: 0px 4px 10px 0px rgb(111, 111, 111);
+}
+
+.seperateLine {
+    margin: 10px 0px 10px 0px;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+    height: inherit;
+    display: flex;
+    align-items: center;
+
+    &::before {
+        content: "";
+        border-bottom: 3px solid #4b4b4b;
+        flex: 1 0 auto;
+        height: 50%;
+        margin-right: 5px;
+    }
+
+    &::after {
+        content: "";
+        border-bottom: 3px solid #4b4b4b;
+        flex: 1 0 auto;
+        height: 50%;
+        margin-left: 5px;
+    }
+}
+
+.contentwrapper .rightside .googleAuthen {
+    margin-top: 10px;
+}
+
+.googleAuthen button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.googleAuthen button i {
+    margin-right: 5px;
+    font-size: 25px;
+}
+
+/* .googleAuthen button:hover i {
+    color: red;
+} */
+
+.contentwrapper .rightside .linkRegister {
+    text-align: center;
+    margin-bottom: 15px;
+    margin: 20px 0 15px;
+}
+
+.contentwrapper .rightside .linkRegister p a {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+}
+
+.contentwrapper .rightside .linkRegister a:hover {
+    text-decoration: underline;
+}
+
+.contentwrapper .leftside {
+    position: relative;
+}
+
+.contentwrapper .leftside h1{
+    position: absolute;
+    left: 25%;
+}
+
+.contentwrapper .leftside img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.contentwrapper .securebar {
+    margin-top: -25px,
+}
+
+.contentwrapper .rightside .inputFieldPassword   {
+    width: 100%;
+    height: 35px;
+}
+
+.contentwrapper .rightside .inputFieldPassword input {
+    width: 100%;
+    height: 100%;
+    padding-left: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #7a7a7a;
+    margin-bottom: 25px;
+}
+
+.contentwrapper .rightside .errortext {
+    font-size: 12px;
+    margin-bottom: 5px;
+    height: 15px;
+}
+
+
+/* .contentwrapper .secure_indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5px 0px 5px 0px;
+    height: 5px;
+}
+
+.contentwrapper .secure_indicator span {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    background-color: lightgray;
+    border-radius: 5px;
+    position: relative;
+}
+
+.contentwrapper .secure_indicator span.medium {
+    margin: 0 3px;
+} */
+
+/* .contentwrapper .secure_indicator span.before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: red;
+    border-radius: 5px;
+}
+
+.contentwrapper .secure_indicator span.weak.before {
+    background-color: red;
+}
+
+.contentwrapper .secure_indicator span.medium.before {
+    background-color: orange;
+}
+
+.contentwrapper .secure_indicator span.strong.before {
+    background-color: greenyellow;
+} */
+
+
+/* .contentwrapper .indicatortext {
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    text-align: center;
+    color: grey;
+    margin-top: 0px;
+} */
+
