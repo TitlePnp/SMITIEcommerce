@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login Customer</title>
+  <!-- <link rel="stylesheet" type="text/css" href="RegisterCustomer.css" /> -->
+  <link rel="stylesheet" type="text/css" href="LoginCustomer.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+  <div class="image-banner">
+
+  </div>
+  <div class="contentwrapper">
+    <div class="leftside">
+      <h1>SMITI SHOP</h1>
+      <img src="../Pictures/Banner.png" alt="Banner" />
+    </div>
+    <div class="rightside">
+      <h1>Sign in</h1>
+      <form method="POST" action="./Old_LoginCustomerV0.css">
+        <div class="inputField">
+          <input type="text" id="username" name="username" placeholder="Username" required />
+        </div>
+
+        <!-- <div class="inputField">
+          <input type="text" name="email" placeholder="Email" required />
+          <span id="emailError" style="color: red; display: none;">Invalid email format</span>
+        </div> -->
+
+        <div class="inputFieldPassword">
+          <input type="password" id="password" name="password" onchange="SecureCheck()" placeholder="Password"
+            required />
+        </div>
+        <!-- 
+        <div class="secure_indicator">
+          <span class="weak" id="weakpass"></span>
+          <span class="medium" id="mediumpass"></span>
+          <span class="strong" id="strongpass"></span>
+        </div> -->
+
+        <!-- <div class="indicatortext">
+          <p id="indicatorpasstext">*Pls fill at least 8 character</p>
+        </div>
+
+        <div class="inputField">
+          <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" required />
+          <span id="confirmPasswordError" style="color: red; display: none;">Invalid confirmPasswordError format</span>
+        </div> -->
+
+        <div class="remember-forget">
+          <label><input type="checkbox" name="rememberuser"></input>Remeber Me</label>
+          <a href="#">Forgot Password?</a>
+        </div>
+
+        <div class="errortext">
+          <span id="errorText"></span>
+        </div>
+
+        <button type="button" onclick="CheckFormat()" class="btn">Sign In</button>
+
+        <span class="seperateLine">Or</span>
+
+
+        <div class="googleAuthen">
+          <button type="submit"><i class='bx bxl-google'></i>Sign in with Google</button>
+        </div>
+
+        <div class="linkRegister">
+          <p>Need an account? <a href="../RegisterPage/RegisterCustomer.html">Sign up</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function CheckFormat() {
+      var errorText = document.getElementById('errorText');
+      var username = document.forms[0].username.value;
+      var password = document.forms[0].password.value;
+
+      var usernameBox = document.getElementById('username');
+      var passwordBox = document.getElementById('password');
+
+      var usernameStatus = false;
+
+      if (username == "" || password == "") {
+        errorText.style.display = "block";
+        errorText.style.color = "red";
+        errorText.innerHTML = "*Please fill in all the fields";
+        usernameBox.style.border = "1px solid red";
+        passwordBox.style.border = "1px solid red";
+      }
+      else {
+        errorText.style.display = "none";
+        usernameBox.style.border = "1px solid #ccc";
+        passwordBox.style.border = "1px solid #ccc";
+        
+        $.ajax({
+          url: '../RegisterPage/checkUserAccount.php',
+          type: 'POST',
+          data: { username: username },
+          success: function (response) {
+            if (response == 'exists') {
+              usernameStatus = true;
+              console.log('usernameStatus: ' + usernameStatus);
+              document.forms[0].submit();
+
+            } else if (response == 'not exists') {
+              usernameStatus = false;
+              errorText.style.display = "block";
+              errorText.style.color = "red";
+              usernameBox.style.border = "1px solid red";
+              passwordBox.style.border = "1px solid red";
+              errorText.innerHTML = "*Incorrect username or password";
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error: ' + textStatus, errorThrown);
+          }
+        });
+      }
+
+      // if (usernameStatus == true && password != "") {
+      //   document.forms[0].submit();
+      // }
+    }
+  </script>
+</body>
+
+</html>

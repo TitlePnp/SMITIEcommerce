@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./Old_SignInV2.css">
+
+    <title>Sign In</title>
+
+</head>
+
+<body class="flex justify-center bg-gray-400 p-10">
+    <div class="p-6 bg-white shadow-md rounded-md w-3/5 h-max">
+        <div class="flex flex-row ">
+            <div class="flex flex-col w-1/2">
+                <img class="rounded-md" src="../Pictures/Banner.png" alt="">
+            </div>
+
+            <div class="flex flex-col w-1/2 justify-center">
+                <div class="flex justify-center">
+                    <p class="font-medium text-3xl mb-5">ยินดีต้อนรับกลับมา!</p>
+                </div>
+                <form action="">
+                    <div class="flex flex-col items-center">
+                        <div class="w-9/12">
+                            <input id="usernameBox" type="text"
+                                class="border-2 border-gray-500 rounded-md pl-3 pr-10 h-10 w-full mb-5"
+                                placeholder="ชื่อผู้ใช้" required>
+                        </div>
+                        <div class="relative w-9/12">
+                            <input id="passwordBox" type="password"
+                                class="border-2 border-gray-500 rounded-md pl-3 pr-10 h-10 w-full"
+                                placeholder="รหัสผ่าน" required>
+                            <div class="absolute text-lg right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                                <i id="showPass" class='bx bxs-show' style='color: black;'></i>
+                                <i id="hidePass" class='bx bxs-hide' style="color: black; display: none;"></i>
+                            </div>
+                        </div>
+                        <div class="flex justify-start w-9/12 h-5 text-sm">
+                            <p id="errorBar"></p>
+                        </div>
+
+                        <div class="flex justify-end w-9/12">
+                            <a href="#" class="text-black text-sm mt-2 hover:text-blue-500 ">ลืมรหัสผ่าน?</a>
+                        </div>
+                        <button type="button"
+                            class="rounded-md bg-black w-9/12 text-white px-4 py-2 mt-5 hover:shadow-xl"
+                            onclick="validateForm()">ลงชื่อเข้าใช้</button>
+                    </div>
+                    <div class="flex items-center justify-center mt-4">
+                        <hr class="border-gray-300 border-t w-3/12">
+                        <span class="mx-2 text-gray-500">Or</span>
+                        <hr class="border-gray-300 border-t w-3/12">
+                    </div>
+                    <div class="flex justify-center mt-4">
+                        <button type="button"
+                            class="flex items-center justify-center rounded-md border-2 bg-white border-gray-400 w-9/12 text-black px-4 py-2 hover:shadow-xl">
+                            <i class='bx bxl-google text-md mr-2' style='color: black'></i> ลงชื่อเข้าใช้ด้วย Google
+                        </button>
+                    </div>
+                    <div>
+                        <p class="text-center mt-5">ยังไม่มีบัญชีผู้ใช้? <a href="#"class="text-blue-500">สมัครสมาชิก</a>
+                        </p>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passwordInput = document.querySelector('input[type="password"]');
+        const showIcon = document.getElementById('showPass');
+        const hideIcon = document.getElementById('hidePass');
+
+        showIcon.addEventListener('click', () => {
+            passwordInput.setAttribute('type', 'text');
+            showIcon.style.display = 'none';
+            hideIcon.style.display = 'block';
+        });
+
+        hideIcon.addEventListener('click', () => {
+            passwordInput.setAttribute('type', 'password');
+            showIcon.style.display = 'block';
+            hideIcon.style.display = 'none';
+        });
+
+        function validateForm() {
+            const username = document.querySelector('input[type="text"]').value;
+            const password = document.querySelector('input[type="password"]').value;
+            const usernameBox = document.getElementById('usernameBox');
+            const passwordBox = document.getElementById('passwordBox');
+            const errorBar = document.getElementById('errorBar');
+
+            if (username === '' && password === '') {
+                errorBar.innerHTML = '*กรุณากรอกข้อมูลให้ครบถ้วน';
+                errorBar.style.color = 'red';
+                usernameBox.style.borderColor = 'rgb(244 63 94)';
+                passwordBox.style.borderColor = 'rgb(244 63 94)';
+            }
+            else if (username === '') {
+                errorBar.innerHTML = '*กรุณากรอกชื่อผู้ใช้';
+                errorBar.style.color = 'red';
+                usernameBox.style.borderColor = 'rgb(244 63 94)';
+                passwordBox.style.borderColor = 'rgb(107 114 128)';
+            }
+            else if (password === '') {
+                errorBar.innerHTML = '*กรุณากรอกรหัสผ่าน';
+                errorBar.style.color = 'red';
+                usernameBox.style.borderColor = 'rgb(107 114 128)';
+                passwordBox.style.borderColor = 'rgb(244 63 94)';
+            }
+
+            if (username != '' && password != '') {
+                errorBar.style.display = 'none';
+                usernameBox.style.borderColor = 'rgb(107 114 128)';
+                passwordBox.style.borderColor = 'rgb(107 114 128)';
+            }
+        }
+    </script>
+</body>
+
+</html>

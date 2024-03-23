@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Kodchasan;
+        }
+
+        body {
+            background-color: #062639;
+        }
+
+        .input-group {
+            position: relative;
+            /* margin: 20px 0; */
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            font-weight: 600;
+            color: black;
+            padding: 0px 5px;
+            pointer-events: none;
+            transition: .4s;
+        }
+
+        .input-group input {
+            width: 320px;
+            height: 40px;
+            font-size: 15px;
+            color: black;
+            padding: 0 10px;
+            background: transparent;
+            border: 1.2px solid black;
+            outline: none;
+            border-radius: 5px;
+        }
+
+        .input-group input:focus~label,
+        .input-group input:valid~label {
+            top: 0;
+            font-size: 12px;
+            color: black;
+            background-color: white;
+            padding: 0 5px;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col justify-center items-center min-h-screen">
+    <div class="bg-white p-10 rounded-md shadow-lg">
+        <div class="text-center">
+            <p class="font-medium text-3xl mb-5">ยินดีต้อนรับ!</p>
+            <p class="font-medium text-xl mb-5">สมัครสมาชิก</p>
+        </div>
+        <div class="input-group mb-5">
+            <input type="text" id="usernameBox" required>
+            <label for="">ชื่อผู้ใช้</label>
+        </div>
+        <div class="input-group mb-5">
+            <input type="text" id="usernameBox" required>
+            <label for="">อีเมลล์</label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="passwordBox" required>
+            <label for="">รหัสผ่าน</label>
+            <div class="absolute text-lg right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                <i id="showPass" class='bx bxs-show block' style='color: black;'></i>
+                <i id="hidePass" class='bx bxs-hide' style="color: black; display: none;"></i>
+            </div>
+            <div id="popoverContent"
+                class="hidden absolute z-10 p-4 font-sans text-sm font-normal break-words whitespace-normal bg-white border rounded-lg shadow-lg w-max border-blue-gray-50 text-blue-gray-500 shadow-blue-gray-500/10 focus:outline-none"
+                style="right: 100%; top: 50%; transform: translate(0%, -50%); margin-right: 10px;">
+                <p class="mb-1">เพื่อความปลอดภัยรหัสผ่านควรมี:</p>
+                <hr>
+                <li class="mt-1" style="list-style-type: none;">
+                    <span id="lengthPassCheck" style="display: none;"><i class='bx bxs-check-circle text-green-500'></i>
+                        รหัสผ่านมากกว่า 8 ตัวอักษร</span>
+                    <span id="lengthPassX"><i class='bx bxs-x-circle text-red-500'"></i> รหัสผ่านมากกว่า 8 ตัวอักษร</span>
+                </li>
+                <li style=" list-style-type: none;">
+                            <span id="upperLowerPassCheck" style="display: none;"><i
+                                    class='bx bxs-check-circle text-green-500'></i> ตัวอักษรตัวเล็กและตัวใหญ่</span>
+                            <span id="upperLowerPassX"><i class='bx bxs-x-circle text-red-500'"></i> ตัวอักษรตัวเล็กและตัวใหญ่</span>
+                </li>
+                <li style=" list-style-type: none;">
+                                    <span id="symbolPassCheck" style="display: none;"><i
+                                            class='bx bxs-check-circle text-green-500'></i> อักขระพิเศษ</span>
+                                    <span id="symbolPassX"><i class='bx bxs-x-circle text-red-500'></i>
+                                        อักขระพิเศษ</span>
+                </li>
+                <li style="list-style-type: none;">
+                    <span id="numberPassCheck" style="display: none;"><i class='bx bxs-check-circle text-green-500'></i>
+                        ตัวเลข</span>
+                    <span id="numberPassX"><i class='bx bxs-x-circle text-red-500'></i> ตัวเลข</span>
+                </li>
+            </div>
+        </div>
+
+        <div class="flex items-center mb-5 mt-2 ">
+            <div id="lowIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md mr-1"></div>
+            <div id="mediumIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md mr-1"></div>
+            <div id="highIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md"></div>
+        </div>
+
+        <!-- <div class="mb-5 w-full text-sm text-gray-500">
+            <p>*At least 8 character</p>
+            <p>*Upper case and lower case letters</p>
+            <p>*A symbols</p>
+            <p>test</p>
+        </div> -->
+
+        <div class="input-group">
+            <input type="password" id="confirmPasswordBox" required>
+            <label for="">ยืนยันรหัสผ่าน</label>
+            <div class="absolute text-lg right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                <i id="showConfrimPass" class='bx bxs-show block' style='color: black;'></i>
+                <i id="hideConfrimPass" class='bx bxs-hide' style="color: black; display: none;"></i>
+            </div>
+        </div>
+
+        <div class="mt-2 h-5">
+            <p id="errorBar" class="text-sm text-red-500"></p>
+        </div>
+
+        <!-- <div>
+            <p class="text-right text-sm mt-2"><a href="#" class="text-black hover:text-blue-500">ลืมรหัสผ่าน?</a></p>
+        </div> -->
+
+        <button type="button" onclick="validateForm()"
+            class="rounded-md bg-black w-full text-white px-4 py-2 mt-5 hover:shadow-xl">สมัครสมาชิก</button>
+
+        <div class="flex items-center justify-center mt-4">
+            <hr class="border-gray-300 border-t w-6/12">
+            <span class="mx-2 text-gray-500">Or</span>
+            <hr class="border-gray-300 border-t w-6/12">
+        </div>
+
+        <div class="flex justify-center mt-4">
+            <button type="button"
+                class="flex items-center justify-center rounded-md border-2 bg-white border-gray-400 w-full text-black px-4 py-2 hover:shadow-xl">
+                <i class='bx bxl-google text-md mr-2' style='color: black'></i> ลงชื่อเข้าใช้ด้วย Google
+            </button>
+        </div>
+
+        <div>
+            <p class="text-center mt-5">มีบัญชีผู้ใช้แล้ว? <a href="#"
+                    class="text-blue-500 hover:underline">เข้าสู่ระบบ</a></p>
+        </div>
+
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('passwordBox');
+        const showIcon = document.getElementById('showPass');
+        const hideIcon = document.getElementById('hidePass');
+
+        const confirmPasswordInput = document.getElementById('confirmPasswordBox');
+        const showConfirmIcon = document.getElementById('showConfrimPass');
+        const hideConfirmIcon = document.getElementById('hideConfrimPass');
+
+        //Password policy pop-over
+        const popover = document.getElementById('popoverContent');
+        const lengthPassCheck = document.getElementById('lengthPassCheck');
+        const lengthPassX = document.getElementById('lengthPassX');
+        const upperLowerPassCheck = document.getElementById('upperLowerPassCheck');
+        const upperLowerPassX = document.getElementById('upperLowerPassX');
+        const symbolPassCheck = document.getElementById('symbolPassCheck');
+        const symbolPassX = document.getElementById('symbolPassX');
+        const numberPassCheck = document.getElementById('numberPassCheck');
+        const numberPassX = document.getElementById('numberPassX');
+
+        //Password policy
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            const lengthPass = password.length >= 8;
+            const upperLowerPass = password.match(/[a-z]/) && password.match(/[A-Z]/);
+            const symbolPass = password.match(/[!@#$%^&*]/);
+            const numberPass = password.match(/[0-9]/);
+
+            if (lengthPass) {
+                lengthPassCheck.style.display = 'block';
+                lengthPassX.style.display = 'none';
+            } else {
+                lengthPassCheck.style.display = 'none';
+                lengthPassX.style.display = 'block';
+            }
+
+            if (upperLowerPass) {
+                upperLowerPassCheck.style.display = 'block';
+                upperLowerPassX.style.display = 'none';
+            } else {
+                upperLowerPassCheck.style.display = 'none';
+                upperLowerPassX.style.display = 'block';
+            }
+
+            if (symbolPass) {
+                symbolPassCheck.style.display = 'block';
+                symbolPassX.style.display = 'none';
+            } else {
+                symbolPassCheck.style.display = 'none';
+                symbolPassX.style.display = 'block';
+            }
+
+            if (numberPass) {
+                numberPassCheck.style.display = 'block';
+                numberPassX.style.display = 'none';
+            } else {
+                numberPassCheck.style.display = 'none';
+                numberPassX.style.display = 'block';
+            }
+        });
+
+        //password entropy indicator
+        const lowIndicator = document.getElementById('lowIndicator');
+        const mediumIndicator = document.getElementById('mediumIndicator');
+        const highIndicator = document.getElementById('highIndicator');
+
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            const entropy = Math.log2(Math.pow(94, password.length));
+
+            if (password.length === 0) {
+                lowIndicator.style.backgroundColor = 'rgb(107 114 128)';
+                mediumIndicator.style.backgroundColor = 'rgb(107 114 128)';
+                highIndicator.style.backgroundColor = 'rgb(107 114 128)';
+            } else if (entropy < 48) {
+                lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
+                mediumIndicator.style.backgroundColor = 'rgb(107 114 128)';
+                highIndicator.style.backgroundColor = 'rgb(107 114 128)';
+            } else if (entropy < 79) {
+                lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
+                mediumIndicator.style.backgroundColor = 'rgb(249 115 22)';
+                highIndicator.style.backgroundColor = 'rgb(107 114 128)';
+            } else {
+                lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
+                mediumIndicator.style.backgroundColor = 'rgb(249 115 22)';
+                highIndicator.style.backgroundColor = 'rgb(34 197 94)';
+            }
+        });
+
+
+        showIcon.addEventListener('click', () => {
+            passwordInput.setAttribute('type', 'text');
+            showIcon.style.display = 'none';
+            hideIcon.style.display = 'block';
+        });
+
+        hideIcon.addEventListener('click', () => {
+            passwordInput.setAttribute('type', 'password');
+            showIcon.style.display = 'block';
+            hideIcon.style.display = 'none';
+        });
+
+        showConfirmIcon.addEventListener('click', () => {
+            confirmPasswordInput.setAttribute('type', 'text');
+            showConfirmIcon.style.display = 'none';
+            hideConfirmIcon.style.display = 'block';
+        });
+
+        hideConfirmIcon.addEventListener('click', () => {
+            confirmPasswordInput.setAttribute('type', 'password');
+            showConfirmIcon.style.display = 'block';
+            hideConfirmIcon.style.display = 'none';
+        });
+
+        //Pop over indicator
+        const popoverContent = document.getElementById('popoverContent');
+
+        passwordInput.addEventListener('focus', () => {
+            popoverContent.classList.remove('hidden');
+        });
+
+        passwordInput.addEventListener('blur', () => {
+            popoverContent.classList.add('hidden');
+        });
+
+        function validateForm() {
+            const username = document.querySelector('input[type="text"]').value;
+            const password = document.querySelector('input[type="password"]').value;
+            const usernameBox = document.getElementById('usernameBox');
+            const passwordBox = document.getElementById('passwordBox');
+            const errorBar = document.getElementById('errorBar');
+
+            if (username === '' && password === '') {
+                errorBar.style.display = 'block';
+                errorBar.innerHTML = '*กรุณากรอกข้อมูลให้ครบถ้วน';
+                errorBar.style.color = 'red';
+                usernameBox.style.borderColor = 'rgb(244 63 94)';
+                passwordBox.style.borderColor = 'rgb(244 63 94)';
+            }
+            else if (username === '') {
+                errorBar.style.display = 'block';
+                errorBar.innerHTML = '*กรุณากรอกชื่อผู้ใช้';
+                errorBar.style.color = 'red';
+                usernameBox.style.borderColor = 'rgb(244 63 94)';
+                passwordBox.style.borderColor = 'rgb(107 114 128)';
+            }
+            else if (password === '') {
+                errorBar.style.display = 'block';
+                errorBar.innerHTML = '*กรุณากรอกรหัสผ่าน';
+                errorBar.style.color = 'red';
+                usernameBox.style.borderColor = 'rgb(107 114 128)';
+                passwordBox.style.borderColor = 'rgb(244 63 94)';
+            }
+
+            if (username != '' && password != '') {
+                errorBar.style.display = 'none';
+                usernameBox.style.borderColor = 'rgb(107 114 128)';
+                passwordBox.style.borderColor = 'rgb(107 114 128)';
+            }
+        }
+    </script>
+</body>
+
+</html>
