@@ -24,8 +24,12 @@ require '../../Components/HeaderUser.html';
 
 <body>
     <div class="flex flex-col justify-center items-center h-screen">
-        <h1 class="text-3xl font-bold">This Page Under Maintain!!🔨</h1>
+        <h1 class="text-3xl font-bold">This page is under maintenance!!🔨</h1>
+        <?php
+        if (isset($_SESSION['token'])) {
 
+        }
+        ?>
     </div>
 </body>
 
