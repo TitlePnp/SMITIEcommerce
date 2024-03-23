@@ -10,8 +10,8 @@
         $email = "";
     }
 
-    $stmt = $connectDB->prepare("INSERT INTO customer(CusID, Email, CusFName, CusLName, Sex, Tel, Address) VALUES 
-    ('[value-1]','{$email}' ,'','','','','')");
+    $stmt = $connectDB->prepare("INSERT INTO customer(CusID, CusFName, CusLName, Sex, Tel, Address) VALUES 
+    ('[value-1]','','','','','')");
     $stmt->execute();
 
     $sql = "SELECT CusID FROM customer ORDER BY CusID DESC LIMIT 1";
@@ -20,11 +20,11 @@
     $cusID = $row['CusID'];
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
-    $stmt = $connectDB->prepare("INSERT INTO customer_account(UserName, Password, CusID, Role) 
-    VALUES (?, ?, ?, 'User')");
+    $stmt = $connectDB->prepare("INSERT INTO customer_account(UserName, Email, Password, GoogleId, Role, CusID)
+    VALUES (?, ?, ?, '', 'User')");
 
-    $stmt->bind_param("sss", $username, $hashedPassword, $cusID);
+    $stmt->bind_param("ssss", $username, $email, $hashedPassword, $cusID);
     $stmt->execute();
 
-    header('Location: ../LoginPage/LoginCustomer.html')
+    header('Location: ../../Frontend/SignIn_Page/SignIn.html')
 ?>

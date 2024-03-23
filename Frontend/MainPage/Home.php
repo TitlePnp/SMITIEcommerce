@@ -27,7 +27,8 @@ require '../../Components/HeaderUser.html';
         <h1 class="text-3xl font-bold">This page is under maintenance!!🔨</h1>
         <?php
         if (isset($_SESSION['token'])) {
-
+            echo '<h1 class="text-3xl font-bold">Welcome ' . $_SESSION['name'] . '</h1>';
+            $sql = "SELECT * FROM users WHERE email = '" . $_SESSION['email'] . "'";
         }
         ?>
     </div>

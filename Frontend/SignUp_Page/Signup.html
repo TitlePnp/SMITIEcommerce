@@ -13,6 +13,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <title>SMITI Shop: Sign Up</title>
+
     <style>
         * {
             margin: 0;
@@ -72,80 +76,81 @@
             <p class="font-medium text-3xl mb-5">ยินดีต้อนรับ!</p>
             <p class="font-medium text-xl mb-5">สมัครสมาชิก</p>
         </div>
-        <div class="input-group mb-5">
-            <input type="text" id="usernameBox" required>
-            <label for="">ชื่อผู้ใช้</label>
-        </div>
-        <div class="input-group mb-5">
-            <input type="text" id="usernameBox" required>
-            <label for="">อีเมลล์</label>
-        </div>
-
-        <div class="input-group">
-            <input type="password" id="passwordBox" required>
-            <label for="">รหัสผ่าน</label>
-            <div class="absolute text-lg right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                <i id="showPass" class='bx bxs-show block' style='color: black;'></i>
-                <i id="hidePass" class='bx bxs-hide' style="color: black; display: none;"></i>
+        <form id="insertForm" action="../../Backend/UserManage/InsertUser.php">
+            <div class="input-group mb-5">
+                <input type="text" id="usernameBox" name="userName" required>
+                <label for="">ชื่อผู้ใช้</label>
             </div>
-            <div id="popoverContent"
-                class="hidden absolute z-10 p-4 font-sans text-sm font-normal break-words whitespace-normal bg-white border rounded-lg shadow-lg w-max border-blue-gray-50 text-blue-gray-500 shadow-blue-gray-500/10 focus:outline-none"
-                style="right: 100%; top: 50%; transform: translate(0%, -50%); margin-right: 10px;">
-                <p class="mb-1">เพื่อความปลอดภัยรหัสผ่านควรมี:</p>
-                <hr>
-                <li class="mt-1" style="list-style-type: none;">
-                    <span id="lengthPassCheck" style="display: none;"><i class='bx bxs-check-circle text-green-500'></i>
-                        รหัสผ่านมากกว่า 8 ตัวอักษร</span>
-                    <span id="lengthPassX"><i class='bx bxs-x-circle text-red-500'"></i> รหัสผ่านมากกว่า 8 ตัวอักษร</span>
+            <div class="input-group mb-5">
+                <input type="text" id="emailBox" name="userEmail" required>
+                <label for="">อีเมลล์</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="passwordBox" name="userPassword" required>
+                <label for="">รหัสผ่าน</label>
+                <div class="absolute text-lg right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <i id="showPass" class='bx bxs-show block' style='color: black;'></i>
+                    <i id="hidePass" class='bx bxs-hide' style="color: black; display: none;"></i>
+                </div>
+                <div id="popoverContent"
+                    class="hidden absolute z-10 p-4 font-sans text-sm font-normal break-words whitespace-normal bg-white border rounded-lg shadow-lg w-max border-blue-gray-50 text-blue-gray-500 shadow-blue-gray-500/10 focus:outline-none"
+                    style="right: 100%; top: 50%; transform: translate(0%, -50%); margin-right: 10px;">
+                    <p class="mb-1"><b>เพื่อความปลอดภัยรหัสผ่านควรมี:</b></p>
+                    <hr>
+                    <li class="mt-1" style="list-style-type: none;">
+                        <span id="lengthPassCheck" style="display: none;"><i
+                                class='bx bxs-check-circle text-green-500'></i>
+                            รหัสผ่านมากกว่า 8 ตัวอักษร</span>
+                        <span id="lengthPassX"><i class='bx bxs-x-circle text-red-500'"></i> รหัสผ่านมากกว่า 8 ตัวอักษร</span>
                 </li>
                 <li style=" list-style-type: none;">
-                            <span id="upperLowerPassCheck" style="display: none;"><i
-                                    class='bx bxs-check-circle text-green-500'></i> ตัวอักษรตัวเล็กและตัวใหญ่</span>
-                            <span id="upperLowerPassX"><i class='bx bxs-x-circle text-red-500'"></i> ตัวอักษรตัวเล็กและตัวใหญ่</span>
+                                <span id="upperLowerPassCheck" style="display: none;"><i
+                                        class='bx bxs-check-circle text-green-500'></i> ตัวอักษรตัวเล็กและตัวใหญ่</span>
+                                <span id="upperLowerPassX"><i class='bx bxs-x-circle text-red-500'"></i> ตัวอักษรตัวเล็กและตัวใหญ่</span>
                 </li>
                 <li style=" list-style-type: none;">
-                                    <span id="symbolPassCheck" style="display: none;"><i
-                                            class='bx bxs-check-circle text-green-500'></i> อักขระพิเศษ</span>
-                                    <span id="symbolPassX"><i class='bx bxs-x-circle text-red-500'></i>
-                                        อักขระพิเศษ</span>
-                </li>
-                <li style="list-style-type: none;">
-                    <span id="numberPassCheck" style="display: none;"><i class='bx bxs-check-circle text-green-500'></i>
-                        ตัวเลข</span>
-                    <span id="numberPassX"><i class='bx bxs-x-circle text-red-500'></i> ตัวเลข</span>
-                </li>
+                                        <span id="symbolPassCheck" style="display: none;"><i
+                                                class='bx bxs-check-circle text-green-500'></i> อักขระพิเศษ</span>
+                                        <span id="symbolPassX"><i class='bx bxs-x-circle text-red-500'></i>
+                                            อักขระพิเศษ</span>
+                    </li>
+                    <li style="list-style-type: none;">
+                        <span id="numberPassCheck" style="display: none;"><i
+                                class='bx bxs-check-circle text-green-500'></i>
+                            ตัวเลข</span>
+                        <span id="numberPassX"><i class='bx bxs-x-circle text-red-500'></i> ตัวเลข</span>
+                    </li>
+                </div>
             </div>
-        </div>
 
-        <div class="flex items-center mb-5 mt-2 ">
-            <div id="lowIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md mr-1"></div>
-            <div id="mediumIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md mr-1"></div>
-            <div id="highIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md"></div>
-        </div>
+            <div class="flex items-center mb-5 mt-2 ">
+                <div id="lowIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md mr-1"></div>
+                <div id="mediumIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md mr-1"></div>
+                <div id="highIndicator" class="w-1/2 h-1 bg-gray-300 rounded-md"></div>
+            </div>
 
-        <!-- <div class="mb-5 w-full text-sm text-gray-500">
+            <!-- <div class="mb-5 w-full text-sm text-gray-500">
             <p>*At least 8 character</p>
             <p>*Upper case and lower case letters</p>
             <p>*A symbols</p>
             <p>test</p>
         </div> -->
 
-        <div class="input-group">
-            <input type="password" id="confirmPasswordBox" required>
-            <label for="">ยืนยันรหัสผ่าน</label>
-            <div class="absolute text-lg right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                <i id="showConfrimPass" class='bx bxs-show block' style='color: black;'></i>
-                <i id="hideConfrimPass" class='bx bxs-hide' style="color: black; display: none;"></i>
+            <div class="input-group">
+                <input type="password" id="confirmPasswordBox" required>
+                <label for="">ยืนยันรหัสผ่าน</label>
+                <div class="absolute text-lg right-2 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                    <i id="showConfrimPass" class='bx bxs-show block' style='color: black;'></i>
+                    <i id="hideConfrimPass" class='bx bxs-hide' style="color: black; display: none;"></i>
+                </div>
             </div>
-        </div>
+
+        </form>
 
         <div class="mt-2 h-5">
             <p id="errorBar" class="text-sm text-red-500"></p>
         </div>
-
-        <!-- <div>
-            <p class="text-right text-sm mt-2"><a href="#" class="text-black hover:text-blue-500">ลืมรหัสผ่าน?</a></p>
-        </div> -->
 
         <button type="button" onclick="validateForm()"
             class="rounded-md bg-black w-full text-white px-4 py-2 mt-5 hover:shadow-xl">สมัครสมาชิก</button>
@@ -164,7 +169,7 @@
         </div>
 
         <div>
-            <p class="text-center mt-5">มีบัญชีผู้ใช้แล้ว? <a href="#"
+            <p class="text-center mt-5">มีบัญชีผู้ใช้แล้ว? <a href="../SignIn_Page/SignIn.html"
                     class="text-blue-500 hover:underline">เข้าสู่ระบบ</a></p>
         </div>
 
@@ -296,38 +301,105 @@
         });
 
         function validateForm() {
-            const username = document.querySelector('input[type="text"]').value;
-            const password = document.querySelector('input[type="password"]').value;
+            const formInsert = document.getElementById('insertForm');
+
+            const username = document.getElementById('usernameBox').value;
+            const password = document.getElementById('passwordBox').value;
+            const confirmPassword = document.getElementById('confirmPasswordBox').value;
+            const email = document.getElementById('emailBox').value;
+
             const usernameBox = document.getElementById('usernameBox');
             const passwordBox = document.getElementById('passwordBox');
+            const confirmPasswordBox = document.getElementById('confirmPasswordBox');
+            const emailBox = document.getElementById('emailBox');
             const errorBar = document.getElementById('errorBar');
 
-            if (username === '' && password === '') {
+            userStatus = false;
+
+            if (username === '' || email === '' || password === '' || confirmPassword === '') {
                 errorBar.style.display = 'block';
                 errorBar.innerHTML = '*กรุณากรอกข้อมูลให้ครบถ้วน';
                 errorBar.style.color = 'red';
-                usernameBox.style.borderColor = 'rgb(244 63 94)';
-                passwordBox.style.borderColor = 'rgb(244 63 94)';
-            }
-            else if (username === '') {
-                errorBar.style.display = 'block';
-                errorBar.innerHTML = '*กรุณากรอกชื่อผู้ใช้';
-                errorBar.style.color = 'red';
-                usernameBox.style.borderColor = 'rgb(244 63 94)';
-                passwordBox.style.borderColor = 'rgb(107 114 128)';
-            }
-            else if (password === '') {
-                errorBar.style.display = 'block';
-                errorBar.innerHTML = '*กรุณากรอกรหัสผ่าน';
-                errorBar.style.color = 'red';
-                usernameBox.style.borderColor = 'rgb(107 114 128)';
-                passwordBox.style.borderColor = 'rgb(244 63 94)';
-            }
+                if (username === '') {
+                    usernameBox.style.borderColor = 'red';
+                } else {
+                    usernameBox.style.borderColor = 'black';
+                }
 
-            if (username != '' && password != '') {
-                errorBar.style.display = 'none';
-                usernameBox.style.borderColor = 'rgb(107 114 128)';
-                passwordBox.style.borderColor = 'rgb(107 114 128)';
+                if (password === '') {
+                    passwordBox.style.borderColor = 'red';
+                } else {
+                    passwordBox.style.borderColor = 'black';
+
+                }
+
+                if (confirmPassword === '') {
+                    confirmPasswordBox.style.borderColor = 'red';
+                } else {
+                    confirmPasswordBox.style.borderColor = 'black';
+                }
+
+                if (email === '') {
+                    emailBox.style.borderColor = 'red';
+                } else {
+                    emailBox.style.borderColor = 'black';
+                }
+            }
+            else if (username != '' && email != '' && password != '' && confirmPassword != '') {
+                const lengthPass = password.length >= 8;
+                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                if (!email.match(emailRegex)) {
+                    errorBar.style.display = 'block';
+                    errorBar.innerHTML = '*รูปแบบอีเมลล์ไม่ถูกต้อง';
+                    errorBar.style.color = 'red';
+                    emailBox.style.borderColor = 'red';
+                } else {
+                    errorBar.style.display = 'none';
+                    emailBox.style.borderColor = 'black';
+                    if (!lengthPass) {
+                        errorBar.style.display = 'block';
+                        errorBar.innerHTML = '*รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
+                        errorBar.style.color = 'red';
+                        passwordBox.style.borderColor = 'red';
+                    } else {
+                        errorBar.style.display = 'none';
+                        passwordBox.style.borderColor = 'black';
+                        if (password != confirmPassword) {
+                            errorBar.style.display = 'block';
+                            errorBar.innerHTML = '*รหัสผ่านไม่ตรงกัน';
+                            errorBar.style.color = 'red';
+                            passwordBox.style.borderColor = 'red';
+                            confirmPasswordBox.style.borderColor = 'red';
+                        } else {
+                            errorBar.style.display = 'none';
+                            passwordBox.style.borderColor = 'black';
+                            confirmPasswordBox.style.borderColor = 'black';
+                            $.ajax({
+                                type: "POST",
+                                url: "../../Backend/UserManage/checkUserAccount.php",
+                                data: {
+                                    username: username
+                                },
+                                success: function (response) {
+                                    if (response.status === 'exist') {
+                                        console.log(response);
+                                        errorBar.style.display = 'block';
+                                        errorBar.innerHTML = "*ชื่อผู้ใช้นี้มีอยู่ในระบบแล้ว, กรุณาลองใหม่อีกครั้ง";
+                                        errorBar.style.color = 'red';
+                                    } else if (response.status === 'not exist') {
+                                        userStatus = true;
+                                        console.log(response);
+                                        // formInsert.submit();
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    console.error('AJAX request failed:', textStatus, errorThrown);
+                                }
+                            });
+                        }
+                    }
+                }
+
             }
         }
     </script>
