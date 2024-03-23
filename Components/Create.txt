@@ -1,0 +1,156 @@
+CREATE DATABASE myStore;
+-- ตารางเก็บข้อมูลลูกค้า (ผู้ส่ง/ผู้สั่ง) --
+CREATE TABLE CUSTOMER (
+    CusID       INT         AUTO_INCREMENT  PRIMARY KEY,
+    CusFName	VARCHAR(20),
+    CusLName	VARCHAR(20),
+    Sex         VARCHAR(1),
+    Tel         CHAR(10),
+    Address     VARCHAR(80)
+);
+-- ตารางบัญชี --
+CREATE TABLE CUSTOMER_ACCOUNT (
+    UserName	VARCHAR(20)     PRIMARY KEY,
+    Email       VARCHAR(255)    NOT NULL,
+    Password 	VARCHAR(255)    NOT NULL,
+    GoogleId    VARCHAR(255),
+    Role        VARCHAR(50)     DEFAULT 'User',
+    CusID       INT             NOT NULL,
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
+);
+
+-- ตารางเก็บข้อมูลคนจ่ายเงิน --
+CREATE TABLE PAYER (
+    TaxID       CHAR(13)        PRIMARY KEY,
+    PayerFName  VARCHAR(20)     NOT NULL,
+    PayerLName	VARCHAR(20)     NOT NULL,
+    Sex			VARCHAR(1),
+    Tel			CHAR(10)        NOT NULL,
+    Address		VARCHAR(80)     NOT NULL 
+);
+-- ตารางเก็บรายชื่อผู้จ่ายเงิน (สำหรับลูกค้า) --
+CREATE TABLE PAYER_LIST (
+    CusID       INT         NOT NULL,
+    NumID       INT         NOT NULL,
+    TaxID       CHAR(13)	NOT NULL,
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
+    FOREIGN KEY (TaxID) REFERENCES PAYER(TaxID),
+    CONSTRAINT PayerList PRIMARY KEY (CusID, NumID)
+);
+
+-- ตารางเก็บข้อมูลผู้รับ --
+CREATE TABLE RECEIVER (
+    RecvID		INT	        AUTO_INCREMENT  PRIMARY KEY,
+    RecvFName	VARCHAR(20) NOT NULL,
+    RecvLName	VARCHAR(20)	NOT NULL,
+    Sex			VARCHAR(1),
+    Tel			CHAR(10)	NOT NULL,
+    Address		VARCHAR(80)	NOT NULL
+);
+-- ตารางเก็บรายชื่อผู้รับ (สำหรับลูกค้า) --
+CREATE TABLE RECEIVER_LIST (
+    CusID			INT	NOT NULL,
+    NumID			INT	NOT NULL,
+    RecvID			INT	NOT NULL,
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
+    FOREIGN KEY (RecvID) REFERENCES RECEIVER(RecvID),
+    CONSTRAINT ReceiverList PRIMARY KEY (CusID, NumID)
+);
+
+-- ตารางเก็บข้อมูลของสินค้า --
+-- มีสถานะดังนี้
+    -- Active = ขายอยู่
+    -- Inactive = เลิกขาย
+    -- OutStock = Out Of Stock = ของหมด = stock ต้องเป็น 0
+--
+CREATE TABLE PRODUCT (
+    ProID           INT             AUTO_INCREMENT	PRIMARY KEY,
+    ProName         VARCHAR(255)    NOT NULL,
+    PricePerUnit	DOUBLE(8,2)     NOT NULL,
+    CostPerUnit	    DOUBLE(8,2)     NOT NULL,
+    StockQty        INT             NOT NULL,
+    Description     CHAR(100)       NOT NULL,
+    ImageSource     VARCHAR(255)	NOT NULL,
+    Status          VARCHAR(10)     NOT NULL,
+    Update_Day      DATETIME        NOT NULL,
+    TypeID          INT             NOT NULL,
+    FOREIGN KEY (TypeID) REFERENCES PRODUCT_TYPE(TypeID)
+);
+-- ตารางเก็บข้อมูลประเภทของสินค้า --
+CREATE TABLE PRODUCT_TYPE (
+    TypeID      INT     AUTO_INCREMENT      PRIMARY KEY,
+    TypeName    VARCHAR(255)    NOT NULL,
+)
+
+-- ตารางเก็บข้อมูลของคำสั่งซื้อ (ยังอยู่ในตะกร้า On-hand) --
+-- มีสถานะดังนี้
+    -- OnHand = เพิ่มสินค้าลงในตะกร้า (จองไว้ก่อน)
+    -- Ordered = กดสั่งของแล้ว
+    -- Cancel = ลบออกจากตะกร้า/เกินกำหนดเวลา
+    -- Completed = จ่ายเงินแล้ว
+--
+-- ใบแจ้งหนี้/คำสั่งซื้อ --
+CREATE TABLE INVOICE-ORDER (
+    InvoiceID   CHAR(10)    PRIMARY KEY,
+    CusID       INT         NOT NULL,
+    StartDate   DATETIME    NOT NULL,
+    EndDate     DATETIME    NOT NULL,
+    Status		VARCHAR(10)	DEFAULT 'OnHand',
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
+)
+-- ตารางเก็บข้อมูลรายละเอียดของใบแจ้งหนี้ --
+CREATE TABLE INVOICE_LIST (
+    InvoiceID   CHAR(10)    NOT NULL,
+    NumID       INT         NOT NULL,
+    ProID       INT	        NOT NULL,
+    Qty	        INT	        NOT NULL,
+    FOREIGN KEY (InvoiceID) REFERENCES INVOICE(InvoiceID),
+    FOREIGN KEY (ProID) REFERENCES PRODUCT(ProID),
+    CONSTRAINT InvoiceList PRIMARY KEY (InvoiceID, NumID)
+)
+
+-- ตารางเก็บข้อมูลของใบเสร็จรับเงิน/ใบกำกับภาษี --
+-- มีสถานะดังนี้
+    -- Pending = ชำระเงินแล้วรอการตรวจสอบ
+    -- Paid = ชำระเงินแล้ว รอการจัดส่ง
+    -- COD = Cash on Delivery = เก็บเงินปลายทางรอการจัดส่ง
+    -- Delivered = จัดส่งแล้ว
+    -- DI = Deferred Income = จัดส่งแล้วรอเงินเข้าจากการเก็บเงินปลายทาง
+    -- Completed = กระบวนการทั้งหมดเสร็จสิ้น
+    -- Returned = สินค้าถูกส่งคืน
+    -- Cancel = ยกเลิก
+
+-- Channel มีรูปแบบ ดังนี้
+    -- Transfer = โอนเงิน
+    -- COD = เก็บเงินปลายทาง
+--
+CREATE TABLE RECEIPT (
+    RecID       CHAR(10)        PRIMARY KEY,
+    PayTime     DATETIME,
+    CusID       INT             NOT NULL,
+    TaxID       CHAR(13),
+    Status      VARCHAR(10)     DEFAULT 'Pending',
+    Channel     VARCHAR(10)     NOT NULL,
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
+    FOREIGN KEY (TaxID) REFERENCES PAYER(TaxID)
+);
+-- ตารางเก็บข้อมูลรายละเอียดของใบเสร็จ --
+CREATE TABLE RECEIPT_LIST (
+    RecID   CHAR(10)    NOT NULL,
+    NumID	INT         NOT NULL,
+    ProID	INT         NOT NULL,
+    Qty     INT         NOT NULL,
+    FOREIGN KEY (RecID) REFERENCES RECEIPT(RecID),
+    FOREIGN KEY (ProID) REFERENCES PRODUCT(ProID),
+    CONSTRAINT OrderList PRIMARY KEY (RecID, NumID)
+);
+
+-- ตารางเก็บข้อมูลการใช้งานของผู้ใช้ --
+CREATE TABLE ACCESS_LOG (
+    CusID		INT             NOT NULL,
+    NumID		INT             NOT NULL,
+    Action		VARCHAR(80)     NOT NULL, 
+    Period	    DATETIME        NOT NULL,
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
+    CONSTRAINT AccessList PRIMARY KEY (CusID, NumID)
+);
