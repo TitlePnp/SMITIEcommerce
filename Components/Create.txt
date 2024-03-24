@@ -106,7 +106,7 @@ CREATE TABLE INVOICE_LIST (
     NumID       INT         NOT NULL,
     ProID       INT	        NOT NULL,
     Qty	        INT	        NOT NULL,
-    FOREIGN KEY (InvoiceID) REFERENCES INVOICE(InvoiceID),
+    FOREIGN KEY (InvoiceID) REFERENCES INVOICE_ORDER(InvoiceID),
     FOREIGN KEY (ProID) REFERENCES PRODUCT(ProID),
     CONSTRAINT InvoiceList PRIMARY KEY (InvoiceID, NumID)
 );
