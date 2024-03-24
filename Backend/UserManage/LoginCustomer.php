@@ -1,11 +1,11 @@
 <?php
-require "../Components/ConnectDB.php";
-require '../vendor/autoload.php';
+require "../../Components/connectDB.php";
+require '../../vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 
 $username = $_POST['username'];
-$password = $_POST['password'];
+$password = $_POST['userpassword'];
 
 $stmt = $connectDB->prepare("SELECT `Password`, `Role` FROM customer_account WHERE UserName = ?");
 $stmt->bind_param("s", $username);
@@ -29,16 +29,17 @@ if ($result->num_rows > 0) {
 
         $jwt = JWT::encode($payload, $key, 'HS256');
 
-        $_SESSION['Token'] = $jwt;
-        header('Location: ../RegisterPage/SuccessLogin.php'); 
+        $_SESSION['tokenJWT'] = $jwt;
+        header('Location: ../../Frontend/MainPage/Home.php'); 
         exit(); 
     } else {
-        header('Location: ./LoginCustomer.html');
+        // var_dump("Wrong password");
+        header('Location: ../../Frontend/SignIn_Page/SignIn.php');
         exit();
     }
 } else {
-    // กรณีไม่พบผู้ใช้ในฐานข้อมูล
-    header('Location: ./LoginCustomer.html');
+    // var_dump("Don't have this username in database");
+    header('Location: ../../Frontend/SignIn_Page/SignIn.php');
     exit();
 }
 ?>

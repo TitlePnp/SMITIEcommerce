@@ -1,11 +1,11 @@
 <?php
-    require "../Components/ConnectDB.php";
+    require "../../Components/ConnectDB.php";
 
     $username = $_POST['username'];
-    $password = $_POST['password'];
+    $password = $_POST['userpassword'];
 
-    if (isset($_POST['email'])) {
-        $email = $_POST['email'];
+    if (isset($_POST['useremail'])) {
+        $email = $_POST['useremail'];
     } else {
         $email = "";
     }
@@ -21,10 +21,10 @@
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
     $stmt = $connectDB->prepare("INSERT INTO customer_account(UserName, Email, Password, GoogleId, Role, CusID)
-    VALUES (?, ?, ?, '', 'User')");
+    VALUES (?, ?, ?, '', 'User', ?)");
 
     $stmt->bind_param("ssss", $username, $email, $hashedPassword, $cusID);
     $stmt->execute();
 
-    header('Location: ../../Frontend/SignIn_Page/SignIn.html')
+    header('Location: ../../Frontend/SignIn_Page/SignIn.php')
 ?>

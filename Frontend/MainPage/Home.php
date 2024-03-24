@@ -1,5 +1,9 @@
 <?php
+session_start();
 require '../../Components/HeaderUser.html';
+require '../../vendor/autoload.php';
+use Firebase\JWT\Key;
+use \Firebase\JWT\JWT;
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +19,7 @@ require '../../Components/HeaderUser.html';
     <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
     <title>SMITI SHOP: HOME</title>
-    
+
     <style>
         * {
             font-family: Kodchasan;
@@ -26,9 +30,25 @@ require '../../Components/HeaderUser.html';
     <div class="flex flex-col justify-center items-center h-screen">
         <h1 class="text-3xl font-bold">This page is under maintenance!!🔨</h1>
         <?php
-        if (isset($_SESSION['token'])) {
-            echo '<h1 class="text-3xl font-bold">Welcome ' . $_SESSION['name'] . '</h1>';
-            $sql = "SELECT * FROM users WHERE email = '" . $_SESSION['email'] . "'";
+        $key = "SECRETKEY_SMITIECOM_CLIENT";
+        if (isset($_SESSION['tokenJWT'])) {
+            echo "Token is set by JWT";
+            $jwt = $_SESSION['tokenJWT'];
+            $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
+            echo "<br>";
+            echo "Username: " . $decoded->user;
+            echo "<br>";
+            echo "Role: " . $decoded->role;
+        }
+        else if (isset($_SESSION['tokenGoogle'])) {
+            echo "Token is set by Google";
+            echo "<br>";
+            echo "Username: " . $_SESSION['tokenGoogle'];
+            echo "<br>";
+            echo "Name: " . $_SESSION['name'];
+        }
+        else {
+            echo "Token is not set";
         }
         ?>
     </div>
