@@ -106,7 +106,7 @@ CREATE TABLE INVOICE_LIST (
     NumID       INT         NOT NULL,
     ProID       INT	        NOT NULL,
     Qty	        INT	        NOT NULL,
-    FOREIGN KEY (InvoiceID) REFERENCES INVOICE(InvoiceID),
+    FOREIGN KEY (InvoiceID) REFERENCES INVOICE_ORDER(InvoiceID),
     FOREIGN KEY (ProID) REFERENCES PRODUCT(ProID),
     CONSTRAINT InvoiceList PRIMARY KEY (InvoiceID, NumID)
 );
@@ -131,10 +131,13 @@ CREATE TABLE RECEIPT (
     PayTime     DATETIME,
     CusID       INT             NOT NULL,
     TaxID       CHAR(13),
+    InvoiceID   CHAR(10)        NOT NULL,
+    Payment     LONGBLOB,
     Status      VARCHAR(10)     DEFAULT 'Pending',
     Channel     VARCHAR(10)     NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
-    FOREIGN KEY (TaxID) REFERENCES PAYER(TaxID)
+    FOREIGN KEY (TaxID) REFERENCES PAYER(TaxID),
+    FOREIGN KEY (InvoiceID) REFERENCES INVOICE_ORDER(InvoiceID)
 );
 -- ตารางเก็บข้อมูลรายละเอียดของใบเสร็จ --
 CREATE TABLE RECEIPT_LIST (
