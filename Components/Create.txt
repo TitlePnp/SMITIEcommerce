@@ -63,6 +63,13 @@ CREATE TABLE RECEIVER_LIST (
     -- Inactive = เลิกขาย
     -- OutStock = Out Of Stock = ของหมด = stock ต้องเป็น 0
 --
+
+-- ตารางเก็บข้อมูลประเภทของสินค้า --
+CREATE TABLE PRODUCT_TYPE (
+    TypeID      INT     AUTO_INCREMENT      PRIMARY KEY,
+    TypeName    VARCHAR(255)    NOT NULL
+);
+
 CREATE TABLE PRODUCT (
     ProID           INT             AUTO_INCREMENT	PRIMARY KEY,
     ProName         VARCHAR(255)    NOT NULL,
@@ -76,11 +83,6 @@ CREATE TABLE PRODUCT (
     TypeID          INT             NOT NULL,
     FOREIGN KEY (TypeID) REFERENCES PRODUCT_TYPE(TypeID)
 );
--- ตารางเก็บข้อมูลประเภทของสินค้า --
-CREATE TABLE PRODUCT_TYPE (
-    TypeID      INT     AUTO_INCREMENT      PRIMARY KEY,
-    TypeName    VARCHAR(255)    NOT NULL,
-)
 
 -- ตารางเก็บข้อมูลของคำสั่งซื้อ (ยังอยู่ในตะกร้า On-hand) --
 -- มีสถานะดังนี้
@@ -90,24 +92,24 @@ CREATE TABLE PRODUCT_TYPE (
     -- Completed = จ่ายเงินแล้ว
 --
 -- ใบแจ้งหนี้/คำสั่งซื้อ --
-CREATE TABLE INVOICE-ORDER (
+CREATE TABLE INVOICE_ORDER (
     InvoiceID   CHAR(10)    PRIMARY KEY,
     CusID       INT         NOT NULL,
     StartDate   DATETIME    NOT NULL,
     EndDate     DATETIME    NOT NULL,
     Status		VARCHAR(10)	DEFAULT 'OnHand',
-    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
-)
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
+);
 -- ตารางเก็บข้อมูลรายละเอียดของใบแจ้งหนี้ --
 CREATE TABLE INVOICE_LIST (
     InvoiceID   CHAR(10)    NOT NULL,
     NumID       INT         NOT NULL,
     ProID       INT	        NOT NULL,
     Qty	        INT	        NOT NULL,
-    FOREIGN KEY (InvoiceID) REFERENCES INVOICE(InvoiceID),
+    FOREIGN KEY (InvoiceID) REFERENCES INVOICE_ORDER(InvoiceID),
     FOREIGN KEY (ProID) REFERENCES PRODUCT(ProID),
     CONSTRAINT InvoiceList PRIMARY KEY (InvoiceID, NumID)
-)
+);
 
 -- ตารางเก็บข้อมูลของใบเสร็จรับเงิน/ใบกำกับภาษี --
 -- มีสถานะดังนี้
@@ -129,10 +131,13 @@ CREATE TABLE RECEIPT (
     PayTime     DATETIME,
     CusID       INT             NOT NULL,
     TaxID       CHAR(13),
+    InvoiceID   CHAR(10)        NOT NULL,
+    Payment    LONGBLOB,
     Status      VARCHAR(10)     DEFAULT 'Pending',
     Channel     VARCHAR(10)     NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
-    FOREIGN KEY (TaxID) REFERENCES PAYER(TaxID)
+    FOREIGN KEY (TaxID) REFERENCES PAYER(TaxID),
+    FOREIGN KEY (InvoiceID) REFERENCES INVOICE_ORDER(InvoiceID)
 );
 -- ตารางเก็บข้อมูลรายละเอียดของใบเสร็จ --
 CREATE TABLE RECEIPT_LIST (
