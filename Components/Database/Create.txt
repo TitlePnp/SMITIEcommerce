@@ -63,7 +63,6 @@ CREATE TABLE RECEIVER_LIST (
     -- Inactive = เลิกขาย
     -- OutStock = Out Of Stock = ของหมด = stock ต้องเป็น 0
 --
-
 -- ตารางเก็บข้อมูลประเภทของสินค้า --
 CREATE TABLE PRODUCT_TYPE (
     TypeID      INT     AUTO_INCREMENT      PRIMARY KEY,
@@ -73,12 +72,13 @@ CREATE TABLE PRODUCT_TYPE (
 CREATE TABLE PRODUCT (
     ProID           INT             AUTO_INCREMENT	PRIMARY KEY,
     ProName         VARCHAR(255)    NOT NULL,
+    Author          VARCHAR(100)	NOT NULL,
+    Description     VARCHAR(1000)   NOT NULL,
     PricePerUnit	DOUBLE(8,2)     NOT NULL,
     CostPerUnit	    DOUBLE(8,2)     NOT NULL,
     StockQty        INT             NOT NULL,
-    Description     CHAR(100)       NOT NULL,
     ImageSource     VARCHAR(255)	NOT NULL,
-    Status          VARCHAR(10)     NOT NULL,
+    Status          VARCHAR(10)     NOT NULL    DEFAULT 'Active',
     Update_Day      DATETIME        NOT NULL,
     TypeID          INT             NOT NULL,
     FOREIGN KEY (TypeID) REFERENCES PRODUCT_TYPE(TypeID)
