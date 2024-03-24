@@ -131,17 +131,6 @@
         /* แสดงเมนู dropdown ตามสถานะ aria-expanded */
         menu.style.display = isExpanded ? 'none' : 'block';
     });
-
-    /* จัดการ menu user */
-    document.getElementById('user-button').addEventListener('click', function() {
-        var menu = document.getElementById('user-menu');
-        /* ดึงค่าสถานะปัจจุบัน */
-        var isExpanded = this.getAttribute('aria-expanded') === 'true';
-        /* เปลี่ยนค่า aria-expanded เมื่อปุ่มถูกคลิก */
-        this.setAttribute('aria-expanded', !isExpanded);
-        /* แสดงเมนู dropdown ตามสถานะ aria-expanded */
-        menu.style.display = isExpanded ? 'none' : 'block';
-    });
   </script>
 </body>
 </html>
