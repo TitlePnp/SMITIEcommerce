@@ -1,7 +1,8 @@
 <?php
 session_start();
-require '../../Components/HeaderUser.html';
+require '../../Components/HeaderGuest.html';
 require '../../vendor/autoload.php';
+
 use Firebase\JWT\Key;
 use \Firebase\JWT\JWT;
 ?>
@@ -23,35 +24,38 @@ use \Firebase\JWT\JWT;
     <style>
         * {
             font-family: Kodchasan;
+            padding: 0px;
+            margin: 0px;
         }
     </style>
 
 <body>
-    <div class="flex flex-col justify-center items-center h-screen">
-        <h1 class="text-3xl font-bold">This page is under maintenance!!🔨</h1>
-        <?php
-        $key = "SECRETKEY_SMITIECOM_CLIENT";
-        if (isset($_SESSION['tokenJWT'])) {
-            echo "Token is set by JWT";
-            $jwt = $_SESSION['tokenJWT'];
-            $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
-            echo "<br>";
-            echo "Username: " . $decoded->user;
-            echo "<br>";
-            echo "Role: " . $decoded->role;
-        }
-        else if (isset($_SESSION['tokenGoogle'])) {
-            echo "Token is set by Google";
-            echo "<br>";
-            echo "Username: " . $_SESSION['tokenGoogle'];
-            echo "<br>";
-            echo "Name: " . $_SESSION['name'];
-        }
-        else {
-            echo "Token is not set";
-        }
-        ?>
+    <div class="flex w-full o-5">
+
     </div>
 </body>
 
 </html>
+
+<?php
+// $key = "SECRETKEY_SMITIECOM_CLIENT";
+// if (isset($_SESSION['tokenJWT'])) {
+//     echo "Token is set by JWT";
+//     $jwt = $_SESSION['tokenJWT'];
+//     $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
+//     echo "<br>";
+//     echo "Username: " . $decoded->user;
+//     echo "<br>";
+//     echo "Role: " . $decoded->role;
+// }
+// else if (isset($_SESSION['tokenGoogle'])) {
+//     echo "Token is set by Google";
+//     echo "<br>";
+//     echo "Username: " . $_SESSION['tokenGoogle'];
+//     echo "<br>";
+//     echo "Name: " . $_SESSION['name'];
+// }
+// else {
+//     echo "Token is not set";
+// }
+?>
