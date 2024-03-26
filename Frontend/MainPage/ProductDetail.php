@@ -43,7 +43,6 @@ include '../../Backend/MainPage/ProductDetail.php';
         echo "<div class='flex justify-center items-center px-4 rounded-xl relative'>";
           echo "<img src='{$row['ImageSource']}' alt='product image' class='w-full rounded-xl object-cover'>";
         echo "</div>";
-
         echo "<div class='lg:col-span-2 py-5'>";
           echo "<span class='bg-blue-900 text-white text-sm font-medium rounded px-2.5 py-1'>ชื่อเรื่อง</span>";
           echo "<h1 class='text-4xl font-bold mt-3 mb-5 underline md:underline-offset-4 decoration-red-600 indent-8'>{$row['ProName']}</h1>";
@@ -69,39 +68,42 @@ include '../../Backend/MainPage/ProductDetail.php';
           echo "</div>";
         echo '</div>';
       echo '</div>';
-
       echo "<div class='pt-8'>";
         echo "<p class='text-base font-medium mr-3 pb-2'>รายละเอียด {$row['ProName']}</p>";
         echo "<p class='text-sm font-normal mr-3 indent-8 leading-8'>{$row['Description']} </p>";
       echo '</div>';
-
       echo "<p class='pt-8 text-base font-medium mr-3 pb-2'>แนะนำสำหรับคุณ</p>";
     }
     /* Recommend Product */
     $recommendProduct = recommendProduct($proID, $type);
     $count = 0;
-    while ($row = $recommendProduct->fetch_assoc()) {
-      if ($count >= 5) {
-        break;
+    echo "<div class='flex flex-wrap gap-x-6 sm:grid-cols-2 lg:grid-cols-5 justify-center items-center'>";
+      while ($row = $recommendProduct->fetch_assoc()) {
+        if ($count >= 5) {
+          break;
+        }
+        $proName = mb_strlen($row['ProName']) > 15 ? mb_substr($row['ProName'], 0, 15) . '...' : $row['ProName'];
+        echo "<form method='post' id='myForm{$count}' style='display: inline;'>";
+          echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
+          echo "<input type='hidden' name='typeName' value='{$row['TypeName']}'>";
+          echo "<button type='submit'>";
+            echo "<div class='group relative flex flex-col'>";
+              echo "<div class='pt-2 overflow-hidden group-hover:opacity-75' style='height: 190px; width: 190px;'>";
+                echo "<img src='{$row['ImageSource']}' alt='' class='h-full w-full object-cover rounded-lg object-center'>";
+              echo "</div>";
+              echo "<div class='mt-4 flex justify-between'>";
+                echo "<h3 class='text-sm text-gray-700'>";
+                  echo "<span aria-hidden='true' class='absolute inset-0'></span>";
+                  echo $proName;
+                echo "</h3>";
+                echo "<p class='text-sm font-medium text-gray-900'>{$row['PricePerUnit']}</p>";
+              echo "</div>";
+            echo "</div>";
+          echo "</button>";
+        echo "</form>";
+        $count++;
       }
-      $proName = mb_strlen($row['ProName']) > 15 ? mb_substr($row['ProName'], 0, 15) . '...' : $row['ProName'];
-      echo "<div class='flex flex-wrap gap-x-6 sm:grid-cols-2 lg:grid-cols-5 justify-center items-center'>";
-        echo "<div class='group relative flex flex-col'>";
-          echo "<div class='pt-2 overflow-hidden group-hover:opacity-75' style='height: 190px; width: 190px;'>";
-            echo "<img src='{$row['ImageSource']}' alt='' class='h-full w-full object-cover rounded-lg object-center'>";
-          echo "</div>";
-          echo "<div class='mt-4 flex justify-between'>";
-            echo "<h3 class='text-sm text-gray-700'>";
-              echo "<a href='#'>";
-              echo "<span aria-hidden='true' class='absolute inset-0'></span>";
-              echo $proName;
-              echo "</a>";
-            echo "</h3>";
-            echo "<p class='text-sm font-medium text-gray-900'>{$row['PricePerUnit']}</p>";
-          echo "</div>";
-        echo "</div>";
-      $count++;
-    }
+    echo "</div>";
   echo "</div>";
 ?>
 </body>
