@@ -1,6 +1,6 @@
 <?php
 require "../../Backend/GoogleAuthen/Google_OAuth.php";
-require "../../Components/HeaderUser.html";
+// require "../../Components/HeaderUser.html";
 $authUrl = $client->createAuthUrl();
 ?>
 

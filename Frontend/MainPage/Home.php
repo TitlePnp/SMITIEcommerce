@@ -1,6 +1,7 @@
 <?php
 session_start();
-require '../../Components/HeaderUser.html';
+require '../../Backend/Authorized/SuperAdminAuthorized.php';
+require '../../Backend/Authorized/ManageHeader.php';
 require '../../vendor/autoload.php';
 use Firebase\JWT\Key;
 use \Firebase\JWT\JWT;
