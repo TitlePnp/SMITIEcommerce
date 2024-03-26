@@ -9,9 +9,8 @@
     } else {
         $email = "";
     }
-
-    $stmt = $connectDB->prepare("INSERT INTO customer(CusID, CusFName, CusLName, Sex, Tel, Address) VALUES 
-    ('[value-1]','','','','','')");
+    $stmt = $connectDB->prepare("INSERT INTO customer(CusFName, CusLName, Sex, Tel, Address) VALUES 
+    ('', '', '', '', '')");
     $stmt->execute();
 
     $sql = "SELECT CusID FROM customer ORDER BY CusID DESC LIMIT 1";

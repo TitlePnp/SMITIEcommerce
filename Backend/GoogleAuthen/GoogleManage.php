@@ -7,7 +7,7 @@ if (isset($_GET['code'])) {
 
     if (isset($token['error'])) {
         // Redirect to login page
-        header('Location: http://localhost:8765/SmitiShop/Frontend/SignIn_Page/SignIn.html');
+        header('Location: http://localhost/SmitiShop/Frontend/SignIn_Page/SignIn.php');
         exit;
     }
 
@@ -31,7 +31,7 @@ if (isset($_GET['code'])) {
         $_SESSION['email'] = $email;
         $_SESSION['name'] = $name;
         $_SESSION['tokenGoogle'] = $userId;
-        header('Location: http://localhost:8765/SmitiShop/Frontend/MainPage/Home.php');
+        header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
         // print_r($_SESSION);
     } else {
         $stmt = $connectDB->prepare("INSERT INTO customer(CusID, CusFName, CusLName, Sex, Tel, Address) VALUES 
@@ -53,7 +53,7 @@ if (isset($_GET['code'])) {
         $_SESSION['email'] = $email;
         $_SESSION['name'] = $name;
         $_SESSION['tokenGoogle'] = $userId;
-        header('Location: http://localhost:8765/SmitiShop/Frontend/MainPage/Home.php');
+        header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
         // print_r($_SESSION);
 
     }

@@ -330,6 +330,15 @@ use \Firebase\JWT\JWT;
                 </div>
             </section>
         </div>
+
+        <?php 
+        if (isset($_SESSION['tokenJWT']) || isset($_SESSION['tokenGoogle'])) {
+            var_dump("isset");
+            // var_dump("Test jwt: " +  $_SESSION['tokenJWT']);
+            var_dump($_SESSION['tokenGoogle']);
+        }
+        
+        ?>
         <script>
             const navLinks = document.querySelectorAll('.slider-nav a');
             let currentIndex = 0; // เริ่มจากภาพแรก
