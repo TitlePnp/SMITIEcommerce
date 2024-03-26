@@ -43,6 +43,7 @@ include '../../Backend/MainPage/ProductDetail.php';
         echo "<div class='flex justify-center items-center px-4 rounded-xl relative'>";
           echo "<img src='{$row['ImageSource']}' alt='product image' class='w-full rounded-xl object-cover'>";
         echo "</div>";
+
         echo "<div class='lg:col-span-2 py-5'>";
           echo "<span class='bg-blue-900 text-white text-sm font-medium rounded px-2.5 py-1'>ชื่อเรื่อง</span>";
           echo "<h1 class='text-4xl font-bold mt-3 mb-5 underline md:underline-offset-4 decoration-red-600 indent-8'>{$row['ProName']}</h1>";
@@ -68,16 +69,18 @@ include '../../Backend/MainPage/ProductDetail.php';
           echo "</div>";
         echo '</div>';
       echo '</div>';
+
       echo "<div class='pt-8'>";
         echo "<p class='text-base font-medium mr-3 pb-2'>รายละเอียด {$row['ProName']}</p>";
         echo "<p class='text-sm font-normal mr-3 indent-8 leading-8'>{$row['Description']} </p>";
       echo '</div>';
+
       echo "<p class='pt-8 text-base font-medium mr-3 pb-2'>แนะนำสำหรับคุณ</p>";
     }
     /* Recommend Product */
     $recommendProduct = recommendProduct($proID, $type);
     $count = 0;
-    echo "<div class='flex flex-wrap gap-x-6 sm:grid-cols-2 lg:grid-cols-5 justify-center items-center'>";
+    echo "<div class='flex flex-wrap gap-x-5 sm:grid-cols-2 lg:grid-cols-5 justify-center items-center'>";
       while ($row = $recommendProduct->fetch_assoc()) {
         if ($count >= 5) {
           break;
