@@ -1,6 +1,7 @@
 <?php
 require_once "../../Backend/Authorized/UserAuthorized.php";
 require_once "../../Backend/Authorized/ManageHeader.php";
+require_once "../../Backend/MainPage/CartDetail.php"
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +30,7 @@ require_once "../../Backend/Authorized/ManageHeader.php";
     <div class="flex flex-row px-28 py-8">
         <div class="w-full bg-white mr-3 p-5 rounded-lg">
             <div class="mb-3">
-                <a class="hover:text-blue-500" href="#"><button class="font-semibold"><i class='bx bx-arrow-back'></i> ย้อนกลับ</button></a>
+                <a class="hover:text-blue-500" href="Cart.php"><button class="font-semibold"><i class='bx bx-arrow-back'></i> ย้อนกลับ</button></a>
             </div>
             <h1 class="text-2xl font-bold">เช็คเอาท์</h1>
             <div class="mt-3">
@@ -37,22 +38,22 @@ require_once "../../Backend/Authorized/ManageHeader.php";
                 <!-- ชื่อ นามสกุล-->
                 <div class="flex flex-row mt-2">
                     <div class="w-full mr-5">
-                        <h1 class="font-semibold">ชื่อ</h1>
+                        <h1 class="font-semibold">ชื่อ*</h1>
                         <!-- plaecholder with address in database -->
-                        <input class="w-full border-2 rounded-md h-8 border-gray-400" type="text" required>
+                        <input class="w-full p-2 border-2 rounded-md h-8 border-gray-400" placeholder="กรุณากรอกชื่อ" type="text" required>
                     </div>
                     <div class="w-full ml-5">
-                        <h1 class="font-semibold">นามสกุล</h1>
+                        <h1 class="font-semibold">นามสกุล*</h1>
                         <!-- plaecholder with address in database -->
-                        <input class="w-full border-2 rounded-md h-8 border-gray-400" type="text" required>
+                        <input class="w-full border-2 p-2 rounded-md h-8 border-gray-400" placeholder="กรุณากรอกนามสกุล" type="text" required>
                     </div>
                 </div>
 
                 <div class="flex flex-row mt-2">
                     <div class="w-full mr-5">
-                        <h1 class="font-semibold">เบอร์โทร</h1>
+                        <h1 class="font-semibold">เบอร์โทรศัพท์*</h1>
                         <!-- plaecholder with address in database -->
-                        <input class="w-full border-2 rounded-md h-8 border-gray-400" type="text" required>
+                        <input class="w-full p-2 border-2 rounded-md h-8 border-gray-400" placeholder="กรุณากรอกเบอร์โทรศัพท์" type="text" required>
                     </div>
                     <div class="w-full ml-5">
                         <h1 class="font-semibold">เพศ</h1>
@@ -64,20 +65,25 @@ require_once "../../Backend/Authorized/ManageHeader.php";
                 </div>
 
                 <div class="mt-2">
-                    <h1 class="font-semibold">ที่อยู่</h1>
-                    <textarea class="mt-1 w-full border-2 rounded-md h-20 border-gray-400" required></textarea>
+                    <h1 class="font-semibold">อีเมล*</h1>
+                    <input class="w-full p-2 border-2 rounded-md h-8 border-gray-400" placeholder="กรุณากรอกอีเมล" type="email" required>
+                </div>
+
+                <div class="mt-2">
+                    <h1 class="font-semibold">ที่อยู่*</h1>
+                    <textarea class="mt-1 w-full p-2 border-2 rounded-md h-20 border-gray-400 resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>
                 </div>
 
                 <div class="flex flex-row mt-2">
                     <div class="w-full mr-5">
-                        <h1 class="font-semibold">จัวหวัด</h1>
+                        <h1 class="font-semibold">จัวหวัด*</h1>
                         <!-- plaecholder with address in database -->
-                        <input class="w-full p-2 border-2 rounded-md h-8 border-gray-400" type="text" required>
+                        <input class="w-full p-2 border-2 rounded-md h-8 border-gray-400 p-2" placeholder="กรุณากรอกจังหวัด" type="text" required>
                     </div>
                     <div class="w-full ml-5">
-                        <h1 class="font-semibold">รหัสไปรษณีย์</h1>
+                        <h1 class="font-semibold">รหัสไปรษณีย์*</h1>
                         <!-- plaecholder with address in database -->
-                        <input class="w-full p-2 border-2 rounded-md h-8 border-gray-400" type="text" required>
+                        <input class="w-full p-2 border-2 rounded-md h-8 border-gray-400 p-2" placeholder="กรุณากรอกรหัสไปรษณีย์" type="text" required>
                     </div>
                 </div>
 
@@ -115,15 +121,51 @@ require_once "../../Backend/Authorized/ManageHeader.php";
         </div>
         <div class="w-3/6 bg-white ml-3 rounded-lg p-5">
             <p class="font-semibold text-lg">รายการสินค้า</p>
-            <?php
-
-            ?>
-
+            <hr class="border-t border-gray-400 my-2">
             <div class="">
-                <p>ยอดรวม</p>
-                <p>ค่าจัดส่ง</p>
-                <p>Vat 7%</p>
-                <p>ยอดสุทธิ</p>
+                <?php
+                $totalPrice = 0;
+                $count = count($_SESSION['cart']);
+                $key = array_keys($_SESSION['cart']);
+                for ($i = 0; $i < $count; $i++) {
+                    $row = showCartProduct($key[$i])->fetch_assoc();
+                    $totalPrice += $row['PricePerUnit'] * $_SESSION['cart'][$i + 1];
+                    echo "<div class='flex flex-row my-2'>";
+                    echo "<div class='w-5/12'>";
+                    echo "<img class='h-16 w-16 max-w-20 object-cover' src='" . $row['ImageSource'] . "'>";
+                    echo "</div>";
+                    echo "<div class='w-4/12'>";
+                    echo "<p class='text-sm font-semibold truncate'>" . $row['ProName'] . "</p>";
+                    echo "<p class='text-sm'>x" . $_SESSION['cart'][$i + 1] . "</p>";
+                    echo "</div>";
+                    echo "<div class='flex flex-row w-full justify-end'>";
+                    echo "<p class='text-sm font-semibold justify-end'>" . $row['PricePerUnit'] . " บาท</p>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "<hr class='border-t border-gray-400 my-2'>";
+                }
+                $vat = $totalPrice * 0.07;
+
+                ?>
+            </div>
+
+            <div class="mt-2">
+                <div class="flex flex-row justify-between">
+                    <p class="font-semibold text-md">ยอดรวม</p>
+                    <p class="font-semibold text-md"><?php echo "" . $totalPrice . " บาท" ?></p>
+                </div>
+                <div class="flex flex-row justify-between">
+                    <p class="font-semibold text-md">ค่าจัดส่ง</p>
+                    <p class="font-semibold text-md">0 บาท</p>
+                </div>
+                <div class="flex flex-row justify-between"> 
+                    <p class="font-semibold text-md">Vat 7%</p>
+                    <p class="font-semibold text-md"><?php echo "" . $vat . " บาท" ?></p>
+                </div>
+                <div class="flex flex-row justify-between">
+                    <p class="font-semibold text-md">ยอดสุทธิ</p>
+                    <p class="font-semibold text-md"><?php echo "" . $totalPrice + $vat . " บาท" ?></p>
+                </div>
                 <div class="text-center mt-5">
                     <button class="p-2 bg-red-500 rounded-lg font-semibold text-white w-4/5 hover:shadow-lg">ยืนยันการสั่งซื้อ</button>
                 </div>

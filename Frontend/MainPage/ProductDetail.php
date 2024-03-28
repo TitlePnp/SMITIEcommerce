@@ -1,5 +1,6 @@
 <?php
-require '../../Components/HeaderUser.html';
+require '../../Backend/Authorized/UserAuthorized.php';
+require '../../Backend/Authorized/ManageHeader.php';
 include '../../Backend/MainPage/ProductDetail.php';
 ?>
 
@@ -61,10 +62,18 @@ include '../../Backend/MainPage/ProductDetail.php';
             echo "</div>";
             echo "<p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
             echo "<div class='flex'>";
+            echo "<form action='../../Backend/MainPage/AddToCart.php' method='post'>";
+              echo "<input type='hidden' name='proID' value='{$proID}'>";
+              echo "<input type='hidden' name='quantity-hidden' value='1'>";
               echo "<button class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>เพิ่มลงในตะกร้า";
               echo "<img src='../../Pictures/shopping-cart.png' alt='cart icon' class='w-6 h-6 ml-2'
               style='filter: grayscale(100%) contrast(0);'></button>";
+            echo "</form>";
+            echo "<form action='Payment.php' method='post'>";
+              echo "<input type='hidden' name='proID' value='{$proID}'>";
+              echo "<input type='hidden' name='quantity-hidden' value=''>";
               echo "<button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3'>ซื้อสินค้า</button>";
+            echo "</form>";
             echo "</div>";
           echo "</div>";
         echo '</div>';
@@ -115,11 +124,13 @@ include '../../Backend/MainPage/ProductDetail.php';
     var decreaseButton = control.querySelector('.decrease');
     var increaseButton = control.querySelector('.increase');
     var quantityInput = control.querySelector('.quantity');
+    var quantityHidden = control.querySelector('input[name="quantity-hidden"]');
 
     decreaseButton.addEventListener('click', function() {
       var currentQuantity = parseInt(quantityInput.value, 10);
       if (currentQuantity > 1) {
         quantityInput.value = currentQuantity - 1;
+        quantityHidden.value = quantityInput.value;
       }
     });
 
@@ -128,6 +139,7 @@ include '../../Backend/MainPage/ProductDetail.php';
       var maxQuantity = parseInt(quantityInput.max, 10);
       if (currentQuantity < maxQuantity) {
         quantityInput.value = currentQuantity + 1;
+        quantityHidden.value = quantityInput.value;
       }
     });
 
@@ -135,10 +147,12 @@ include '../../Backend/MainPage/ProductDetail.php';
       var currentQuantity = parseInt(quantityInput.value, 10);
       if (isNaN(currentQuantity)) {
         quantityInput.value = "1";
+        quantityHidden.value = quantityInput.value;
       } else {
         var maxQuantity = parseInt(quantityInput.max, 10);
         if (currentQuantity > maxQuantity) {
           quantityInput.value = maxQuantity;
+          quantityHidden.value = quantityInput.value;
         }
       }
     });
