@@ -96,6 +96,22 @@ if (isset($_SESSION['cart'])) {
         </tbody>
       </table>
     </div>
+    <footer class="sticky bottom-0 bg-[#062639] rounded-lg shadow m-4 p-4">
+      <div class="container mx-auto flex flex-wrap justify-between items-center">
+        <div class="flex items-center">
+          <input id="checkbox-all-last" type="checkbox" class="w-4 h-4 text-blue-600 mr-2">
+          <label for="checkbox-all-last" class="text-white">สินค้าที่เลือก: <span id="qty-choose"></span> รายการ</label>
+        </div>
+        <div class="text-white text-center"> ราคารวมทั้งหมด: <span id="total"></span> บาท</div>
+        <div class="justify-end">
+          <form action='Payment.php' method='post'>
+            <input type='hidden' name='proID' value='{$proID}'>
+            <input type='hidden' name='quantity-hidden' value=''>
+            <button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded'>ซื้อสินค้า</button>
+          </form>
+        </div>
+      </div>
+    </footer>
   <div>
 
 <script>
@@ -130,29 +146,54 @@ if (isset($_SESSION['cart'])) {
         }
       }
     });
-    $.ajax({
-    url: '../../Backend/MainPage/AddToCart.php',
-    method: 'POST',
-    data: {
-      proID: productId,
-      'quantity-hidden': quantity
-    },
-    success: function(response) {
-      // Update the page with the response if necessary
-      location.reload(); // reload the page to see the updated cart
-    }
-  });
   });
 
   $(document).ready(function(){
+    updateTotal();
     $('#checkbox-all').click(function(){
       if ($(this).is(':checked')) {
         $('input[type="checkbox"]').prop('checked', true);
       } else{
         $('input[type="checkbox"]').prop('checked', false);
       }
+      updateTotal();
+    });
+    $('input[type="checkbox"]').click(function(){
+      updateTotal();
     });
   });
+
+  $(document).ready(function(){
+    updateTotal();
+    $('#checkbox-all-last').click(function(){
+      if ($(this).is(':checked')) {
+        $('input[type="checkbox"]').prop('checked', true);
+      } else{
+        $('input[type="checkbox"]').prop('checked', false);
+      }
+      updateTotal();
+    });
+    $('input[type="checkbox"]').click(function(){
+      updateTotal();
+    });
+  });
+
+  function updateTotal() {
+    var total = 0;
+    var count = 0;
+    var rows = document.querySelectorAll('tbody tr');
+    rows.forEach(function(row) {
+      var checkbox = row.querySelector('input[type="checkbox"]');
+      if (checkbox.checked) {
+        var price = parseFloat(row.querySelector('td:nth-child(4)').textContent);
+        var qty = parseInt(row.querySelector('input[type="number"]').value, 10);
+        total += price * qty;
+        count++;
+      }
+    });
+    document.getElementById('total').innerHTML = total.toFixed(2);
+    document.getElementById('qty-choose').innerHTML = count;
+  }
 </script>
 </body>
 </html>

@@ -64,7 +64,7 @@ include '../../Backend/MainPage/ProductDetail.php';
             echo "<div class='flex'>";
             echo "<form action='../../Backend/MainPage/AddToCart.php' method='post'>";
               echo "<input type='hidden' name='proID' value='{$proID}'>";
-              echo "<input type='hidden' name='quantity-hidden' value='1'>";
+              echo "<input type='hidden' name='quantity-hidden' value=''>";
               echo "<button class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>เพิ่มลงในตะกร้า";
               echo "<img src='../../Pictures/shopping-cart.png' alt='cart icon' class='w-6 h-6 ml-2'
               style='filter: grayscale(100%) contrast(0);'></button>";
@@ -147,7 +147,6 @@ include '../../Backend/MainPage/ProductDetail.php';
       var currentQuantity = parseInt(quantityInput.value, 10);
       if (isNaN(currentQuantity)) {
         quantityInput.value = "1";
-        quantityHidden.value = quantityInput.value;
       } else {
         var maxQuantity = parseInt(quantityInput.max, 10);
         if (currentQuantity > maxQuantity) {
@@ -156,6 +155,7 @@ include '../../Backend/MainPage/ProductDetail.php';
         }
       }
     });
+    quantityHidden.value = quantityInput.value;
   });
 </script>
 </html>
