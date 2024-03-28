@@ -1,10 +1,11 @@
 <?php
 session_start();
-$_SESSION['cart'][1] = 5;
-$_SESSION['cart'][2] = 3;
-$_SESSION['cart'][3] = 2;
-$_SESSION['cart'][4] = 1; 
+// $_SESSION['cart'][1] = 5;
+// $_SESSION['cart'][2] = 3;
+// $_SESSION['cart'][3] = 2;
+// $_SESSION['cart'][4] = 1; 
 
+$_SESSION['token']
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +15,9 @@ $_SESSION['cart'][4] = 1;
     </head>
 
     <body>
-        <a href="../Frontend/MainPage/SummaryOrder.php">test</a>    
+        <button>Add Payer</button>  
+        <button>Add PayerList</button>  
+        <button>Add Recv</button>  
+        <button>Add RecvList</button>  
     </body>
 </html>
