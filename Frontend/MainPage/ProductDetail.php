@@ -9,6 +9,7 @@ include '../../Backend/MainPage/ProductDetail.php';
 <head>
   <meta charset="UTF-8">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
@@ -62,16 +63,16 @@ include '../../Backend/MainPage/ProductDetail.php';
             echo "</div>";
             echo "<p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
             echo "<div class='flex'>";
-            echo "<form action='../../Backend/MainPage/AddToCart.php' method='post'>";
+            // echo "<form action='../../Backend/MainPage/AddToCart.php' method='post'>";
               echo "<input type='hidden' name='proID' value='{$proID}'>";
-              echo "<input type='hidden' name='quantity-hidden' value=''>";
-              echo "<button class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>เพิ่มลงในตะกร้า";
+              echo "<input type='hidden' name='quantityHidden' value=''>";
+              echo "<button id='add-to-cart-button' class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>เพิ่มลงในตะกร้า";
               echo "<img src='../../Pictures/shopping-cart.png' alt='cart icon' class='w-6 h-6 ml-2'
               style='filter: grayscale(100%) contrast(0);'></button>";
-            echo "</form>";
+            // echo "</form>";
             echo "<form action='Payment.php' method='post'>";
               echo "<input type='hidden' name='proID' value='{$proID}'>";
-              echo "<input type='hidden' name='quantity-hidden' value=''>";
+              echo "<input type='hidden' name='quantityHidden' value=''>";
               echo "<button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3'>ซื้อสินค้า</button>";
             echo "</form>";
             echo "</div>";
@@ -124,7 +125,7 @@ include '../../Backend/MainPage/ProductDetail.php';
     var decreaseButton = control.querySelector('.decrease');
     var increaseButton = control.querySelector('.increase');
     var quantityInput = control.querySelector('.quantity');
-    var quantityHidden = control.querySelector('input[name="quantity-hidden"]');
+    var quantityHidden = control.querySelector('input[name="quantityHidden"]');
 
     decreaseButton.addEventListener('click', function() {
       var currentQuantity = parseInt(quantityInput.value, 10);
@@ -152,10 +153,30 @@ include '../../Backend/MainPage/ProductDetail.php';
         if (currentQuantity > maxQuantity) {
           quantityInput.value = maxQuantity;
           quantityHidden.value = quantityInput.value;
+        } else if (currentQuantity === 0) {
+          quantityInput.value = "1";
+          quantityHidden.value = quantityInput.value;
         }
       }
+      quantityHidden.value = quantityInput.value;
     });
     quantityHidden.value = quantityInput.value;
+  });
+
+  $(document).ready(function() {
+    $('#add-to-cart-button').click(function() {
+      $.ajax({
+        type: 'POST',
+        url: '../../Backend/MainPage/AddToCart.php',
+        data: {
+          proID: $('input[name="proID"]').val(),
+          quantityHidden: $('input[name="quantityHidden"]').val()
+        },
+        success: function() {
+          window.location.href = '../../Frontend/MainPage/Cart.php';
+        }
+      });
+    });
   });
 </script>
 </html>

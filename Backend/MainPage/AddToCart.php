@@ -1,12 +1,12 @@
 <?php
   session_start();
+  error_reporting(E_ALL);
+  ini_set('display_errors', 1);
   require '../../Components/ConnectDB.php';
   manageCart();
-  header("Location: ../../Frontend/MainPage/Cart.php"); 
-  
   function manageCart() {
     $proID = $_POST['proID'];
-    $quantity = $_POST['quantity-hidden'];
+    $quantity = $_POST['quantityHidden'];
     if (isset($_SESSION['tokenJWT'])) {
       $jwt = $_SESSION['tokenJWT'];
       $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
@@ -56,6 +56,10 @@
     } else {
       $_SESSION['cart'][$proID] = $quantity;
     }
+
+    if (isset($_POST['update']) && $_POST['update'] == 'true') {
+      $_SESSION['cart'][$proID] = $quantity;
+    }
   }
 
   function checkQty($proID) {
@@ -93,8 +97,8 @@
 
   function alreadyInCart($id, $proID) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT COUNT(*) AS alreadyInCart FROM CART_LIST cl WHERE cl.CusID = ? AND cl.ProID = ?");
-    $stmt->bind_param("ii", $id, $proID);
+    $stmt = $connectDB->prepare("SELECT COUNT(*) AS alreadyInCart FROM CART_LIST cl WHERE cl.CusID = ? AND cl.ProID = ? AND cl.Status != ?");
+    $stmt->bind_param("iis", $id, $proI, 'Ordered');
     $stmt->execute();
     $result = $stmt->get_result();
     $result = $result->fetch_assoc()['alreadyInCart'];

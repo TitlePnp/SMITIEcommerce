@@ -3,7 +3,7 @@ require '../../Backend/Authorized/UserAuthorized.php';
 require '../../Backend/Authorized/ManageHeader.php';
 include '../../Backend/MainPage/CartDetail.php';
 if (isset($_SESSION['cart'])) {
-    print_r($_SESSION['cart']);
+  print_r($_SESSION['cart']);
 }
 ?>
 
@@ -51,7 +51,7 @@ if (isset($_SESSION['cart'])) {
             <td scope="col" class="px-6 py-3 text-center border-x">ราคาต่อเล่ม</td>
             <td scope="col" class="px-6 py-3 text-center border-x">จำนวน</td>
             <td scope="col" class="px-6 py-3 text-center border-x">ราคารวม</td>
-            <td scope="col" class="px-6 py-3 text-center">Action</td>
+            <td scope="col" class="px-6 py-3 text-center">ต้องการลบสินค้า?</td>
           </tr>
         </thead>
         <tbody>
@@ -74,22 +74,22 @@ if (isset($_SESSION['cart'])) {
                     echo "<img src='{$row['ImageSource']}' alt='' class='h-full w-full object-cover rounded-lg object-center'>";
                   echo "</div>";
                 echo "</td>";
-                $proName = $row['ProName'];
-                if (strlen($proName) >= 20) {
-                  $proName = wordwrap($proName, 20, "<br />\n", true);
-                }
+                $proName = mb_strlen($row['ProName']) > 20 ? mb_substr($row['ProName'], 0, 20) . '...' : $row['ProName'];
                 echo "<td scope='row' class='font-medium text-gray-900'>{$proName}</td>";
-                echo "<td class='text-center'>{$row['PricePerUnit']}</td>";
+                echo "<td class='text-center'}'>{$row['PricePerUnit']}</td>";
                 echo "<td>";
                   echo "<div class='quantity-controls flex items-center justify-center'>";
-                    echo "<button type='button' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>";
+                    echo "<input type='hidden' name='proID' value='{$keys[$i]}'>";
+                    echo "<input type='hidden' name='quantityHidden' value=''>";
+                    echo "<input type='hidden' name='pricePerUnit' value='{$row['PricePerUnit']}'>";
+                    echo "<button type='submit' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>";
                       echo "<input type='number' min='1' max='{$row['StockQty']}' value='{$quantity[$i]}' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>";
-                    echo "<button type='button' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>";
-                  echo "</div>";
+                    echo "<button type='submit' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>";
+                    echo "</div>";
                   echo "<p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
                 echo "</td>";
-                echo "<td class='text-center'>{$totalPrice}</td>";
-                echo "<td class='text-center'><button class='bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3'>ลบ</button></td>";
+                echo "<td class='text-center'><p class='sum' data-sum='{$totalPrice}'></p></td>";
+                echo "<td class='text-center'><button class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='{$keys[$i]}'>ลบ</button></td>";
               echo "</tr>";
             }
           ?>
@@ -115,16 +115,26 @@ if (isset($_SESSION['cart'])) {
   <div>
 
 <script>
-  document.querySelectorAll('.quantity-controls').forEach(function(control) {
+  document.querySelectorAll('.quantity-controls').forEach(function(control, index) {
     var decreaseButton = control.querySelector('.decrease');
     var increaseButton = control.querySelector('.increase');
     var quantityInput = control.querySelector('.quantity');
+    var quantityHidden = control.querySelector('input[name="quantityHidden"]');
+    
+    var price = parseFloat(control.querySelector('input[name="pricePerUnit"]').value);
+    var sumElement = document.querySelectorAll('.sum')[index];
+    var sum = price * quantityInput.value;
 
     decreaseButton.addEventListener('click', function() {
       var currentQuantity = parseInt(quantityInput.value, 10);
       if (currentQuantity > 1) {
         quantityInput.value = currentQuantity - 1;
+        quantityHidden.value = quantityInput.value;
       }
+      sum = price * quantityInput.value;
+      sumElement.innerHTML = sum;
+      var proID = control.querySelector('input[name="proID"]').value;
+      sendAjaxRequest(proID, quantityInput.value);
     });
 
     increaseButton.addEventListener('click', function() {
@@ -132,7 +142,12 @@ if (isset($_SESSION['cart'])) {
       var maxQuantity = parseInt(quantityInput.max, 10);
       if (currentQuantity < maxQuantity) {
         quantityInput.value = currentQuantity + 1;
+        quantityHidden.value = quantityInput.value;
       }
+      sum = price * quantityInput.value;
+      sumElement.innerHTML = sum;
+      var proID = control.querySelector('input[name="proID"]').value;
+      sendAjaxRequest(proID, quantityInput.value);
     });
 
     quantityInput.addEventListener('input', function() {
@@ -143,9 +158,19 @@ if (isset($_SESSION['cart'])) {
         var maxQuantity = parseInt(quantityInput.max, 10);
         if (currentQuantity > maxQuantity) {
           quantityInput.value = maxQuantity;
+          quantityHidden.value = quantityInput.value;
+        } else if (currentQuantity === 0) {
+          quantityInput.value = "1";
+          quantityHidden.value = quantityInput.value;
         }
       }
+      sum = price * quantityInput.value;
+      sumElement.innerHTML = sum;
+      var proID = control.querySelector('input[name="proID"]').value;
+      sendAjaxRequest(proID, quantityInput.value);
     });
+    sumElement.innerHTML = sum;
+    quantityHidden.value = quantityInput.value;
   });
 
   $(document).ready(function(){
@@ -194,6 +219,45 @@ if (isset($_SESSION['cart'])) {
     document.getElementById('total').innerHTML = total.toFixed(2);
     document.getElementById('qty-choose').innerHTML = count;
   }
+
+  function sendAjaxRequest(proID, quantity) {
+    $.ajax({
+      type: 'POST',
+      url: '../../Backend/MainPage/AddToCart.php',
+      data: {
+        proID: proID,
+        quantityHidden: quantity,
+        update: true
+      },
+      success: function() {
+        console.log('success');
+        updateTotal();
+      }
+    });
+  }
+
+  $(document).ready(function() {
+    document.querySelectorAll('.delete').forEach(function(button) {
+      button.addEventListener('click', function() {
+          var proID = button.dataset.proid;
+          sendDeleteRequest(proID);
+      });
+    });
+  });
+
+function sendDeleteRequest(proID) {
+  $.ajax({
+    type: 'POST',
+    url: '../../Backend/MainPage/DeleteFromCart.php',
+    data: {
+      proID: proID
+    },
+    success: function() {
+      location.reload();
+    }
+  });
+}
+
 </script>
 </body>
 </html>
