@@ -97,12 +97,12 @@ if (isset($_SESSION['cart'])) {
       </table>
     </div>
     <footer class="sticky bottom-0 bg-[#062639] rounded-lg shadow m-4 p-4">
-      <div class="container mx-auto flex flex-wrap justify-between items-center">
-        <div class="flex items-center">
+      <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center mb-2 md:mb-0">
           <input id="checkbox-all-last" type="checkbox" class="w-4 h-4 text-blue-600 mr-2">
           <label for="checkbox-all-last" class="text-white">สินค้าที่เลือก: <span id="qty-choose"></span> รายการ</label>
         </div>
-        <div class="text-white text-center"> ราคารวมทั้งหมด: <span id="total"></span> บาท</div>
+        <div class="text-white text-center mb-2 md:mb-0"> ราคารวมทั้งหมด: <span id="total"></span> บาท</div>
         <div class="justify-end">
           <form action='Payment.php' method='post'>
             <input type='hidden' name='proID' value='{$proID}'>
