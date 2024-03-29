@@ -188,7 +188,7 @@ use Farzai\PromptPay\Generator;
                 amount: $totlaPrice
             );
             
-            $qrCode->save('qrcode.png');
+            // $qrCode->save('qrcode.png');
             
             // Or insert it directly into a template:
             echo '<img src="' . $qrCode->asDataUri() . '" />';
