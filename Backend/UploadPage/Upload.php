@@ -17,11 +17,7 @@
       if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === 0) {
         $image = $_FILES['receipt']['tmp_name'];
         $imgContent = file_get_contents($image);
-        $fileName = $file['name'];
-        $fileExt = explode('.', $fileName);
-        $fileActualExt = strtolower(end($fileExt));
-        $allowed = array('jpg', 'jpeg', 'png');
-        if (in_array($fileActualExt, $allowed)) {
+
         //   $recID = newRecID();
         //   $stmt = $connectDB->prepare("INSERT INTO RECEIPT (RecID, PayTime, CusID, TaxID, InvoiceID, Payment, Status, Channel) 
         //                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -29,10 +25,6 @@
         //   $stmt->execute();
           $_SESSION['success'] = "อัปโหลดรูปภาพการชำระเงินสำเร็จ";
           header("Location: ../../Frontend/UploadPage/Upload.php");
-          } else {
-            $_SESSION['error'] = "เกิดข้อผิดพลาด โปรดเลือกอัปโหลดใหม่อีกครั้ง k";
-            header("Location: ../../Frontend/UploadPage/Upload.php");
-          }
         } else {
           $_SESSION['error'] = "เกิดข้อผิดพลาด โปรดเลือกอัปโหลดใหม่อีกครั้ง";
           header("Location: ../../Frontend/UploadPage/Upload.php");

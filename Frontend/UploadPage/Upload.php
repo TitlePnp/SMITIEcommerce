@@ -60,7 +60,7 @@
               <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">คลิกเพื่ออัปโหลด</span> หรือ วางไฟล์ไว้ที่นี่</p>
               <p class="text-xs text-gray-500 dark:text-gray-400">PNG หรือ JPG</p>
             </div>
-            <input id="dropzone-file" name="receipt" type="file" class="hidden" />
+            <input id="dropzone-file" name="receipt" type="file" class="hidden" accept="image/png, image/jpeg,  image/jpg" />
             </label>
           </div> 
           <button type="submit" class="w-full h-12 mt-8 text-white bg-blue-500 rounded-lg">ยืนยันการชำระเงิน</button>
