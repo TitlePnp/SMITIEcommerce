@@ -39,12 +39,6 @@ function insertReceiver($RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr)
     $stmt = $connectDB->prepare("INSERT INTO Receiver (RecvFName, RecvLName, Sex, Tel, Address) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr);
     $stmt->execute();
-
-    $stmt = $connectDB->prepare("SELECT MAX(RecvID) AS LastRecvID FROM receiver");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
-    return $result->fetch_assoc()['LastRecvID'];
 }
 
 function insertReceiverList($recieverID)
@@ -78,7 +72,7 @@ function insertReceiverList($recieverID)
 }
 
 
-function insertInvoiceOrder($InvoiceID)
+function insertInvoiceOrder($InvoiceID, $payment)
 {
     global $connectDB, $jwt, $key;
     $StartDate = date("Y-m-d H:i:s");
@@ -99,8 +93,8 @@ function insertInvoiceOrder($InvoiceID)
     }
 
     $status = 'Ordered';
-    $stmt = $connectDB->prepare("INSERT INTO invoice_order(InvoiceID, CusID, StartDate, EndDate, Status) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $InvoiceID, $CusID, $StartDate, $EndDate, $status);
+    $stmt = $connectDB->prepare("INSERT INTO invoice_order(InvoiceID, CusID, StartDate, EndDate, Status, Payment) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $InvoiceID, $CusID, $StartDate, $EndDate, $status, $payment);
     $stmt->execute();
     $stmt->close();
 }
@@ -123,11 +117,10 @@ function getNewInvoiceID()
 {
     global $connectDB;
 
-    $stmt = $connectDB->prepare("SELECT MAX(InvoiceID) AS LastInvoiceID FROM invoice_order");
+    $stmt = $connectDB->prepare("SELECT InvoiceID FROM invoice_order ORDER BY CAST(SUBSTRING(InvoiceID FROM 2) AS UNSIGNED) DESC LIMIT 1");
     $stmt->execute();
     $result = $stmt->get_result();
-    $lastInvoiceID = $result->fetch_assoc()['LastInvoiceID'];
-    // If there is no invoice in the database, return "N1"
+    $lastInvoiceID = $result->fetch_assoc()['InvoiceID'];    // If there is no invoice in the database, return "N1"
     if ($lastInvoiceID == null) {
         return "N1";
     }
@@ -138,13 +131,14 @@ function getNewInvoiceID()
     return $prefix . $number;
 }
 
-function getInvoiceID() {
+function getInvoiceID()
+{
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT MAX(InvoiceID) AS LastInvoiceID FROM invoice_order");
+    $stmt = $connectDB->prepare("SELECT InvoiceID FROM invoice_order ORDER BY CAST(SUBSTRING(InvoiceID FROM 2) AS UNSIGNED) DESC LIMIT 1");
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
-    return $result->fetch_assoc()['LastInvoiceID'];
+    return $result->fetch_assoc()['InvoiceID'];
 }
 
 function getRecvID()
