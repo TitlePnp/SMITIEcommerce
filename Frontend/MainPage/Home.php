@@ -194,9 +194,29 @@ use \Firebase\JWT\JWT;
                         echo "<p class='text-md'><b>ผู้เขียน:</b> " . $row['Author'] . "</p>";
                         echo "<p class='text-md'><b>หมวดหมู่:</b> " . $row['TypeName'] . "</p>";
                         echo "<p class='text-md'><b>เรื่องย่อ:</b> " . $row['Description'] . "</p>";
-                        echo "<div class='flex mt-5 items-center w-full rounded-md bg-red-100 h-16'>";
-                        echo "<span class='font-bold text-2xl ml-5'>" . $row['PricePerUnit'] . " </span>";
-                        echo "<span class='font-medium text-lg ml-2'> บาท</span>";
+                        echo "<div class='p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50' role='alert'/>";
+                        echo "<span class='text-3xl font-bold'>{$row['PricePerUnit']}</span> บาท";
+                        echo "</div>";
+                        echo "<div class='quantity-controls'>";
+                        echo "<div class='flex items-center'>";
+                        echo "<p class='text-base font-normal mr-3'>จำนวน: </p>";
+                        echo "<button type='button' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>";
+                        echo "<input type='number' min='1' max='{$row['StockQty']}' value='1' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>";
+                        echo "<button type='button' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>";
+                        echo "</div>";
+                        echo "<p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
+                        echo "<div class='flex'>";
+                        echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
+                        echo "<input type='hidden' name='quantityHidden' value=''>";
+                        echo "<button id='add-to-cart-button' class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>เพิ่มลงในตะกร้า";
+                        echo "<img src='../../Pictures/shopping-cart.png' alt='cart icon' class='w-6 h-6 ml-2'
+              style='filter: grayscale(100%) contrast(0);'></button>";
+                        echo "<form action='Payment.php' method='post'>";
+                        echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
+                        echo "<input type='hidden' name='quantityHidden' value=''>";
+                        echo "<button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3'>ซื้อสินค้า</button>";
+                        echo "</form>";
+                        echo "</div>";
                         echo "</div>"
                         ?>
                     </div>
@@ -434,6 +454,64 @@ use \Firebase\JWT\JWT;
                         },
                         success: function() {
                             location.reload();
+                        }
+                    });
+                });
+            });
+
+            document.querySelectorAll('.quantity-controls').forEach(function(control) {
+                var decreaseButton = control.querySelector('.decrease');
+                var increaseButton = control.querySelector('.increase');
+                var quantityInput = control.querySelector('.quantity');
+                var quantityHidden = control.querySelector('input[name="quantityHidden"]');
+
+                decreaseButton.addEventListener('click', function() {
+                    var currentQuantity = parseInt(quantityInput.value, 10);
+                    if (currentQuantity > 1) {
+                        quantityInput.value = currentQuantity - 1;
+                        quantityHidden.value = quantityInput.value;
+                    }
+                });
+
+                increaseButton.addEventListener('click', function() {
+                    var currentQuantity = parseInt(quantityInput.value, 10);
+                    var maxQuantity = parseInt(quantityInput.max, 10);
+                    if (currentQuantity < maxQuantity) {
+                        quantityInput.value = currentQuantity + 1;
+                        quantityHidden.value = quantityInput.value;
+                    }
+                });
+
+                quantityInput.addEventListener('input', function() {
+                    var currentQuantity = parseInt(quantityInput.value, 10);
+                    if (isNaN(currentQuantity)) {
+                        quantityInput.value = "1";
+                    } else {
+                        var maxQuantity = parseInt(quantityInput.max, 10);
+                        if (currentQuantity > maxQuantity) {
+                            quantityInput.value = maxQuantity;
+                            quantityHidden.value = quantityInput.value;
+                        } else if (currentQuantity === 0) {
+                            quantityInput.value = "1";
+                            quantityHidden.value = quantityInput.value;
+                        }
+                    }
+                    quantityHidden.value = quantityInput.value;
+                });
+                quantityHidden.value = quantityInput.value;
+            });
+
+            $(document).ready(function() {
+                $('#add-to-cart-button').click(function() {
+                    $.ajax({
+                        type: 'POST',
+                        url: '../../Backend/CartQuery/AddToCart.php',
+                        data: {
+                            proID: $('input[name="proID"]').val(),
+                            quantityHidden: $('input[name="quantityHidden"]').val()
+                        },
+                        success: function() {
+                            window.location.href = '../../Frontend/MainPage/Cart.php';
                         }
                     });
                 });
