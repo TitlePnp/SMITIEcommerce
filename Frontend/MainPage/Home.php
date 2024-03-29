@@ -3,7 +3,6 @@ require '../../Backend/Authorized/UserAuthorized.php';
 require '../../Backend/Authorized/ManageHeader.php';
 require '../../vendor/autoload.php';
 require_once "../../Backend/ProductQuery/ProductInfo.php";
-
 use Firebase\JWT\Key;
 use \Firebase\JWT\JWT;
 ?>
@@ -16,6 +15,7 @@ use \Firebase\JWT\JWT;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
@@ -183,7 +183,7 @@ use \Firebase\JWT\JWT;
                 <h1 class="font-bold text-2xl mb-2">แนะนำสำหรับคุณ</h1>
                 <div class="flex flex-row w-full">
                     <div class="flex justify-center w-full">
-                        <img class="m-5 max-h-84 object-contain rounded-md border-2 " src="../../Pictures/Product/Commic/onepiece98.jpeg" alt="recommendBook  ">
+                        <img class="m-5 max-h-84 object-contain rounded-md border-2 " src="../../Pictures/Product/comic/onepiece98.jpeg" alt="recommendBook  ">
                     </div>
                     <div class="w-full border-l-2 p-2">
                         <?php
@@ -217,11 +217,16 @@ use \Firebase\JWT\JWT;
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
                         echo "<span class='productDiscount absolute top-2.5 left-2.5 px-1.5 py-1.5 bg-red-700 text-white font-medium rounded-md'>-10%</span>";
 
+                        echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
                         echo "<img id='imageProduct' class='productImage hover:cursor-pointer rounded-lg border-2 w-full h-96 min-h-80 object-fill' src='" . $row['ImageSource'] . "' alt='product'>";
-                        echo "<input id='ProductID' type='hidden' name='productID' value='" . $row['ProID'] . "'>";
+                        echo "<input type='hidden' name='proID' value='" . $row['ProID'] . "'>";
+                        echo "<input type='hidden' name='typeName' value='" . $row['TypeName'] . "'>";
+                        echo "</form>";
 
-                        echo "<button id='addToCartButton' data-product-id='" . $row['ProID'] . "' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
-                        echo "<input id='productID' type='hidden' name='productID' value='" . $row['ProID'] . "'>";
+                        // echo "<form id='addtoCard' method='POST' action='#'>";
+                        echo "<button id='addtoCard' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
+                        echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
+                        // echo "</form>";
 
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
@@ -262,10 +267,10 @@ use \Firebase\JWT\JWT;
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         echo "</form>";
 
-                        echo "<form id='addtoCard' method='POST' action='#'>";
-                        echo "<button type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
+                        // echo "<form id='addtoCard' method='POST' action='#'>";
+                        echo "<button id='addtoCard' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
-                        echo "</form>";
+                        // echo "</form>";
 
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
@@ -303,8 +308,10 @@ use \Firebase\JWT\JWT;
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         echo "</form>";
 
-                        echo "<button type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
+                        // echo "<form id='addtoCard' method='POST' action='#'>";
+                        echo "<button id='addtoCard' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
+                        // echo "</form>";
 
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
@@ -324,13 +331,13 @@ use \Firebase\JWT\JWT;
             </section>
         </div>
 
-        <?php
+        <?php 
         if (isset($_SESSION['tokenJWT']) || isset($_SESSION['tokenGoogle'])) {
             var_dump("isset");
             // var_dump("Test jwt: " +  $_SESSION['tokenJWT']);
             var_dump($_SESSION['tokenGoogle']);
         }
-
+        
         ?>
         <script>
             const navLinks = document.querySelectorAll('.slider-nav a');
@@ -389,27 +396,30 @@ use \Firebase\JWT\JWT;
             // เรียกใช้ฟังก์ชันแรกเพื่อแสดงภาพแรกเมื่อเพจโหลด
             showSlide(currentIndex);
 
-
-            const addToCartButton = document.getElementById('addToCartButton');
-            // const productID = document.getElementById('productID');
-
-            $(document).on('click', '.addToCartButton', function() {
-                var productID = $(this).data('product-id');
-                $.ajax({
-                    type: 'POST',
-                    url: '../../Backend/CartQuery/AddToCart.php',
-                    data: {
-                        proID: productID,
-                        quantityHidden: 1
-                    },
-                    success: function() {
-                        alert('Add to cart successfully');
-                    },
-                    error: function() {
-                        alert('Error in adding to cart');
-                    }
-                });
+        const imgProdcut = document.querySelectorAll('.productImage');
+        imgProdcut.forEach((img) => {
+            img.addEventListener('click', () => {
+                var form = img.parentElement;
+                form.submit();
             });
+        });
+
+        $(document).ready(function() {
+            $('#addtoCard').click(function() {
+            $.ajax({
+                type: 'POST',
+                url: '../../Backend/CartQuery/AddToCart.php',
+                data: {
+                proID: $('input[name="productID"]').val(),
+                quantityHidden: 1
+                },
+                success: function() {
+                // window.location.href = '../../Frontend/MainPage/Cart.php';
+                alert('Add to cart success');
+                }
+            });
+            });
+        });
         </script>
 </body>
 

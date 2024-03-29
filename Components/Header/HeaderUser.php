@@ -36,7 +36,7 @@
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 relative flex h-12 items-center justify-between">
       <!-- logo -->
       <div>
-        <a href="#"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
+        <a href="../../Frontend/MainPage/Home.php"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
       </div>
       <!-- search bar -->
       <form class="mx-auto" style="width: 60%">
