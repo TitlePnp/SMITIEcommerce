@@ -27,7 +27,7 @@ require_once "../../Backend/MainPage/CartDetail.php"
 </head>
 
 <body class="">
-    <form method="POST" action="#">
+    <form id="OrderControl" method="POST" action="../../Backend/OrderManage/OrderController.php">
         <div class="flex flex-row px-28 py-8">
             <div class="w-full bg-white mr-3 p-5 rounded-lg shadow-lg">
                 <div class="mb-3">
@@ -131,8 +131,8 @@ require_once "../../Backend/MainPage/CartDetail.php"
                 </div>
             </div>
             <div class="w-3/6 bg-white ml-3 rounded-lg p-5 shadow-lg">
-                <div class="rounded-md h-10" style="background-color: #062639;">
-                    <p class="font-semibold text-white text-lg">รายการสินค้า</p>
+                <div class=" flex rounded-md h-10 items-center mb-5" style="background-color: #062639;">
+                    <p class="font-semibold text-white text-lg ml-2">รายการสินค้า</p>
                 </div>
                 <div class="">
                     <?php
@@ -230,6 +230,15 @@ require_once "../../Backend/MainPage/CartDetail.php"
         });
 
         //Form Control
+        let RecvFNameStatus = false;
+        let RecvLNameStatus = false;
+        let RecvTelStatus = false;
+        let RecvEmailStatus = false;
+        let RecvAddrStatus = false;
+        let RecvProvinceStatus = false;
+        let RecvPostStatus = false;
+        let PaymentStatus = false;
+
         const RecvFNameInput = document.getElementById("RecvFNameInput");
         const RecvLNameInput = document.getElementById("RecvLNameInput");
         const RecvTelInput = document.getElementById("RecvTelInput");
@@ -250,79 +259,102 @@ require_once "../../Backend/MainPage/CartDetail.php"
                 RecvFNameInput.style.borderColor = 'red';
                 RecvFNameError.style.display = 'block';
                 RecvFNameError.innerHTML = '*กรุณากรอกชื่อ';
+                RecvFNameStatus = false;
             } else {
                 RecvFNameInput.style.borderColor = 'rgb(156 163 175)';
                 RecvFNameError.style.display = 'none';
+                RecvFNameStatus = true;
             }
 
             if (RecvLNameInput.value === "") {
                 RecvLNameInput.style.borderColor = 'red';
                 RecvLNameError.style.display = 'block';
                 RecvLNameError.innerHTML = '*กรุณากรอกนามสกุล';
+                RecvLNameStatus = false;
             } else {
                 RecvLNameInput.style.borderColor = 'rgb(156 163 175)';
                 RecvLNameError.style.display = 'none';
+                RecvLNameStatus = true;
             }
 
             if (RecvTelInput.value === "") {
                 RecvTelInput.style.borderColor = 'red';
                 RecvTelError.style.display = 'block';
                 RecvTelError.innerHTML = '*กรุณากรอกเบอร์โทรศัพท์';
+                RecvTelStatus = false;
             } else if (isNaN(RecvTelInput.value)) {
                 RecvTelError.style.display = 'block';
                 RecvTelError.innerHTML = '*กรุณากรอกเบอร์โทรศัพท์เป็นตัวเลขเท่านั้น';
+                RecvTelStatus = false;
             } else if (RecvTelInput.value.length !== 10) {
                 RecvTelError.style.display = 'block';
                 RecvTelError.innerHTML = '*กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก';
+                RecvTelStatus = false;
             } else {
                 RecvTelInput.style.borderColor = 'rgb(156 163 175)';
                 RecvTelError.style.display = 'none';
+                RecvTelStatus = true;
             }
 
             if (RecvEmailInput.value === "") {
                 RecvEmailInput.style.borderColor = 'red';
                 RecvEmailError.style.display = 'block';
                 RecvEmailError.innerHTML = '*กรุณากรอกอีเมล';
+                RecvEmailStatus = false;
             } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(RecvEmailInput.value)) {
                 RecvEmailError.style.display = 'block';
                 RecvEmailError.innerHTML = '*กรุณากรอกอีเมลให้ถูกต้อง';
+                RecvEmailStatus = false;
             } else {
                 RecvEmailInput.style.borderColor = 'rgb(156 163 175)';
                 RecvEmailError.style.display = 'none';
+                RecvEmailStatus = true;
             }
 
             if (RecvAddrInput.value === "") {
                 RecvAddrInput.style.borderColor = 'red';
                 RecvAddrError.style.display = 'block';
                 RecvAddrError.innerHTML = '*กรุณากรอกที่อยู่';
+                RecvAddrStatus = false;
             } else {
                 RecvAddrInput.style.borderColor = 'rgb(156 163 175)';
                 RecvAddrError.style.display = 'none';
+                RecvAddrStatus = true;
             }
 
             if (RecvProvinceInput.value === "") {
                 RecvProvinceInput.style.borderColor = 'red';
                 RecvProvinceError.style.display = 'block';
                 RecvProvinceError.innerHTML = '*กรุณากรอกจังหวัด';
+                RecvPostStatus = false;
             } else {
                 RecvProvinceInput.style.borderColor = 'rgb(156 163 175)';
                 RecvProvinceError.style.display = 'none';
+                RecvProvinceStatus = true;
             }
 
             if (RecvInputPost.value === "") {
                 RecvInputPost.style.borderColor = 'red';
                 RecvPostError.style.display = 'block';
                 RecvPostError.innerHTML = '*กรุณากรอกรหัสไปรษณีย์';
+                RecvPostStatus = false;
             } else {
                 RecvInputPost.style.borderColor = 'rgb(156 163 175)';
                 RecvPostError.style.display = 'none';
+                RecvPostStatus = true;
             }
 
             if (document.getElementById('MB').checked === false && document.getElementById('COD').checked === false) {
                 document.getElementById('PaymetError').style.display = 'block';
             } else {
                 document.getElementById('PaymetError').style.display = 'none';
+                PaymentStatus = true;
             }
+
+            if (RecvAddrStatus && RecvEmailStatus && RecvFNameStatus && RecvLNameStatus && RecvPostStatus && RecvProvinceStatus && RecvTelStatus &&PaymentStatus) {
+                document.getElementById('OrderControl').submit();
+            }
+
         }
     </script>
 </body>
