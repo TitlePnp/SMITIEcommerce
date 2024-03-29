@@ -1,7 +1,25 @@
 <?php
 require_once "../../Backend/Authorized/UserAuthorized.php";
 require_once "../../Backend/Authorized/ManageHeader.php";
-require_once "../../Backend/CartQuery/CartDetail.php"
+require_once "../../Backend/CartQuery/CartDetail.php";
+require_once "../../Backend/UserManage/UserInfo.php";
+require '../../vendor/autoload.php';
+
+use Firebase\JWT\Key;
+use \Firebase\JWT\JWT;
+
+$isMember = false;
+if (isset($_SESSION["tokenJWT"])) {
+    $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
+    $CusID = $decoded->cusid;
+    $userInfo = getUserInfoFromCusID($CusID);
+    $isMember = true;
+} else if (isset($_SESSION["tokenGoogle"])) {
+    $userInfo = getGoogleUserInfo($_SESSION["tokenGoogle"]);
+    $CusID = $userInfo['CusID'];
+    $isMember = true;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +49,7 @@ require_once "../../Backend/CartQuery/CartDetail.php"
         <div class="flex flex-row px-28 py-8">
             <div class="w-full bg-white mr-3 p-5 rounded-lg shadow-lg">
                 <div class="mb-3">
-                    <a class="hover:text-blue-500" href="Cart.php"><button class="font-semibold"><i class='bx bx-arrow-back'></i> ย้อนกลับ</button></a>
+                    <a class="hover:text-blue-500" href="Cart.php"><button type="button" class="font-semibold"><i class='bx bx-arrow-back'></i> ย้อนกลับ</button></a>
                 </div>
                 <div class="">
                     <h1 class="text-2xl font-bold">เช็คเอาท์</h1>
@@ -42,14 +60,32 @@ require_once "../../Backend/CartQuery/CartDetail.php"
                     <div class="flex flex-row mt-2">
                         <div class="w-full mr-5">
                             <h1 class="font-semibold">ชื่อ*</h1>
-                            <!-- plaecholder with address in database -->
-                            <input id="RecvFNameInput" name="RecvFName" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกชื่อ" type="text" required>
+                            <?php
+                            if ($isMember) {
+                                if ($userInfo['CusFName'] != "") {
+                                    echo '<input id="RecvFNameInput" name="RecvFName" class="w-full p-2 border rounded-md h-8 border-gray-400" type="text" value="' . $userInfo['CusFName'] . '" required>';
+                                } else {
+                                    echo '<input id="RecvFNameInput" name="RecvFName" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกชื่อ" type="text" required>';
+                                }
+                            } else {
+                                echo '<input id="RecvFNameInput" name="RecvFName" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกชื่อ" type="text" required>';
+                            }
+                            ?>
                             <span id="RecvFNameError" class="text-sm text-red-500" style="display:none"></span>
                         </div>
                         <div class="w-full ml-5">
                             <h1 class="font-semibold">นามสกุล*</h1>
-                            <!-- plaecholder with address in database -->
-                            <input id="RecvLNameInput" name="RecvLName" class="w-full border p-2 rounded-md h-8 border-gray-400" placeholder="กรุณากรอกนามสกุล" type="text" required>
+                            <?php
+                            if ($isMember) {
+                                if ($userInfo['CusLName'] != "") {
+                                    echo '<input id="RecvLNameInput" name="RecvLName" class="w-full p-2 border rounded-md h-8 border-gray-400" type="text" value="' . $userInfo['CusLName'] . '" required>';
+                                } else {
+                                    echo '<input id="RecvLNameInput" name="RecvLName" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกนามสกุล" type="text" required>';
+                                }
+                            } else {
+                                echo '<input id="RecvLNameInput" name="RecvLName" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกนามสกุล" type="text" required>';
+                            }
+                            ?>
                             <span id="RecvLNameError" class="text-sm text-red-500" style="display:none"></span>
                         </div>
                     </div>
@@ -57,28 +93,77 @@ require_once "../../Backend/CartQuery/CartDetail.php"
                     <div class="flex flex-row mt-2">
                         <div class="w-full mr-5">
                             <h1 class="font-semibold">เบอร์โทรศัพท์*</h1>
-                            <!-- plaecholder with address in database -->
-                            <input id="RecvTelInput" name="RecvTel" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกเบอร์โทรศัพท์" type="text" required>
+                            <?php
+                            if ($isMember) {
+                                if ($userInfo['Tel'] != "") {
+                                    echo '<input id="RecvTelInput" name="RecvTel" class="w-full p-2 border rounded-md h-8 border-gray-400" type="text" value="' . $userInfo['Tel'] . '" required>';
+                                } else {
+                                    echo '<input id="RecvTelInput" name="RecvTel" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกเบอร์โทรศัพท์" type="text" required>';
+                                }
+                            } else {
+                                echo '<input id="RecvTelInput" name="RecvTel" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกเบอร์โทรศัพท์" type="text" required>';
+                            }
+                            ?>
                             <span id="RecvTelError" class="text-sm text-red-500" style="display:none"></span>
                         </div>
                         <div class="w-full ml-5">
                             <h1 class="font-semibold">เพศ</h1>
-                            <!-- plaecholder with address in database -->
-                            <input type="radio" name="sex" value="M"> ชาย
-                            <input type="radio" name="sex" value="F"> หญิง
-                            <input type="radio" name="sex" value="N" required> ไม่ระบุ
+                            <?php
+                            if ($isMember) {
+                                if ($userInfo['Sex'] == 'M') {
+                                    echo '<input type="radio" name="sex" value="M" checked> ชาย
+                                        <input type="radio" name="sex" value="F"> หญิง
+                                        <input type="radio" name="sex" value="N"> ไม่ระบุ';
+                                } else if ($userInfo['Sex'] == 'F') {
+                                    echo '<input type="radio" name="sex" value="M"> ชาย
+                                        <input type="radio" name="sex" value="F" checked> หญิง
+                                        <input type="radio" name="sex" value="N"> ไม่ระบุ';
+                                } else {
+                                    echo '<input type="radio" name="sex" value="M"> ชาย
+                                        <input type="radio" name="sex" value="F"> หญิง
+                                        <input type="radio" name="sex" value="N"> ไม่ระบุ';
+                                }
+                            } else {
+                                echo '<input type="radio" name="sex" value="M"> ชาย
+                                        <input type="radio" name="sex" value="F"> หญิง
+                                        <input type="radio" name="sex" value="N"> ไม่ระบุ';
+                            }
+
+                            ?>
                         </div>
                     </div>
 
                     <div class="mt-2">
                         <h1 class="font-semibold">อีเมล*</h1>
-                        <input id="RecvEmailInput" name="RecvEmail" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกอีเมล" type="email" required>
+                        <?php
+                        if ($isMember) {
+                            if ($userInfo['Email'] != "") {
+                                echo '<input id="RecvEmailInput" name="RecvEmail" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="" value="' . $userInfo['Email'] .  '" type="email" required>';
+                            } else {
+                                echo '<input id="RecvEmailInput" name="RecvEmail" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกอีเมล" type="email" required>';
+                            }
+                        } else {
+                            echo '<input id="RecvEmailInput" name="RecvEmail" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกอีเมล" type="email" required>';
+                        }
+                        ?>
+                        <!-- <input id="RecvEmailInput" name="RecvEmail" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกอีเมล" type="email" required> -->
                         <span id="RecvEmailError" class="text-sm text-red-500" style="display:none"></span>
                     </div>
 
                     <div class="mt-2">
                         <h1 class="font-semibold">ที่อยู่สำหรับการจัดส่ง*</h1>
-                        <textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 border-gray-400 resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>
+                        <?php
+                        if ($isMember) {
+                            if ($userInfo['Address'] != "") {
+                                echo '<textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 border-gray-400 resize-none" required>' . $userInfo['Address'] . '</textarea>';
+                            } else {
+                                echo '<textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 border-gray-400 resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
+                            }
+                        } else {
+                            echo '<textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 border-gray-400 resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
+                        }
+                        ?>
+                        <!-- <textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 border-gray-400 resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea> -->
                         <span id="RecvAddrError" class="text-sm text-red-500" style="display:none"></span>
                     </div>
 
@@ -136,28 +221,49 @@ require_once "../../Backend/CartQuery/CartDetail.php"
                 </div>
                 <div class="">
                     <?php
-                    $totalPrice = 0;
-                    $count = count($_SESSION['cart']);
-                    $key = array_keys($_SESSION['cart']);
-                    for ($i = 0; $i < $count; $i++) {
-                        $row = showCartSession($key[$i])->fetch_assoc();
-                        $totalPrice += $row['PricePerUnit'] * $_SESSION['cart'][$key[$i]];
-                        echo "<div class='flex flex-row my-2'>";
-                        echo "<div class='w-5/12'>";
-                        echo "<img class='h-16 w-16 max-w-20 object-cover' src='" . $row['ImageSource'] . "'>";
-                        echo "</div>";
-                        echo "<div class='w-4/12'>";
-                        echo "<p class='text-sm font-semibold truncate'>" . $row['ProName'] . "</p>";
-                        echo "<p class='text-sm'>x" . $_SESSION['cart'][$key[$i]] . "</p>";
-                        echo "</div>";
-                        echo "<div class='flex flex-row w-full justify-end'>";
-                        echo "<p class='text-sm font-semibold justify-end'>" . $row['PricePerUnit'] . " บาท</p>";
-                        echo "</div>";
-                        echo "</div>";
-                        echo "<hr class='border-t border-gray-400 my-2'>";
+                    if ($isMember) {
+                        $totalPrice = 0;
+                        $result = showCartDB($id);
+                        while ($row = $result->fetch_assoc()) {
+                            $totalPrice += $row['PricePerUnit'] * $row['Qty'];
+                            echo "<div class='flex flex-row my-2'>";
+                            echo "<div class='w-5/12'>";
+                            echo "<img class='h-16 w-16 max-w-20 object-cover' src='" . $row['ImageSource'] . "'>";
+                            echo "</div>";
+                            echo "<div class='w-4/12'>";
+                            echo "<p class='text-sm font-semibold truncate'>" . $row['ProName'] . "</p>";
+                            echo "<p class='text-sm'>x" . $row['Qty'] . "</p>";
+                            echo "</div>";
+                            echo "<div class='flex flex-row w-full justify-end'>";
+                            echo "<p class='text-sm font-semibold justify-end'>" . $row['PricePerUnit'] . " บาท</p>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<hr class='border-t border-gray-400 my-2'>";
+                        }
+                        $vat = $totalPrice * 0.07;
+                    } else {
+                        $totalPrice = 0;
+                        $count = count($_SESSION['cart']);
+                        $key = array_keys($_SESSION['cart']);
+                        for ($i = 0; $i < $count; $i++) {
+                            $row = showCartSession($key[$i])->fetch_assoc();
+                            $totalPrice += $row['PricePerUnit'] * $_SESSION['cart'][$key[$i]];
+                            echo "<div class='flex flex-row my-2'>";
+                            echo "<div class='w-5/12'>";
+                            echo "<img class='h-16 w-16 max-w-20 object-cover' src='" . $row['ImageSource'] . "'>";
+                            echo "</div>";
+                            echo "<div class='w-4/12'>";
+                            echo "<p class='text-sm font-semibold truncate'>" . $row['ProName'] . "</p>";
+                            echo "<p class='text-sm'>x" . $_SESSION['cart'][$key[$i]] . "</p>";
+                            echo "</div>";
+                            echo "<div class='flex flex-row w-full justify-end'>";
+                            echo "<p class='text-sm font-semibold justify-end'>" . $row['PricePerUnit'] . " บาท</p>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<hr class='border-t border-gray-400 my-2'>";
+                        }
+                        $vat = $totalPrice * 0.07;
                     }
-                    $vat = $totalPrice * 0.07;
-
                     ?>
                 </div>
 
