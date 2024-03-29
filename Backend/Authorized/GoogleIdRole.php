@@ -8,7 +8,8 @@
     $smtp->bind_param("s", $googleId);
     $smtp->execute();
     $result = $smtp->get_result();
-    $role = $result->fetch_assoc();
+    $roleFromDatabase = $result->fetch_assoc();
+    $role = $roleFromDatabase['role'];
     return $role;
   }
 ?>
