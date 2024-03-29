@@ -205,7 +205,7 @@ use \Firebase\JWT\JWT;
 
             <section class="relative overflow-hidden pt-8">
                 <div class="flex mb-5 justify-between">
-                    <h1 class="font-bold text-2xl">สินค้าลดราคา</h1>
+                    <h1 class="font-bold text-2xl">สินค้าแนะนำ</h1>
                     <h1 class="font-regular text-lg ">ดูทั้งหมด ></h1>
                 </div>
                 <i id='leftPointer' class='bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
@@ -216,7 +216,7 @@ use \Firebase\JWT\JWT;
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='product-card w-64 h-4/5 mr-5'>";
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
-                        echo "<span class='productDiscount absolute top-2.5 left-2.5 px-1.5 py-1.5 bg-red-700 text-white font-medium rounded-md'>-10%</span>";
+                        // echo "<span class='productDiscount absolute top-2.5 left-2.5 px-1.5 py-1.5 bg-red-700 text-white font-medium rounded-md'>-10%</span>";
 
                         echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
                         echo "<img id='imageProduct' class='productImage hover:cursor-pointer rounded-lg border-2 w-full h-96 min-h-80 object-fill' src='" . $row['ImageSource'] . "' alt='product'>";
@@ -234,13 +234,15 @@ use \Firebase\JWT\JWT;
 
                         echo "<p id='productType' class='uppercase text-lg font-bold mt-2 overflow-hidden text-ellipsis whitespace-nowrap'>" . $row['TypeName'] . "</p>";
 
-                        echo "<form id='detialProduct' method='POST' action='#'>";
-                        echo "<p id='productName' class='uppercase text-md font-semibold mt-1 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
-                        echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
+                        echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
+                        echo "<p id='productName' class='nameToDetail uppercase text-md font-semibold mt-1 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
+                        echo "<input type='hidden' name='proID' value='" . $row['ProID'] . "'>";
+                        echo "<input type='hidden' name='typeName' value='" . $row['TypeName'] . "'>";
                         echo "</form>";
 
-                        echo "<span class='font-semibold text-lg'>ราคา: " . ($row['PricePerUnit'] - ($row['PricePerUnit'] * 10 / 100)) . " ฿</span>";
-                        echo "<span class='line-through text-md opacity-50 ml-2'>" . $row['PricePerUnit'] . " ฿</span>";
+                        // echo "<span class='font-semibold text-lg'>ราคา: " . ($row['PricePerUnit'] - ($row['PricePerUnit'] * 10 / 100)) . " </span>";
+                        // echo "<span class='line-through text-md opacity-50 ml-2'>" . $row['PricePerUnit'] . " ฿</span>";
+                        echo "<span class='font-bold text-lg'>ราคา: " . $row['PricePerUnit'] . " บาท</span>";
                         echo "</div>";
                         echo "</div>";
                     };
@@ -277,13 +279,16 @@ use \Firebase\JWT\JWT;
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
 
+                        echo "<p id='productType' class='uppercase text-lg font-bold mt-2 overflow-hidden text-ellipsis whitespace-nowrap'>" . $row['TypeName'] . "</p>";
+
+
                         echo "<form id='detialProduct' method='POST' action='#'>";
-                        echo "<p id='productName' class='uppercase text-md font-semibold mt-2 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
+                        echo "<p id='productName' class='nameToDetail uppercase text-md font-semibold mt-2 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         echo "</form>";
 
                         // echo "<span class='font-bold text-lg'>" . ($row['PricePerUnit'] - ($row['PricePerUnit'] * 10 / 100)) . " ฿</span>";
-                        echo "<span class='text-lg font-bold'>" . $row['PricePerUnit'] . " ฿</span>";
+                        echo "<span class='font-bold text-lg'>ราคา: " . $row['PricePerUnit'] . " บาท</span>";
                         echo "</div>";
                         echo "</div>";
                     };
@@ -319,13 +324,16 @@ use \Firebase\JWT\JWT;
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
 
-                        echo "<form id='detialProduct' method='POST' action='#'>";
-                        echo "<p id='productName' class='uppercase text-md font-semibold mt-2 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
+                        echo "<p id='productType' class='uppercase text-lg font-bold mt-2 overflow-hidden text-ellipsis whitespace-nowrap'>" . $row['TypeName'] . "</p>";
+
+                        echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
+                        echo "<p id='productName' class='nameToDetail uppercase text-md font-semibold mt-2 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         echo "</form>";
 
                         // echo "<span class='font-bold text-lg'>" . ($row['PricePerUnit'] - ($row['PricePerUnit'] * 10 / 100)) . " ฿</span>";
-                        echo "<span class='font-bold text-lg'>" . $row['PricePerUnit'] . " ฿</span>";
+                        // echo "<span class='font-bold text-lg'>" . $row['PricePerUnit'] . " ฿</span>";
+                        echo "<span class='font-bold text-lg'>ราคา: " . $row['PricePerUnit'] . " บาท</span>";
                         echo "</div>";
                         echo "</div>";
                     };
@@ -402,6 +410,14 @@ use \Firebase\JWT\JWT;
             imgProdcut.forEach((img) => {
                 img.addEventListener('click', () => {
                     var form = img.parentElement;
+                    form.submit();
+                });
+            });
+
+            const nameProduct = document.querySelectorAll('.nameToDetail');
+            nameProduct.forEach((name) => {
+                name.addEventListener('click', () => {
+                    var form = name.parentElement;
                     form.submit();
                 });
             });
