@@ -50,7 +50,7 @@
       <div>
         <form action="../../Backend/UploadPage/Upload.php" method="POST" enctype="multipart/form-data">
           <p class="font-medium p-2">หมายเลขคำสั่งซื้อ</p>
-          <input type="text" name="invoiceID" class="w-full h-12 px-3 py-2 text-sm placeholder-gray-400 border rounded-lg" placeholder="<?php echo $invoiceID?>" />
+          <input type="text" name="invoiceID" class="w-full h-12 px-3 py-2 text-sm placeholder-gray-400 border rounded-lg" placeholder="<?php echo $invoiceID?>" value="<?php $invoiceID?>" required />
           <p class="font-normal pt-2 pl-5 text-red-500 text-sm" id="error-invoice"></p>
           <p class="font-medium pl-2 mt-8 mb-3">อัปโหลดรูปภาพการชำระเงิน</p>
           <div class="flex items-center justify-center w-full">
@@ -58,9 +58,9 @@
             <div class="flex flex-col items-center justify-center">
               <img src="../../Pictures/upload.png" class="w-12 h-12" alt="upload" />
               <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">คลิกเพื่ออัปโหลด</span> หรือ วางไฟล์ไว้ที่นี่</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">PNG หรือ JPG</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">PNG หรือ JPG หรือ JPEG</p>
             </div>
-            <input id="dropzone-file" name="receipt" type="file" class="hidden" accept="image/png, image/jpeg,  image/jpg" />
+            <input id="dropzone-file" name="receipt" type="file" class="hidden" accept="image/png, image/jpeg,  image/jpg" ondrop="handleDrop()" required/>
             </label>
           </div> 
           <button type="submit" class="w-full h-12 mt-8 text-white bg-blue-500 rounded-lg">ยืนยันการชำระเงิน</button>
@@ -74,16 +74,35 @@
   </div>
 
   <script>
-  let input = document.getElementById('dropzone-file');
-  let previewImg = document.getElementById('previewImg');
-
-  input.onchange = evt => {
-    const [file] = input.files;
-    if (file) {
-      previewImg.src = URL.createObjectURL(file);
-    }
-  }
-</script>
-
+    let dropzone = document.querySelector('label[for="dropzone-file"]');
+    let input = document.getElementById('dropzone-file');
+    let previewImg = document.getElementById('previewImg');
+    
+    dropzone.ondragover = dropzone.ondragenter = function(evt) {
+      evt.preventDefault();
+    };
+    
+    dropzone.ondrop = function(evt) {
+      /* รับไฟล์จากเหตุการณ์ และแสดง */
+      let file = evt.dataTransfer.files[0];
+      /* ตรวจสอบประเภทของไฟล์ */
+      if (file && (file.type === "image/png" || file.type === "image/jpeg" || file.type === "image/jpg")) {
+        input.files = evt.dataTransfer.files;
+        previewImg.src = URL.createObjectURL(file);
+      } else {
+        alert("เกิดข้อผิดพลาด โปรดอัปโหลดใหม่อีกครั้ง");
+      }
+      /* ป้องกันเบราว์เซอร์จากการเปิดไฟล์ */
+      evt.preventDefault();
+    };
+    
+    input.onchange = function(evt) {
+      /* รับไฟล์จากอินพุต และแสดง */
+      let file = evt.target.files[0];
+      if (file) {
+        previewImg.src = URL.createObjectURL(file);
+      }
+    };
+  </script>
 </body>
 </html>
