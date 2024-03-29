@@ -1,7 +1,7 @@
 <?php
   require '../../Backend/Authorized/UserAuthorized.php';
   require '../../Backend/Authorized/ManageHeader.php';
-  include '../../Backend/MainPage/ProductDetail.php';
+  include '../../Backend/ProductQuery/ProductDetail.php';
 ?>
 
 <!DOCTYPE html>
@@ -165,7 +165,7 @@
     $('#add-to-cart-button').click(function() {
       $.ajax({
         type: 'POST',
-        url: '../../Backend/MainPage/AddToCart.php',
+        url: '../../Backend/CartQuery/AddToCart.php',
         data: {
           proID: $('input[name="proID"]').val(),
           quantityHidden: $('input[name="quantityHidden"]').val()

@@ -1,7 +1,7 @@
 <?php
   require '../../Backend/Authorized/UserAuthorized.php';
   require '../../Backend/Authorized/ManageHeader.php';
-  include '../../Backend/MainPage/CartDetail.php';
+  include '../../Backend/CartQuery/CartDetail.php';
 ?>
 
 <!DOCTYPE html>
@@ -262,7 +262,7 @@
     console.log(proID, quantity);
     $.ajax({
       type: 'POST',
-      url: '../../Backend/MainPage/AddToCart.php',
+      url: '../../Backend/CartQuery/AddToCart.php',
       data: {
         proID: proID,
         quantityHidden: quantity,
@@ -288,7 +288,7 @@
   function sendDeleteRequest(proID) {
     $.ajax({
       type: 'POST',
-      url: '../../Backend/MainPage/DeleteFromCart.php',
+      url: '../../Backend/CartQuery/DeleteFromCart.php',
       data: {
         proID: proID
       },
