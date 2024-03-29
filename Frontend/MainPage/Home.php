@@ -228,8 +228,8 @@ use \Firebase\JWT\JWT;
                     <h1 class="font-bold text-2xl">สินค้าแนะนำ</h1>
                     <h1 class="font-regular text-lg ">ดูทั้งหมด ></h1>
                 </div>
-                <i id='leftPointer' class='bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
-                <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
+                <i id='leftPointer' class='leftPointer bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
+                <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
                     $result = selectShowProduct();
@@ -275,8 +275,8 @@ use \Firebase\JWT\JWT;
                     <h1 class="font-bold text-2xl">สินค้ายอดนิยม</h1>
                     <h1 class="font-regular text-lg ">ดูทั้งหมด</h1>
                 </div>
-                <i id='leftPointer' class='bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
-                <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
+                <i id='leftPointer' class='leftPointer bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
+                <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
                     $result = selectShowProduct();
@@ -320,8 +320,9 @@ use \Firebase\JWT\JWT;
                 <div class="flex mb-5 justify-between">
                     <h1 class="font-bold text-2xl">สินค้าใหม่</h1>
                     <h1 class="font-regular text-lg ">ดูทั้งหมด</h1>
-                </div> <i id='leftPointer' class='bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
-                <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
+                </div>
+                <i id='leftPointer' class='leftPointer bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
+                <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
                     $result = selectShowProduct();
@@ -359,6 +360,7 @@ use \Firebase\JWT\JWT;
                     };
                     ?>
                 </div>
+            </section>
         </div>
 
         <?php
@@ -375,25 +377,24 @@ use \Firebase\JWT\JWT;
             const slides = document.querySelectorAll('.slider img'); // เลือกทุกภาพใน slider
             const totalSlides = slides.length; // นับจำนวนภาพทั้งหมด
 
-            // 1. สร้างตัวแปร JavaScript สำหรับ .product-container, #leftPointer, และ #rightPointer.
-            var productContainer = document.querySelector('.product-container');
-            var leftPointer = document.querySelector('#leftPointer');
-            var rightPointer = document.querySelector('#rightPointer');
+            $(document).ready(function() {
+                var scrollAmount = 200; // จำนวนที่ต้องการเลื่อน
+                var scrollDuration = 50; // ระยะเวลาที่ต้องการให้การเลื่อนเสร็จสิ้น (มิลลิวินาที)
 
-            // 2. สร้าง event listener สำหรับการคลิกที่ #leftPointer และ #rightPointer.
-            leftPointer.addEventListener('click', function() {
-                // 3. ใน event listener, ใช้ scrollBy ใน .product-container เพื่อเลื่อนสินค้าไปทางซ้าย.
-                productContainer.scrollBy({
-                    left: -260,
-                    behavior: 'smooth'
+                $('.leftPointer').each(function() {
+                    $(this).click(function() {
+                        $(this).siblings('.product-container').animate({
+                            scrollLeft: "-=" + scrollAmount + "px"
+                        }, scrollDuration);
+                    });
                 });
-            });
 
-            rightPointer.addEventListener('click', function() {
-                // 3. ใน event listener, ใช้ scrollBy ใน .product-container เพื่อเลื่อนสินค้าไปทางขวา.
-                productContainer.scrollBy({
-                    left: 260,
-                    behavior: 'smooth'
+                $('.rightPointer').each(function() {
+                    $(this).click(function() {
+                        $(this).siblings('.product-container').animate({
+                            scrollLeft: "+=" + scrollAmount + "px"
+                        }, scrollDuration);
+                    });
                 });
             });
 
@@ -481,7 +482,6 @@ use \Firebase\JWT\JWT;
                         quantityHidden.value = quantityInput.value;
                     }
                 });
-
                 quantityInput.addEventListener('input', function() {
                     var currentQuantity = parseInt(quantityInput.value, 10);
                     if (isNaN(currentQuantity)) {
