@@ -3,6 +3,7 @@ require '../../Backend/Authorized/UserAuthorized.php';
 require '../../Backend/Authorized/ManageHeader.php';
 require '../../vendor/autoload.php';
 require_once "../../Backend/ProductQuery/ProductInfo.php";
+
 use Firebase\JWT\Key;
 use \Firebase\JWT\JWT;
 ?>
@@ -216,15 +217,11 @@ use \Firebase\JWT\JWT;
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
                         echo "<span class='productDiscount absolute top-2.5 left-2.5 px-1.5 py-1.5 bg-red-700 text-white font-medium rounded-md'>-10%</span>";
 
-                        echo "<form id='detialProduct' method='POST' action='#'>";
                         echo "<img id='imageProduct' class='productImage hover:cursor-pointer rounded-lg border-2 w-full h-96 min-h-80 object-fill' src='" . $row['ImageSource'] . "' alt='product'>";
-                        echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
-                        echo "</form>";
+                        echo "<input id='ProductID' type='hidden' name='productID' value='" . $row['ProID'] . "'>";
 
-                        echo "<form id='addtoCard' method='POST' action='#'>";
-                        echo "<button type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
-                        echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
-                        echo "</form>";
+                        echo "<button id='addToCartButton' data-product-id='" . $row['ProID'] . "' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
+                        echo "<input id='productID' type='hidden' name='productID' value='" . $row['ProID'] . "'>";
 
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
@@ -306,10 +303,8 @@ use \Firebase\JWT\JWT;
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         echo "</form>";
 
-                        echo "<form id='addtoCard' method='POST' action='#'>";
                         echo "<button type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
-                        echo "</form>";
 
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
@@ -329,13 +324,13 @@ use \Firebase\JWT\JWT;
             </section>
         </div>
 
-        <?php 
+        <?php
         if (isset($_SESSION['tokenJWT']) || isset($_SESSION['tokenGoogle'])) {
             var_dump("isset");
             // var_dump("Test jwt: " +  $_SESSION['tokenJWT']);
             var_dump($_SESSION['tokenGoogle']);
         }
-        
+
         ?>
         <script>
             const navLinks = document.querySelectorAll('.slider-nav a');
@@ -393,6 +388,28 @@ use \Firebase\JWT\JWT;
 
             // เรียกใช้ฟังก์ชันแรกเพื่อแสดงภาพแรกเมื่อเพจโหลด
             showSlide(currentIndex);
+
+
+            const addToCartButton = document.getElementById('addToCartButton');
+            // const productID = document.getElementById('productID');
+
+            $(document).on('click', '.addToCartButton', function() {
+                var productID = $(this).data('product-id');
+                $.ajax({
+                    type: 'POST',
+                    url: '../../Backend/CartQuery/AddToCart.php',
+                    data: {
+                        proID: productID,
+                        quantityHidden: 1
+                    },
+                    success: function() {
+                        alert('Add to cart successfully');
+                    },
+                    error: function() {
+                        alert('Error in adding to cart');
+                    }
+                });
+            });
         </script>
 </body>
 
