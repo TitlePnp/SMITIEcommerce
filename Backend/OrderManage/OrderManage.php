@@ -7,6 +7,8 @@ use \Firebase\JWT\jwt;
 
 $key = "SECRETKEY_SMITIECOM_CLIENT";
 
+date_default_timezone_set('Asia/Bangkok');
+
 function insertPayer($TaxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr)
 {
     global $connectDB;
@@ -93,7 +95,7 @@ function insertInvoiceOrder($InvoiceID, $payment)
     }
 
     $status = 'Ordered';
-    $stmt = $connectDB->prepare("INSERT INTO invoice_order(InvoiceID, CusID, StartDate, EndDate, Status, Payment) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $connectDB->prepare("INSERT INTO invoice_order(InvoiceID, CusID, StartDate, EndDate, Status, Channel) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssss", $InvoiceID, $CusID, $StartDate, $EndDate, $status, $payment);
     $stmt->execute();
     $stmt->close();

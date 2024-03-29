@@ -168,9 +168,9 @@ use Farzai\PromptPay\Generator;
             </div>
             <div class="w-full flex justify-end">
                 <?php
-                if ($invoiceInfo['Payment'] == "COD") {
+                if ($invoiceInfo['Channel'] == "COD") {
                     $payMethod = "เก็บเงินปลายทาง";
-                } else if ($invoiceInfo['Payment'] == "MobileBanking") {
+                } else if ($invoiceInfo['Channel'] == "MobileBanking") {
                     $payMethod = "โอนผ่านบัญชีธนาคาร";
                 }
                 ?>
@@ -181,10 +181,10 @@ use Farzai\PromptPay\Generator;
         <hr class="w-2/6 border-2 rounded-sm border-black my-2">
 
         <?php
-        if ($invoiceInfo["Payment"] == "MobileBanking") {
+        if ($invoiceInfo["Channel"] == "MobileBanking") {
             $generator = new Generator();
             $qrCode = $generator->generate(
-                target: "098-888-8888", 
+                target: "089-788-3624", 
                 amount: $totlaPrice
             );
             
@@ -199,7 +199,7 @@ use Farzai\PromptPay\Generator;
         <div class="flex w-2/6 mt-5 justify-center">
             <a href="Home.php"><button class="bg-red-500 p-3 rounded-md text-white font-semibold hover:shadow-lg mx-2">กลับไปหน้าร้านค้า</button></a>
             <?php
-            if ($invoiceInfo['Payment'] == "MobileBanking") {
+            if ($invoiceInfo['Channel'] == "MobileBanking") {
                 echo '<a href="MobileBanking.php"><button class="bg-green-500 p-3 rounded-md text-white font-semibold hover:shadow-lg mx-2">แจ้งการชำระเงิน</button></a>';
             }
             ?>

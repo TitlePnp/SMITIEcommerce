@@ -34,5 +34,5 @@ if (isset($_POST['RecvFName']) && isset($_POST['RecvLName']) && isset($_POST['se
     // echo "InsertInvoice list Success";
     $_SESSION['InvoiceID'] = $invoiceID;
     $_SESSION['ReceiverID'] = $receiverID;
-    header("Location: ../../frontend/MainPage/ThankOrder.php");
+    header("Location: ../../Frontend/MainPage/ThankOrder.php");
 }
