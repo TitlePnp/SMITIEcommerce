@@ -1,5 +1,7 @@
 <?php
     require "../../Components/ConnectDB.php";
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
     $username = $_POST['username'];
     $password = $_POST['userpassword'];
@@ -10,8 +12,8 @@
         $email = "";
     }
 
-    $stmt = $connectDB->prepare("INSERT INTO customer(CusID, CusFName, CusLName, Sex, Tel, Address) VALUES 
-    ('[value-1]','','','','','')");
+    $stmt = $connectDB->prepare("INSERT INTO customer(CusFName, CusLName, Sex, Tel, Address) VALUES 
+    ('', '', '', '', '')");
     $stmt->execute();
 
     $sql = "SELECT CusID FROM customer ORDER BY CusID DESC LIMIT 1";

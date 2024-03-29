@@ -1,7 +1,7 @@
 <?php
-require '../../Backend/Authorized/UserAuthorized.php';
-require '../../Backend/Authorized/ManageHeader.php';
-include '../../Backend/MainPage/ProductDetail.php';
+  require '../../Backend/Authorized/UserAuthorized.php';
+  require '../../Backend/Authorized/ManageHeader.php';
+  include '../../Backend/MainPage/ProductDetail.php';
 ?>
 
 <!DOCTYPE html>
@@ -63,13 +63,11 @@ include '../../Backend/MainPage/ProductDetail.php';
             echo "</div>";
             echo "<p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
             echo "<div class='flex'>";
-            // echo "<form action='../../Backend/MainPage/AddToCart.php' method='post'>";
               echo "<input type='hidden' name='proID' value='{$proID}'>";
               echo "<input type='hidden' name='quantityHidden' value=''>";
               echo "<button id='add-to-cart-button' class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>เพิ่มลงในตะกร้า";
               echo "<img src='../../Pictures/shopping-cart.png' alt='cart icon' class='w-6 h-6 ml-2'
               style='filter: grayscale(100%) contrast(0);'></button>";
-            // echo "</form>";
             echo "<form action='Payment.php' method='post'>";
               echo "<input type='hidden' name='proID' value='{$proID}'>";
               echo "<input type='hidden' name='quantityHidden' value=''>";

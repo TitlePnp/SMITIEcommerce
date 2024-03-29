@@ -1,9 +1,11 @@
+<?php
+  require '../../Backend/UserManage/OnCart.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet"> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
@@ -35,7 +37,7 @@
         <a href="#"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
       </div>
       <!-- search bar -->
-      <form class="mx-auto" style="width: 60%">
+      <form class="mx-auto" style="width: 43%">
         <div class="relative">
           <input type="text" class="text-sm w-full placeholder:italic bg-white border rounded-md py-2 px-3 
                   focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1"
@@ -45,42 +47,22 @@
           </button>
         </div>
       </form>
+      <!-- signin / signup -->
+      <div>
+        <button type="button" class="text-white text-sm font-medium bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-2">สมัครสมาชิก</button>
+        <button type="button" class="text-white text-sm font-medium bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-2">เข้าสู่ระบบ</button>
+      </div>
       <!-- shopping cart -->
-      <div class="relative inline-flex w-fit">
-        <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block 
-                  -translate-y-1/3 translate-x-1/6 rounded-full bg-red-600 p-2 text-xs">
+      <div class="relative inline-flex w-fit ml-3">
+        <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block text-white
+                  -translate-y-1/3 translate-x-1/6 rounded-full bg-red-600 p-2 text-xs/[1px]"><?php echo $_SESSION['productOnCart']; ?>
         </div>
         <button type="button" class="relative flex mr-3" id="cart" aria-expanded="false" aria-haspopup="true">
-          <a href="test1.php">
+          <a href="../../Frontend/MainPage/Cart.php">
             <img class="h-6 w-6 hover:scale-110"
             src="../../Pictures/shopping-cart.png" alt="shopping-cart">
           </a>
         </button>
-      </div>
-      <!-- notification -->
-      <button type="button" class="relative rounded-full p-1 text-white hover:text-red-600 hover:bg-white ml-2">
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967
-                                                                  0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312
-                                                                  6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255
-                                                                  0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-        </svg>
-      </button>
-      <!-- dropdown user -->
-      <div class="relative ml-3">
-        <div>
-          <button type="button" class="relative flex" id="user-button" aria-expanded="false" aria-haspopup="true">
-            <img class="h-8 w-8 rounded-full border border-transparent hover:border-red-600 hover:scale-110"
-                  src="../../Pictures/user.png" alt="user-account">
-          </button>
-        </div>
-        <!-- list dropdown user -->
-        <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-1 shadow-lg
-                  ring-1 ring-black ring-opacity-5 focus:outline-none text-sm hidden" role="menu"
-                  aria-orientation="vertical" aria-labelledby="user-button" tabindex="-1" id="user-menu">
-          <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-0">บัญชีผู้ใช้งาน</a>
-          <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-1">ออกจากระบบ</a>
-        </div>
       </div>
     </div>
   </nav>
@@ -109,6 +91,7 @@
             <a href="test1.php" class="nav-style" aria-current="false">หนังสือนวนิยาย</a>
             <a href="#" class="nav-style" aria-current="false">หนังสือนิตยสาร</a>
             <a href="#" class="nav-style" aria-current="false">หนังสือเตรียมสอบ</a>
+            <a href="#" class="nav-style underline underline-offset-4 decoration-pink-500 hover:decoration-indigo-500" aria-current="false">แจ้งการชำระเงิน</a>
           </div>
         </div>
       </div>
@@ -121,6 +104,7 @@
           <a href="#" class="nav-style block" aria-current="false">หนังสือนวนิยาย</a>
           <a href="#" class="nav-style block" aria-current="false">หนังสือนิตยสาร</a>
           <a href="#" class="nav-style block" aria-current="false">หนังสือเตรียมสอบ</a>
+          <a href="#" class="nav-style block underline underline-offset-4 decoration-pink-500 hover:decoration-indigo-500" aria-current="false">แจ้งการชำระเงิน</a>
         </div>
       </div>
     </div>
@@ -154,17 +138,6 @@
     /* จัดการ menu product dropdown */
     document.getElementById('hide-button').addEventListener('click', function() {
         var menu = document.getElementById('hide-menu');
-        /* ดึงค่าสถานะปัจจุบัน */
-        var isExpanded = this.getAttribute('aria-expanded') === 'true';
-        /* เปลี่ยนค่า aria-expanded เมื่อปุ่มถูกคลิก */
-        this.setAttribute('aria-expanded', !isExpanded);
-        /* แสดงเมนู dropdown ตามสถานะ aria-expanded */
-        menu.style.display = isExpanded ? 'none' : 'block';
-    });
-
-    /* จัดการ menu user */
-    document.getElementById('user-button').addEventListener('click', function() {
-        var menu = document.getElementById('user-menu');
         /* ดึงค่าสถานะปัจจุบัน */
         var isExpanded = this.getAttribute('aria-expanded') === 'true';
         /* เปลี่ยนค่า aria-expanded เมื่อปุ่มถูกคลิก */

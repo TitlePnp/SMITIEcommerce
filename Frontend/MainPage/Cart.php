@@ -1,10 +1,7 @@
 <?php
-require '../../Backend/Authorized/UserAuthorized.php';
-require '../../Backend/Authorized/ManageHeader.php';
-include '../../Backend/MainPage/CartDetail.php';
-if (isset($_SESSION['cart'])) {
-  print_r($_SESSION['cart']);
-}
+  require '../../Backend/Authorized/UserAuthorized.php';
+  require '../../Backend/Authorized/ManageHeader.php';
+  include '../../Backend/MainPage/CartDetail.php';
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +14,7 @@ if (isset($_SESSION['cart'])) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet">
-  <title>Book Detail</title>
+  <title>Cart Detail</title>
   <style>
     * {
       font-family: Kodchasan;
@@ -34,7 +31,7 @@ if (isset($_SESSION['cart'])) {
     }
   </style>
 </head>
-<body>
+<body> <!-- PRODUCT SECTION -->
   <div class="px-28 pb-12">
     <div class="relative overflow-x-scroll sm:rounded-lg">
       <table class="w-full font-black">
@@ -56,12 +53,13 @@ if (isset($_SESSION['cart'])) {
         </thead>
         <tbody>
           <?php
+          /* FOR SESSION */
+          if (isset($_SESSION['cart'])) {
             $count = count($_SESSION['cart']);
             $keys = array_keys($_SESSION['cart']);
             $quantity = array_values($_SESSION['cart']);
             for ($i = 0; $i < $count; $i++) {
-              $row = showCartProduct($keys[$i])->fetch_assoc();
-              $totalPrice = $row['PricePerUnit'] * $quantity[$i];
+              $row = showCartSession($keys[$i])->fetch_assoc();
               echo "<tr class='bg-white font-normal border-b'>";
                 echo "<td class='w-4 p-4'>";
                   echo "<div class='flex items-center'>";
@@ -88,14 +86,50 @@ if (isset($_SESSION['cart'])) {
                     echo "</div>";
                   echo "<p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
                 echo "</td>";
-                echo "<td class='text-center'><p class='sum' data-sum='{$totalPrice}'></p></td>";
+                echo "<td class='text-center'><p class='sum'></p></td>";
                 echo "<td class='text-center'><button class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='{$keys[$i]}'>ลบ</button></td>";
               echo "</tr>";
+            } 
+          } else { /* FOR DB */
+              $rows = showCartDB(getID());
+              while ($row = $rows->fetch_assoc()) {
+                $id = $row['ProID'];
+                echo "<tr class='bg-white font-normal border-b'>";
+                  echo "<td class='w-4 p-4'>";
+                    echo "<div class='flex items-center'>";
+                      echo "<input id='checkbox-product' type='checkbox' class='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded'>";
+                      echo "<label for='checkbox-product' class='sr-only'>checkbox</label>";
+                    echo "</div>";
+                  echo "</td>";
+                  echo "<td class='w-4 p-4'>";
+                    echo "<div style='height: 120px; width: 120px;'>";
+                      echo "<img src='{$row['ImageSource']}' alt='' class='h-full w-full object-cover rounded-lg object-center'>";
+                    echo "</div>";
+                  echo "</td>";
+                  $proName = mb_strlen($row['ProName']) > 20 ? mb_substr($row['ProName'], 0, 20) . '...' : $row['ProName'];
+                  echo "<td scope='row' class='font-medium text-gray-900'>{$proName}</td>";
+                  echo "<td class='text-center'}'>{$row['PricePerUnit']}</td>";
+                  echo "<td>";
+                    echo "<div class='quantity-controls flex items-center justify-center'>";
+                      echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
+                      echo "<input type='hidden' name='quantityHidden' value=''>";
+                      echo "<input type='hidden' name='pricePerUnit' value='{$row['PricePerUnit']}'>";
+                      echo "<button type='submit' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>";
+                      echo "<input type='number' min='1' max='{$row['StockQty']}' value='{$row['Qty']}' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>";
+                      echo "<button type='submit' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>";
+                    echo "</div>";
+                    echo "<p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
+                  echo "</td>";
+                  echo "<td class='text-center'><p class='sum'}'></p></td>";
+                  echo "<td class='text-center'><button type='submit' class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='{$row['ProID']}'>ลบ</button></td>";
+                echo "</tr>";
+              }
             }
           ?>
         </tbody>
       </table>
     </div>
+    <!-- SUMMARY SECTION -->
     <footer class="sticky bottom-0 bg-[#062639] rounded-lg shadow m-4 p-4">
       <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <div class="flex items-center mb-2 md:mb-0">
@@ -106,7 +140,7 @@ if (isset($_SESSION['cart'])) {
         <div class="justify-end">
           <form action='Payment.php' method='post'>
             <input type='hidden' name='proID' value='{$proID}'>
-            <input type='hidden' name='quantity-hidden' value=''>
+            <input type='hidden' name='quantityHidden' value=''>
             <button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded'>ซื้อสินค้า</button>
           </form>
         </div>
@@ -115,6 +149,7 @@ if (isset($_SESSION['cart'])) {
   <div>
 
 <script>
+  /* Decrease, Increase QTY */
   document.querySelectorAll('.quantity-controls').forEach(function(control, index) {
     var decreaseButton = control.querySelector('.decrease');
     var increaseButton = control.querySelector('.increase');
@@ -134,7 +169,7 @@ if (isset($_SESSION['cart'])) {
       sum = price * quantityInput.value;
       sumElement.innerHTML = sum;
       var proID = control.querySelector('input[name="proID"]').value;
-      sendAjaxRequest(proID, quantityInput.value);
+      sendUpdateRequest(proID, quantityInput.value);
     });
 
     increaseButton.addEventListener('click', function() {
@@ -147,7 +182,7 @@ if (isset($_SESSION['cart'])) {
       sum = price * quantityInput.value;
       sumElement.innerHTML = sum;
       var proID = control.querySelector('input[name="proID"]').value;
-      sendAjaxRequest(proID, quantityInput.value);
+      sendUpdateRequest(proID, quantityInput.value);
     });
 
     quantityInput.addEventListener('input', function() {
@@ -167,12 +202,13 @@ if (isset($_SESSION['cart'])) {
       sum = price * quantityInput.value;
       sumElement.innerHTML = sum;
       var proID = control.querySelector('input[name="proID"]').value;
-      sendAjaxRequest(proID, quantityInput.value);
+      sendUpdateRequest(proID, quantityInput.value);
     });
     sumElement.innerHTML = sum;
     quantityHidden.value = quantityInput.value;
   });
 
+  /* CHECK BOX */
   $(document).ready(function(){
     updateTotal();
     $('#checkbox-all').click(function(){
@@ -203,6 +239,7 @@ if (isset($_SESSION['cart'])) {
     });
   });
 
+  /* SUMMARY SECTION */
   function updateTotal() {
     var total = 0;
     var count = 0;
@@ -220,7 +257,9 @@ if (isset($_SESSION['cart'])) {
     document.getElementById('qty-choose').innerHTML = count;
   }
 
-  function sendAjaxRequest(proID, quantity) {
+  /* AJAX UPDATE */
+  function sendUpdateRequest(proID, quantity) {
+    console.log(proID, quantity);
     $.ajax({
       type: 'POST',
       url: '../../Backend/MainPage/AddToCart.php',
@@ -245,19 +284,19 @@ if (isset($_SESSION['cart'])) {
     });
   });
 
-function sendDeleteRequest(proID) {
-  $.ajax({
-    type: 'POST',
-    url: '../../Backend/MainPage/DeleteFromCart.php',
-    data: {
-      proID: proID
-    },
-    success: function() {
-      location.reload();
-    }
-  });
-}
-
+  /* AJAX DELETE */
+  function sendDeleteRequest(proID) {
+    $.ajax({
+      type: 'POST',
+      url: '../../Backend/MainPage/DeleteFromCart.php',
+      data: {
+        proID: proID
+      },
+      success: function() {
+        location.reload();
+      }
+    });
+  }
 </script>
 </body>
 </html>
