@@ -12,10 +12,10 @@ function selectProduct($name)
     return $result;
 }
 
-function selectDiscountProduct()
+function selectShowProduct()
 {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID LIMIT 7");
+    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID ORDER BY RAND() LIMIT 7");
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
