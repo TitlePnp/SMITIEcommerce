@@ -98,6 +98,7 @@ CREATE TABLE INVOICE_ORDER (
     StartDate   DATETIME    NOT NULL,
     EndDate     DATETIME    NOT NULL,
     Status		VARCHAR(10)	DEFAULT 'OnHand',
+    Channel     VARCHAR(255) NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 );
 -- ตารางเก็บข้อมูลรายละเอียดของใบแจ้งหนี้ --
@@ -158,4 +159,16 @@ CREATE TABLE ACCESS_LOG (
     Period	    DATETIME        NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
     CONSTRAINT AccessList PRIMARY KEY (CusID, NumID)
+);
+
+-- ตารางเก็บตะกร้าสินค้า -- 
+CREATE TABLE CART_LIST (
+    CusID       INT            NOT NULL,
+    NumID       INT         NOT NULL,
+    ProID       INT            NOT NULL,
+    Qty            INT            NOT NULL,
+    Status        VARCHAR(10)    DEFAULT 'OnHand',
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
+    FOREIGN KEY (ProID) REFERENCES PRODUCT(ProID),
+    CONSTRAINT CartList PRIMARY KEY (CusID, NumID)
 );
