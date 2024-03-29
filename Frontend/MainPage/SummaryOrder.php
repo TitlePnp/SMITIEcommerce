@@ -1,7 +1,7 @@
 <?php
 require_once "../../Backend/Authorized/UserAuthorized.php";
 require_once "../../Backend/Authorized/ManageHeader.php";
-require_once "../../Backend/MainPage/CartDetail.php"
+require_once "../../Backend/CartQuery/CartDetail.php"
 ?>
 
 <!DOCTYPE html>
@@ -140,15 +140,15 @@ require_once "../../Backend/MainPage/CartDetail.php"
                     $count = count($_SESSION['cart']);
                     $key = array_keys($_SESSION['cart']);
                     for ($i = 0; $i < $count; $i++) {
-                        $row = showCartProduct($key[$i])->fetch_assoc();
-                        $totalPrice += $row['PricePerUnit'] * $_SESSION['cart'][$i + 1];
+                        $row = showCartSession($key[$i])->fetch_assoc();
+                        $totalPrice += $row['PricePerUnit'] * $_SESSION['cart'][$key[$i]];
                         echo "<div class='flex flex-row my-2'>";
                         echo "<div class='w-5/12'>";
                         echo "<img class='h-16 w-16 max-w-20 object-cover' src='" . $row['ImageSource'] . "'>";
                         echo "</div>";
                         echo "<div class='w-4/12'>";
                         echo "<p class='text-sm font-semibold truncate'>" . $row['ProName'] . "</p>";
-                        echo "<p class='text-sm'>x" . $_SESSION['cart'][$i + 1] . "</p>";
+                        echo "<p class='text-sm'>x" . $_SESSION['cart'][$key[$i]] . "</p>";
                         echo "</div>";
                         echo "<div class='flex flex-row w-full justify-end'>";
                         echo "<p class='text-sm font-semibold justify-end'>" . $row['PricePerUnit'] . " บาท</p>";
@@ -351,7 +351,7 @@ require_once "../../Backend/MainPage/CartDetail.php"
                 PaymentStatus = true;
             }
 
-            if (RecvAddrStatus && RecvEmailStatus && RecvFNameStatus && RecvLNameStatus && RecvPostStatus && RecvProvinceStatus && RecvTelStatus &&PaymentStatus) {
+            if (RecvAddrStatus && RecvEmailStatus && RecvFNameStatus && RecvLNameStatus && RecvPostStatus && RecvProvinceStatus && RecvTelStatus && PaymentStatus) {
                 document.getElementById('OrderControl').submit();
             }
 
