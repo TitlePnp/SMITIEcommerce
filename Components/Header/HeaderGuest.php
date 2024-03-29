@@ -49,8 +49,8 @@
       </form>
       <!-- signin / signup -->
       <div>
-        <button type="button" class="text-white text-sm font-medium bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-2">สมัครสมาชิก</button>
-        <button type="button" class="text-white text-sm font-medium bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-2">เข้าสู่ระบบ</button>
+        <a href="../../Frontend/SignUp_Page/Signup.php"><button type="button" class="text-white text-sm font-medium bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-2">สมัครสมาชิก</button></a>
+        <a href="../../Frontend/SignIn_Page/SignIn.php"><button type="button" class="text-white text-sm font-medium bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-2">เข้าสู่ระบบ</button></a>
       </div>
       <!-- shopping cart -->
       <div class="relative inline-flex w-fit ml-3">
