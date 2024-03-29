@@ -1,3 +1,7 @@
+<?php
+  require '../../Backend/UserManage/OnCart.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,11 +51,11 @@
       </form>
       <!-- shopping cart -->
       <div class="relative inline-flex w-fit">
-        <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block 
-                  -translate-y-1/3 translate-x-1/6 rounded-full bg-red-600 p-2 text-xs">
+        <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block text-white
+                  -translate-y-1/3 translate-x-1/6 rounded-full bg-red-600 p-2 text-xs/[1px]"> <?php echo $_SESSION['productOnCart']; ?>
         </div>
         <button type="button" class="relative flex mr-3" id="cart" aria-expanded="false" aria-haspopup="true">
-          <a href="test1.php">
+          <a href="../../Frontend/MainPage/Cart.php">
             <img class="h-6 w-6 hover:scale-110"
             src="../../Pictures/shopping-cart.png" alt="shopping-cart">
           </a>

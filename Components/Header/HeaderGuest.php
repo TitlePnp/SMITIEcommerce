@@ -1,9 +1,11 @@
+<?php
+  require '../../Backend/UserManage/OnCart.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet"> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
@@ -52,11 +54,11 @@
       </div>
       <!-- shopping cart -->
       <div class="relative inline-flex w-fit ml-3">
-        <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block 
-                  -translate-y-1/3 translate-x-1/6 rounded-full bg-red-600 p-2 text-xs">
+        <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block text-white
+                  -translate-y-1/3 translate-x-1/6 rounded-full bg-red-600 p-2 text-xs/[1px]"><?php echo $_SESSION['productOnCart']; ?>
         </div>
         <button type="button" class="relative flex mr-3" id="cart" aria-expanded="false" aria-haspopup="true">
-          <a href="test1.php">
+          <a href="../../Frontend/MainPage/Cart.php">
             <img class="h-6 w-6 hover:scale-110"
             src="../../Pictures/shopping-cart.png" alt="shopping-cart">
           </a>
@@ -66,7 +68,7 @@
   </nav>
 
   <!-- SECTION 2 -->
-  <nav class="bg-[#062639] text-sm font-semibold tracking-wider mb-2" style="font-family: 'Kodchasan', semibold,serif;">
+  <nav class="bg-[#062639] text-sm font-semibold tracking-wider mb-10" style="font-family: 'Kodchasan', semibold,serif;">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 relative flex h-12 items-center justify-between">
       <!-- sm:hidden = ซ่อนส่วนของ Element เมื่อมีขนาดเล็ก -->
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
