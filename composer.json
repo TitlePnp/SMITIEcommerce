@@ -1,6 +1,7 @@
 {
     "require": {
         "firebase/php-jwt": "^6.10",
-        "google/apiclient": "2.15.0"
+        "google/apiclient": "2.15.0",
+        "farzai/promptpay": "^1.0"
     }
 }

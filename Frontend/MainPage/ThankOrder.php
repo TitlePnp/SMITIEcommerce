@@ -1,10 +1,9 @@
 <?php
-session_start();
-date_default_timezone_set('Asia/Bangkok');
-require '../components/ConnectDB.php';
-require '../components/HeaderStore.html';
+require_once "../../Backend/Authorized/UserAuthorized.php";
+require_once "../../Backend/Authorized/ManageHeader.php";
+require_once "../../Backend/OrderManage/GetOrderInfo.php";
+use Farzai\PromptPay\Generator;
 
-$userID = $_SESSION['userID'];
 ?>
 
 <!DOCTYPE html>
@@ -13,213 +12,199 @@ $userID = $_SESSION['userID'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMITI Shop</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Sarabun&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <title>SMITI Shop:ThankYou for order</title>
     <style>
-        .headbar {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 5px solid black;
-            border-radius: 2px;
-            margin-top: 0px;
-            margin-left: 450px;
-            margin-right: 450px;
-        }
-
-        .orderDetail {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0px;
-            margin-left: 450px;
-            margin-right: 450px;
-        }
-
-        .orderNo {
-            margin-right: 0px;
-            font-family: sarabun;
-            font-size: 20px;
-        }
-
-        .orderInfo {
-            margin-left: 0px;
-            padding-bottom: 10px;
-            color: grey;
-            font-family: sarabun;
-            font-size: 20px;
+        * {
+            font-family: 'Kodchasan';
         }
     </style>
 </head>
 
 <body>
-    <center>
-        <img src="../pictures/Thank1.png" style="padding-top: 100px;" />
+    <?php
+    $invoiceInfo = getInvoiceInfo($_SESSION['InvoiceID']);
+    $receiverInfo = getReceiverInfo($_SESSION['ReceiverID']);
+    $orderList = getOrderList($_SESSION['InvoiceID']);
+    ?>
+    <div class="flex items-center flex-col mb-20">
+        <div class="flex">
+            <img src="../../Pictures/Thank.png" alt="">
+        </div>
 
-        <?php
-        $HisID = $_SESSION['HisID'];
-        $payment_Method = $_SESSION['paymentMethod'];
-        $payerTaxID = $_SESSION['PayerTaxID'];
+        <div class="flex items-center flex-col">
+            <h1 class="text-4xl font-bold mt-3 mb-3">ขอบคุณที่ใช้บริการ</h1>
+            <h1 class="text-xl font-semibold mb-3">ได้รับคำสั่งซื้อเรียบร้อยแล้ว</h1>
+        </div>
 
-        $sql = "SELECT HisID, UpdateTime, CusID, Status FROM history WHERE HisID = '" . $HisID . "';";
-        $result = mysqli_query($connectDB, $sql);
-        $row = mysqli_fetch_array($result);
-        $orderNo = $row['HisID'];
-        $statusOrder = $row['Status'];
-        $updateTime = $row['UpdateTime'];
-        $time = date("h:i A", strtotime($updateTime));
-        $date = date("d-m-Y", strtotime($updateTime));
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold">Order number: </p>
+            </div>
+            <div>
+                <p class="text-xl font-semibold">#<?php echo $invoiceInfo['InvoiceID']; ?></p>
+            </div>
+        </div>
 
-        // if ($_SESSION['userType'] == "guest") {
-        //     $custID = $_SESSION['userID'];
+        <hr class="w-2/6 border-2 rounded-sm border-black my-2">
 
-        //     $payer_FName = $_POST['payerFirstName'];
-        //     $payer_LName = $_POST['payerLastname'];
-        // } else if ($_SESSION['userType'] == "member") {
-        //     $custID = $row['CusID'];
+        <!-- <div class="flex items-center flex-col">
+            <h1 class="text-4xl font-bold mt-3 mb-3">ขอบคุณที่ใช้บริการ</h1>
+            <h1 class="text-xl font-semibold mb-3">ได้รับคำสั่งซื้อเรียบร้อยแล้ว</h1>
+        </div> -->
 
-        //     $sql = "SELECT * FROM customer WHERE CusID = $custID;";
-        //     $result = mysqli_query($connectDB, $sql);
-        //     $row = mysqli_fetch_array($result);
-        //     $payer_FName = $row['CusFName']; 
-        //     $payer_LName = $row['CusLName'];
-        // }
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">วันที่ทำการสั่งซื้อ: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <p class="text-md font-semibold">#<?php echo $invoiceInfo['StartDate']; ?></p>
+            </div>
+        </div>
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">ชื่อ-นามสกุล: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <p class="text-md font-semibold"><?php echo $receiverInfo['RecvFName'] . ' ' . $receiverInfo['RecvLName']; ?></p>
+            </div>
+        </div>
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">ที่อยู่การจัดส่ง: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <p class="text-md font-semibold"><?php echo $receiverInfo['Address']; ?></p>
+            </div>
+        </div>
 
-        $RecvID = $_SESSION['RecvID'];
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">ที่อยู่การจัดส่ง: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <p class="text-md font-semibold"><?php echo $receiverInfo['Address']; ?></p>
+            </div>
+        </div>
 
-        $sql = "SELECT * FROM history_list WHERE HisID = '" . $HisID . "';";
-        $result = mysqli_query($connectDB, $sql);
-        $row = mysqli_fetch_array($result);
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">จำนวนสินค้า: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <?php
+                $ProductCount = getCountInvoiceList($_SESSION['InvoiceID']);
+                ?>
+                <p class="text-md font-semibold"><?php echo $ProductCount['COUNT(ProID)']; ?> รายการ</p>
+            </div>
+        </div>
 
-        foreach ($result as $row) {
-            $productQTY[$row['ProID']]['qty'] = $row['Qty'];
-        }
+        <hr class="w-2/6 rounded-sm border-black my-2">
 
-        foreach ($productQTY as $ProID => $details) {
-            $sql = "SELECT * FROM product WHERE ProID = " . $ProID . ";";
-            $result = mysqli_query($connectDB, $sql);
-            $row = mysqli_fetch_array($result);
-            $product[$row['ProName']]['qty'] = $details['qty'];
-            $product[$row['ProName']]['price'] = $row['PricePerUnit'];
-        }
-
-        $totalPrice = 0;
-        foreach ($product as $productName => $details) {
-            $totalPrice += $details['qty'] * $details['price'];
-        }
-        $vat = $totalPrice * 0.07;
-        $totalPrice = $totalPrice + $vat;
-        $totalPrice = number_format($totalPrice, 2);
-
-        $productTotal = 0;
-        foreach ($product as $productName => $details) {
-            $productTotal += $details['qty'];
-        }
-
-        // $sql = "SELECT * FROM payer WHERE TaxID = '$payerTaxID';";
-        // $result = mysqli_query($connectDB, $sql);
-        // $row = mysqli_fetch_array($result);
-
-        // $payerFname = $row['PayerFName'];
-        // $payerLname = $row['PayerLName'];
-        // $payerTel = $row['Tel'];
-        // $payerAddr = $row['Address'];
-
-        $sql = "SELECT * FROM receiver WHERE RecvID = $RecvID;";
-        $result = mysqli_query($connectDB, $sql);
-        $row = mysqli_fetch_array($result);
-
-        $receiverFname = $row['RecvFName'];
-        $receiverLname = $row['RecvLName'];
-        $receiverTel = $row['Tel'];
-        $receiverAddr = $row['Address'];
-
-        echo "<div class='headbar'>
-            <b class='orderInfo' style='font-family:sarabun; font-size:30px'>Order</b>
-            <b class='orderNo' style='font-family:sarabun; font-size:30px'> #" .  $orderNo  . "</b>
-        </div>";
-        echo "<h1 style='font-family:sarabun; padding-top: 20px'>ขอบคุณที่ใช้บริการ</h1>";
-        echo "<h3 style='font-family:sarabun;'>ได้รับคำสั่งซื้อเรียบร้อยแล้ว</h3>";
-        echo "<div class='orderDetail'>
-            <b class='orderInfo'>วันที่ทำการสั่งซื้อ</b>
-            <b class='orderNo'>" . $date . "</b>
-            </div>";
-        echo "<div class='orderDetail'>
-            <b class='orderInfo'>เวลา</b>
-            <b class='orderNo'>" . $time . "</b>
-            </div>";
-        echo "<div class='orderDetail'>
-            <b class='orderInfo'>ชื่อ-นามสกุลผู้รับ</b>
-            <b class='orderNo'>" . $receiverFname . " " . $receiverLname . "</b>
-            </div>";
-        echo "<div class='orderDetail'>
-            <b class='orderInfo'>ที่อยู่การจัดส่ง</b>
-            <b class='orderNo'>" . $receiverAddr . "</b>
-            </div>";
-        echo "<div class='orderDetail'>
-            <b class='orderInfo'>เบอร์โทรศัพท์</b>
-            <b class='orderNo'>" . $receiverTel . "</b>
-            </div>";
-        echo "<div class='orderDetail'>
-            <b class='orderInfo'>จำนวนสินค้า</b>
-            <b class='orderNo'>" . $productTotal . " รายการ</b>
-            </div>";
-        foreach ($product as $productName => $details) {
-            echo "<div class='orderDetail'>";
-            echo "<b class='orderInfo'></b>";
-            echo "<b class='orderNo'>• " . $productName . " " . $details['qty'] . " เล่ม</b>";
-            echo "</div>";
-        }
-        echo "<div class='orderDetail'>";
-        echo "<b class='orderInfo'>Vat 7%</b>";
-        echo "<b class='orderNo'>" . $vat . " บาท</b>";
-        echo "</div>";
-        echo "<div class='orderDetail'>";
-        echo "<b class='orderInfo'>ราคาสุทธิ</b>";
-        echo "<b class='orderNo'>" . $totalPrice . " บาท</b>";
-        echo "</div>";
-        echo "<div class='orderDetail'>";
-        echo "<b class='orderInfo'>ช่องทางการชำระเงิน</b>";
-        echo "<b class='orderNo'>" . $payment_Method . "</b>";
-        echo "</div>";
-        echo "<div class='orderDetail'>";
-        echo "<b class='orderInfo'>สถานะคำสั่งซื้อ</b>";
-        echo "<b class='orderNo'>" . $statusOrder . "</b>";
-        echo "</div>";
-        ?>
-        <br>
-        <?php
-        echo "<div class='d-flex justify-content-center'>
-        <a href='Store.php' class='btn btn-danger' style='font-family:sarabun; margin-right: 10px; font-size:20px;'><b>🧺 กลับไปหน้าร้านค้า</b></a>
-        <form id='show-receipt' method='POST' action='InsertReceipt.php'>
-            <input type='hidden' name='recvID' value='" . $RecvID . "'>";
-        // echo "<button type='button' class='btn btn-primary' style='font-family:sarabun; font-size:20px;' onclick='insertLog()'><b>🧾 ดูใบเสร็จ</b></button>";
-        echo "<button type='submit' class='btn btn-primary' style='font-family:sarabun; font-size:20px;'><b>🧾 ดูใบเสร็จ</b></button>";
-        echo "</form>
-    </div>";
-        ?>
-
-        <br>
-
-    </center>
-</body>
-<!-- <script>
-    function insertLog() {
-        var userID = <?php //echo $userID ?>;
-        var insertType = "Show Receipt";
-        $.ajax({
-            type: "POST",
-            url: "Insert_log.php",
-            data: {
-                userID: userID,
-                insertType: insertType
-            },
-            success: function(response) {
-                document.getElementById('show-receipt').submit();
+        <div class="flex flex-col w-2/6 items-end">
+            <?php
+            $totlaPrice = 0;
+            while ($row = $orderList->fetch_assoc()) {
+                echo '<p class="text-md ">' . $row['ProName'] . ' จำนวน ' . $row['Qty'] . ' เล่ม</p>';
+                $totlaPrice += $row['PricePerUnit'] * $row['Qty'];
             }
-        });
-    }
-</script> -->
+            $totlaPriceFormat = number_format($totlaPrice, 2);
+            ?>
+        </div>
+
+        <hr class="w-2/6 rounded-sm border-black my-2">
+
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">ราคารวม: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <p class="text-md font-semibold"><?php echo $totlaPriceFormat ?> บาท</p>
+            </div>
+        </div>
+
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">Vat 7%: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <?php
+                $vat = $totlaPrice * 0.07;
+                $vatFormat = number_format($vat, 2);
+                ?>
+                <p class="text-md font-semibold"><?php echo $vatFormat ?> บาท</p>
+            </div>
+        </div>
+
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">ราคาสุทธิ: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <?php
+                $totlaPrice += $vat;
+                $totlaPriceFormat = number_format($totlaPrice, 2);
+                ?>
+                <p class="text-md font-semibold"><?php echo $totlaPriceFormat ?> บาท</p>
+            </div>
+        </div>
+
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">สถานะคำสั่งซื้อ: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <p class="text-md font-semibold"><?php echo $invoiceInfo['Status'] ?> </p>
+            </div>
+        </div>
+
+        <div class="flex w-2/6">
+            <div class="w-full flex justify-between">
+                <p class="text-xl font-semibold text-gray-500">ช่องทางการชำระเงิน: </p>
+            </div>
+            <div class="w-full flex justify-end">
+                <?php
+                if ($invoiceInfo['Payment'] == "COD") {
+                    $payMethod = "เก็บเงินปลายทาง";
+                } else if ($invoiceInfo['Payment'] == "MobileBanking") {
+                    $payMethod = "โอนผ่านบัญชีธนาคาร";
+                }
+                ?>
+                <p class="text-md font-semibold"><?php echo $payMethod ?> </p>
+            </div>
+        </div>
+
+        <hr class="w-2/6 border-2 rounded-sm border-black my-2">
+
+        <?php
+        if ($invoiceInfo["Payment"] == "MobileBanking") {
+            $generator = new Generator();
+            $qrCode = $generator->generate(
+                target: "098-888-8888", 
+                amount: $totlaPrice
+            );
+            
+            $qrCode->save('qrcode.png');
+            
+            // Or insert it directly into a template:
+            echo '<img src="' . $qrCode->asDataUri() . '" />';
+        }
+        ?>
+
+
+        <div class="flex w-2/6 mt-5 justify-center">
+            <a href="Home.php"><button class="bg-red-500 p-3 rounded-md text-white font-semibold hover:shadow-lg mx-2">กลับไปหน้าร้านค้า</button></a>
+            <?php
+            if ($invoiceInfo['Payment'] == "MobileBanking") {
+                echo '<a href="MobileBanking.php"><button class="bg-green-500 p-3 rounded-md text-white font-semibold hover:shadow-lg mx-2">แจ้งการชำระเงิน</button></a>';
+            }
+            ?>
+        </div>
+    </div>
+</body>
 
 </html>
