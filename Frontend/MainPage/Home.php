@@ -416,6 +416,7 @@ use \Firebase\JWT\JWT;
                 success: function() {
                 // window.location.href = '../../Frontend/MainPage/Cart.php';
                 alert('Add to cart success');
+                // location.reload();
                 }
             });
             });
