@@ -27,13 +27,13 @@ require_once "../../Backend/MainPage/CartDetail.php"
 </head>
 
 <body class="">
-    <form method="POST" action="#">
+    <form id="OrderControl" method="POST" action="../../Backend/OrderManage/OrderController.php">
         <div class="flex flex-row px-28 py-8">
             <div class="w-full bg-white mr-3 p-5 rounded-lg shadow-lg">
                 <div class="mb-3">
                     <a class="hover:text-blue-500" href="Cart.php"><button class="font-semibold"><i class='bx bx-arrow-back'></i> ย้อนกลับ</button></a>
                 </div>
-                <div class="bg-red-500">
+                <div class="">
                     <h1 class="text-2xl font-bold">เช็คเอาท์</h1>
                 </div>
                 <div class="mt-3">
@@ -44,11 +44,13 @@ require_once "../../Backend/MainPage/CartDetail.php"
                             <h1 class="font-semibold">ชื่อ*</h1>
                             <!-- plaecholder with address in database -->
                             <input id="RecvFNameInput" name="RecvFName" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกชื่อ" type="text" required>
+                            <span id="RecvFNameError" class="text-sm text-red-500" style="display:none"></span>
                         </div>
                         <div class="w-full ml-5">
                             <h1 class="font-semibold">นามสกุล*</h1>
                             <!-- plaecholder with address in database -->
                             <input id="RecvLNameInput" name="RecvLName" class="w-full border p-2 rounded-md h-8 border-gray-400" placeholder="กรุณากรอกนามสกุล" type="text" required>
+                            <span id="RecvLNameError" class="text-sm text-red-500" style="display:none"></span>
                         </div>
                     </div>
 
@@ -57,6 +59,7 @@ require_once "../../Backend/MainPage/CartDetail.php"
                             <h1 class="font-semibold">เบอร์โทรศัพท์*</h1>
                             <!-- plaecholder with address in database -->
                             <input id="RecvTelInput" name="RecvTel" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกเบอร์โทรศัพท์" type="text" required>
+                            <span id="RecvTelError" class="text-sm text-red-500" style="display:none"></span>
                         </div>
                         <div class="w-full ml-5">
                             <h1 class="font-semibold">เพศ</h1>
@@ -70,11 +73,13 @@ require_once "../../Backend/MainPage/CartDetail.php"
                     <div class="mt-2">
                         <h1 class="font-semibold">อีเมล*</h1>
                         <input id="RecvEmailInput" name="RecvEmail" class="w-full p-2 border rounded-md h-8 border-gray-400" placeholder="กรุณากรอกอีเมล" type="email" required>
+                        <span id="RecvEmailError" class="text-sm text-red-500" style="display:none"></span>
                     </div>
 
                     <div class="mt-2">
-                        <h1 class="font-semibold">ที่อยู่*</h1>
+                        <h1 class="font-semibold">ที่อยู่สำหรับการจัดส่ง*</h1>
                         <textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 border-gray-400 resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>
+                        <span id="RecvAddrError" class="text-sm text-red-500" style="display:none"></span>
                     </div>
 
                     <div class="flex flex-row mt-2">
@@ -82,11 +87,13 @@ require_once "../../Backend/MainPage/CartDetail.php"
                             <h1 class="font-semibold">จัวหวัด*</h1>
                             <!-- plaecholder with address in database -->
                             <input id="RecvProvinceInput" name="RecvProvince" class="w-full p-2 border rounded-md h-8 border-gray-400 p-2" placeholder="กรุณากรอกจังหวัด" type="text" required>
+                            <span id="RecvProvinceError" class="text-sm text-red-500" style="display:none"></span>
                         </div>
                         <div class="w-full ml-5">
                             <h1 class="font-semibold">รหัสไปรษณีย์*</h1>
                             <!-- plaecholder with address in database -->
                             <input id="RecvInputPost" name="RecvPost" class="w-full p-2 border rounded-md h-8 border-gray-400 p-2" placeholder="กรุณากรอกรหัสไปรษณีย์" type="text" required>
+                            <span id="RecvPostError" class="text-sm text-red-500" style="display:none"></span>
                         </div>
                     </div>
 
@@ -124,8 +131,9 @@ require_once "../../Backend/MainPage/CartDetail.php"
                 </div>
             </div>
             <div class="w-3/6 bg-white ml-3 rounded-lg p-5 shadow-lg">
-                <p class="font-semibold text-lg">รายการสินค้า</p>
-                <hr class="border-t border-gray-400 my-2">
+                <div class=" flex rounded-md h-10 items-center mb-5" style="background-color: #062639;">
+                    <p class="font-semibold text-white text-lg ml-2">รายการสินค้า</p>
+                </div>
                 <div class="">
                     <?php
                     $totalPrice = 0;
@@ -222,6 +230,15 @@ require_once "../../Backend/MainPage/CartDetail.php"
         });
 
         //Form Control
+        let RecvFNameStatus = false;
+        let RecvLNameStatus = false;
+        let RecvTelStatus = false;
+        let RecvEmailStatus = false;
+        let RecvAddrStatus = false;
+        let RecvProvinceStatus = false;
+        let RecvPostStatus = false;
+        let PaymentStatus = false;
+
         const RecvFNameInput = document.getElementById("RecvFNameInput");
         const RecvLNameInput = document.getElementById("RecvLNameInput");
         const RecvTelInput = document.getElementById("RecvTelInput");
@@ -230,47 +247,114 @@ require_once "../../Backend/MainPage/CartDetail.php"
         const RecvProvinceInput = document.getElementById("RecvProvinceInput");
         const RecvInputPost = document.getElementById("RecvInputPost");
 
+        const RecvFNameError = document.getElementById('RecvFNameError');
+        const RecvTelError = document.getElementById('RecvTelError');
+        const RecvEmailError = document.getElementById('RecvEmailError');
+        const RecvAddrError = document.getElementById('RecvAddrError');
+        const RecvProvinceError = document.getElementById('RecvProvinceError');
+        const RecvPostError = document.getElementById('RecvPostError');
+
         function checkForm() {
             if (RecvFNameInput.value === "") {
                 RecvFNameInput.style.borderColor = 'red';
+                RecvFNameError.style.display = 'block';
+                RecvFNameError.innerHTML = '*กรุณากรอกชื่อ';
+                RecvFNameStatus = false;
             } else {
                 RecvFNameInput.style.borderColor = 'rgb(156 163 175)';
+                RecvFNameError.style.display = 'none';
+                RecvFNameStatus = true;
             }
+
             if (RecvLNameInput.value === "") {
                 RecvLNameInput.style.borderColor = 'red';
+                RecvLNameError.style.display = 'block';
+                RecvLNameError.innerHTML = '*กรุณากรอกนามสกุล';
+                RecvLNameStatus = false;
             } else {
                 RecvLNameInput.style.borderColor = 'rgb(156 163 175)';
+                RecvLNameError.style.display = 'none';
+                RecvLNameStatus = true;
             }
+
             if (RecvTelInput.value === "") {
                 RecvTelInput.style.borderColor = 'red';
+                RecvTelError.style.display = 'block';
+                RecvTelError.innerHTML = '*กรุณากรอกเบอร์โทรศัพท์';
+                RecvTelStatus = false;
+            } else if (isNaN(RecvTelInput.value)) {
+                RecvTelError.style.display = 'block';
+                RecvTelError.innerHTML = '*กรุณากรอกเบอร์โทรศัพท์เป็นตัวเลขเท่านั้น';
+                RecvTelStatus = false;
+            } else if (RecvTelInput.value.length !== 10) {
+                RecvTelError.style.display = 'block';
+                RecvTelError.innerHTML = '*กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก';
+                RecvTelStatus = false;
             } else {
                 RecvTelInput.style.borderColor = 'rgb(156 163 175)';
+                RecvTelError.style.display = 'none';
+                RecvTelStatus = true;
             }
+
             if (RecvEmailInput.value === "") {
                 RecvEmailInput.style.borderColor = 'red';
+                RecvEmailError.style.display = 'block';
+                RecvEmailError.innerHTML = '*กรุณากรอกอีเมล';
+                RecvEmailStatus = false;
+            } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(RecvEmailInput.value)) {
+                RecvEmailError.style.display = 'block';
+                RecvEmailError.innerHTML = '*กรุณากรอกอีเมลให้ถูกต้อง';
+                RecvEmailStatus = false;
             } else {
                 RecvEmailInput.style.borderColor = 'rgb(156 163 175)';
+                RecvEmailError.style.display = 'none';
+                RecvEmailStatus = true;
             }
+
             if (RecvAddrInput.value === "") {
                 RecvAddrInput.style.borderColor = 'red';
+                RecvAddrError.style.display = 'block';
+                RecvAddrError.innerHTML = '*กรุณากรอกที่อยู่';
+                RecvAddrStatus = false;
             } else {
                 RecvAddrInput.style.borderColor = 'rgb(156 163 175)';
+                RecvAddrError.style.display = 'none';
+                RecvAddrStatus = true;
             }
+
             if (RecvProvinceInput.value === "") {
                 RecvProvinceInput.style.borderColor = 'red';
+                RecvProvinceError.style.display = 'block';
+                RecvProvinceError.innerHTML = '*กรุณากรอกจังหวัด';
+                RecvPostStatus = false;
             } else {
                 RecvProvinceInput.style.borderColor = 'rgb(156 163 175)';
+                RecvProvinceError.style.display = 'none';
+                RecvProvinceStatus = true;
             }
+
             if (RecvInputPost.value === "") {
                 RecvInputPost.style.borderColor = 'red';
+                RecvPostError.style.display = 'block';
+                RecvPostError.innerHTML = '*กรุณากรอกรหัสไปรษณีย์';
+                RecvPostStatus = false;
             } else {
                 RecvInputPost.style.borderColor = 'rgb(156 163 175)';
+                RecvPostError.style.display = 'none';
+                RecvPostStatus = true;
             }
+
             if (document.getElementById('MB').checked === false && document.getElementById('COD').checked === false) {
                 document.getElementById('PaymetError').style.display = 'block';
             } else {
                 document.getElementById('PaymetError').style.display = 'none';
+                PaymentStatus = true;
             }
+
+            if (RecvAddrStatus && RecvEmailStatus && RecvFNameStatus && RecvLNameStatus && RecvPostStatus && RecvProvinceStatus && RecvTelStatus &&PaymentStatus) {
+                document.getElementById('OrderControl').submit();
+            }
+
         }
     </script>
 </body>
