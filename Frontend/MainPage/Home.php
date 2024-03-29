@@ -3,6 +3,7 @@ require '../../Backend/Authorized/UserAuthorized.php';
 require '../../Backend/Authorized/ManageHeader.php';
 require '../../vendor/autoload.php';
 require_once "../../Backend/ProductQuery/ProductInfo.php";
+
 use Firebase\JWT\Key;
 use \Firebase\JWT\JWT;
 ?>
@@ -211,7 +212,7 @@ use \Firebase\JWT\JWT;
                 <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
-                    $result = selectDiscountProduct();
+                    $result = selectShowProduct();
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='product-card w-64 h-4/5 mr-5'>";
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
@@ -223,8 +224,8 @@ use \Firebase\JWT\JWT;
                         echo "<input type='hidden' name='typeName' value='" . $row['TypeName'] . "'>";
                         echo "</form>";
 
-                        // echo "<form id='addtoCard' method='POST' action='#'>";
-                        echo "<button id='addtoCard' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
+                        // echo "<form id='addtoCart' method='POST' action='#'>";
+                        echo "<button id='addtoCart' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         // echo "</form>";
 
@@ -256,19 +257,20 @@ use \Firebase\JWT\JWT;
                 <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
-                    $result = selectDiscountProduct();
+                    $result = selectShowProduct();
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='product-card w-64 h-4/5 mr-5'>";
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
                         // echo "<span class='productDiscount absolute top-2.5 left-2.5 px-1.5 py-1.5 bg-red-700 text-white font-medium rounded-md'>-10%</span>";
 
-                        echo "<form id='detialProduct' method='POST' action='#'>";
+                        echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
                         echo "<img id='imageProduct' class='productImage hover:cursor-pointer rounded-lg border-2 w-full h-96 min-h-80 object-fill' src='" . $row['ImageSource'] . "' alt='product'>";
-                        echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
+                        echo "<input type='hidden' name='proID' value='" . $row['ProID'] . "'>";
+                        echo "<input type='hidden' name='typeName' value='" . $row['TypeName'] . "'>";
                         echo "</form>";
 
-                        // echo "<form id='addtoCard' method='POST' action='#'>";
-                        echo "<button id='addtoCard' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
+                        // echo "<form id='addtoCart' method='POST' action='#'>";
+                        echo "<button id='addtoCart' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         // echo "</form>";
 
@@ -297,19 +299,20 @@ use \Firebase\JWT\JWT;
                 <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
-                    $result = selectDiscountProduct();
+                    $result = selectShowProduct();
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='product-card w-64 h-4/5 mr-5'>";
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
                         // echo "<span class='productDiscount absolute top-2.5 left-2.5 px-1.5 py-1.5 bg-red-700 text-white font-medium rounded-md'>-10%</span>";
 
-                        echo "<form id='detialProduct' method='POST' action='#'>";
+                        echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
                         echo "<img id='imageProduct' class='productImage hover:cursor-pointer rounded-lg border-2 w-full h-96 min-h-80 object-fill' src='" . $row['ImageSource'] . "' alt='product'>";
-                        echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
+                        echo "<input type='hidden' name='proID' value='" . $row['ProID'] . "'>";
+                        echo "<input type='hidden' name='typeName' value='" . $row['TypeName'] . "'>";
                         echo "</form>";
 
-                        // echo "<form id='addtoCard' method='POST' action='#'>";
-                        echo "<button id='addtoCard' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
+                        // echo "<form id='addtoCart' method='POST' action='#'>";
+                        echo "<button id='addtoCart' type='button' class='addCartBtn absolute bottom-2.5 left-2/4 p-2.5 w-11/12 capitalize outline-none rounded-md cursor-pointer opacity-0 '>Add to Cart <i class='bx bxs-cart'></i></button>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         // echo "</form>";
 
@@ -328,16 +331,15 @@ use \Firebase\JWT\JWT;
                     };
                     ?>
                 </div>
-            </section>
         </div>
 
-        <?php 
-        if (isset($_SESSION['tokenJWT']) || isset($_SESSION['tokenGoogle'])) {
-            var_dump("isset");
-            // var_dump("Test jwt: " +  $_SESSION['tokenJWT']);
-            var_dump($_SESSION['tokenGoogle']);
-        }
-        
+        <?php
+        // if (isset($_SESSION['tokenJWT']) || isset($_SESSION['tokenGoogle'])) {
+        //     // var_dump("isset");
+        //     // var_dump("Test jwt: " +  $_SESSION['tokenJWT']);
+        //     // var_dump($_SESSION['tokenGoogle']);
+        // }
+
         ?>
         <script>
             const navLinks = document.querySelectorAll('.slider-nav a');
@@ -396,31 +398,30 @@ use \Firebase\JWT\JWT;
             // เรียกใช้ฟังก์ชันแรกเพื่อแสดงภาพแรกเมื่อเพจโหลด
             showSlide(currentIndex);
 
-        const imgProdcut = document.querySelectorAll('.productImage');
-        imgProdcut.forEach((img) => {
-            img.addEventListener('click', () => {
-                var form = img.parentElement;
-                form.submit();
+            const imgProdcut = document.querySelectorAll('.productImage');
+            imgProdcut.forEach((img) => {
+                img.addEventListener('click', () => {
+                    var form = img.parentElement;
+                    form.submit();
+                });
             });
-        });
 
-        $(document).ready(function() {
-            $('#addtoCard').click(function() {
-            $.ajax({
-                type: 'POST',
-                url: '../../Backend/CartQuery/AddToCart.php',
-                data: {
-                proID: $('input[name="productID"]').val(),
-                quantityHidden: 1
-                },
-                success: function() {
-                // window.location.href = '../../Frontend/MainPage/Cart.php';
-                alert('Add to cart success');
-                // location.reload();
-                }
+            $(document).ready(function() {
+                $('.addCartBtn').click(function() {
+                    var productID = $(this).next('input[name="productID"]').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '../../Backend/CartQuery/AddToCart.php',
+                        data: {
+                            proID: productID,
+                            quantityHidden: 1
+                        },
+                        success: function() {
+                            location.reload();
+                        }
+                    });
+                });
             });
-            });
-        });
         </script>
 </body>
 
