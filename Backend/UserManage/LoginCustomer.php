@@ -26,7 +26,7 @@ if ($result->num_rows > 0) {
             "user" => $username, 
             "role" => $row['Role'], 
             "iat" => time(),
-            "exp" => time() + (60*60)
+            "exp" => time() + (60*240)
         );
 
         $jwt = JWT::encode($payload, $key, 'HS256');
