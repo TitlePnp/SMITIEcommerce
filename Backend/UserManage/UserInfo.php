@@ -15,6 +15,8 @@ function getGoogleUserInfo($googleID)
         customer.Sex, 
         customer.Tel, 
         customer.Address 
+        customer.Province,
+        customer.Postcode
     FROM 
         customer_account 
     INNER JOIN 
@@ -49,7 +51,9 @@ function getUserInfoFromCusID($CusID)
         customer.CusLName, 
         customer.Sex, 
         customer.Tel, 
-        customer.Address 
+        customer.Address,
+        customer.Province,
+        customer.Postcode
     FROM 
         customer_account 
     INNER JOIN 
