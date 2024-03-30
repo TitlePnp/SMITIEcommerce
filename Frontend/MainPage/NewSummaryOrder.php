@@ -45,7 +45,7 @@ $proIds = array_filter($proIds);
             padding: 0px;
         }
 
-        input:focus {
+        input:focus, textarea:focus {
             outline-color: rgb(59 130 246);
         }
     </style>
@@ -55,6 +55,9 @@ $proIds = array_filter($proIds);
     <div class="px-28 py-5">
         <div class="flex flex-row border-2 rounded-lg py-5 bg-gray-50">
             <div class="flex flex-col w-full p-10">
+                <div class="mb-2">
+                    <a href="Cart.php" class="hover:text-blue-800 text-blue-500 font-semibold"><i class='bx bx-arrow-back mr-2'></i>ย้อนกลับ</a>
+                </div>
                 <p class="font-bold text-2xl">Check out</p>
 
                 <!-- ข้อมูลผู้รับ -->
@@ -67,7 +70,7 @@ $proIds = array_filter($proIds);
                             <p class="font-semibold mb-1">ชื่อจริง</p>
                             <?php
                             if ($isMember) {
-                                if ($userInfo["CusFName"] == "") {
+                                if ($userInfo["CusFName"] != "") {
                                     echo "<input id='RecvFNameBox' name='RecvFName' value='{$userInfo["CusFName"]}' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                 } else {
                                     echo "<input id='RecvFNameBox' name='RecvFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
@@ -82,7 +85,7 @@ $proIds = array_filter($proIds);
                             <p class="font-semibold mb-1">นามสกุล</p>
                             <?php
                             if ($isMember) {
-                                if ($userInfo["CusLName"] == "") {
+                                if ($userInfo["CusLName"] != "") {
                                     echo "<input id='RecvLNameBox' name='RecvLName' value='{$userInfo["CusLName"]}' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                 } else {
                                     echo "<input id='RecvLNameBox' name='RecvLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
@@ -101,7 +104,7 @@ $proIds = array_filter($proIds);
                             <p class="font-semibold mb-1">เบอร์โทรศัพท์</p>
                             <?php
                             if ($isMember) {
-                                if ($userInfo["Tel"] == "") {
+                                if ($userInfo["Tel"] != "") {
                                     echo "<input id='RecvTelBox' name='RecvTel' value='{$userInfo["Tel"]}' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                 } else {
                                     echo "<input id='RecvTelBox' name='RecvTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
@@ -185,7 +188,7 @@ $proIds = array_filter($proIds);
                             <p class="font-semibold mb-1">จังหวัด</p>
                             <?php
                             if ($isMember) {
-                                if ($userInfo["Province"] == "") {
+                                if ($userInfo["Province"] != "") {
                                     echo "<input id='RecvProvinceBox' name='RecvProvince' value='{$userInfo["Province"]}' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                 } else {
                                     echo "<input id='RecvProvinceBox' name='RecvProvince' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
@@ -200,7 +203,7 @@ $proIds = array_filter($proIds);
                             <p class="font-semibold mb-1">รหัสไปรษณีย์</p>
                             <?php
                             if ($isMember) {
-                                if ($userInfo["Postcode"] == "") {
+                                if ($userInfo["Postcode"] != "") {
                                     echo "<input id='RecvPostcodeBox' name='RecvPostcode' value='{$userInfo["Postcode"]}' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                 } else {
                                     echo "<input id='RecvPostcodeBox' name='RecvPostcode' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
@@ -384,21 +387,26 @@ $proIds = array_filter($proIds);
 
             </div>
 
-            <div class="w-full p-10">
-                <p class="font-bold text-xl">รายการสินค้า</p>
+            <div class="w-full p-10 mt-10">
+                <p class="font-bold text-xl mb-2">รายการสินค้า</p>
                 <div class="flex flex-col border bg-white rounded-md p-5">
                     <?php
+                    $totoalPrice = 0;
                     if ($isMember) {
                         foreach ($proIds as $proId) {
                             $row = showCartSession($proId)->fetch_assoc();
                             $qty = getQtyFromCart($CusID, $proId)->fetch_assoc();
+                            $totoalPrice += $row['PricePerUnit'] * $qty['Qty'];
                             echo "<div class='flex flex-row mb-5 w-full'>";
                             echo "<div class=''>";
                             echo "<img src='{$row['ImageSource']}' class='w-24 h-30 objec-fill'>";
                             echo "</div>";
                             echo "<div class='ml-3 w-3/4 flex flex-col'>";
-                            echo "<p class='font-semibold text-md'>{$row['ProName']}</p>";
-                            echo "<p class='font-semibold text-md'>{$qty['Qty']}</p>";
+                            echo "<p class='font-semibold text-xl'>{$row['ProName']}</p>";
+                            echo "<p class=' text-sm'>จำนวน {$qty['Qty']} เล่ม</p>";
+                            echo "<div class='flex flex-col justify-end h-full'>";
+                            echo "<p class='text-sm font-semibold'>ราคา {$row['PricePerUnit']} บาท</p>";
+                            echo "</div>";
                             echo "</div>";
                             echo "</div>";
                             echo "<hr class='border border-gray-300 border-5 mb-5 rounded-md w-full' style='border-width: 1px;'>";
@@ -407,8 +415,39 @@ $proIds = array_filter($proIds);
                         //loop to use showProductSession function
                     }
                     ?>
+                    <div class="flex flex-col">
+                        <div class="flex justify-between mb-5">
+                            <?php
+                            $totoalPriceFormat = number_format($totoalPrice, 2);
+                            ?>
+                            <p class="font-semibold text-md">ราคารวม: </p>
+                            <p class="font-md text-md"><?php echo $totoalPriceFormat; ?> บาท</p>
+                        </div>
+                        <div class="flex justify-between">
+                            <?php
+                            $vat = $totoalPrice * 0.07;
+                            $vatFormat = number_format($vat, 2);
+                            ?>
+                            <p class="font-semibold text-md">Vat 7%: </p>
+                            <p class="font-md text-md"><?php echo $vatFormat; ?> บาท</p>
+                        </div>
+                    </div>
+
+                    <hr class='border border-gray-300 my-6 rounded-md w-full' style='border-width: 0.1px;'>
+
+                    <div class="flex justify-between">
+                        <?php
+                        $totalPrice = $totoalPrice + $vat;
+                        $totalPriceFormat = number_format($totalPrice, 2);
+                        ?>
+                        <p class="font-semibold text-xl">ราคาสุทธิ: </p>
+                        <p class="font-md text-md"><?php echo $totalPriceFormat; ?> บาท</p>
+                    </div>
+
+                    <hr class='border border-gray-300 my-6 rounded-md w-full' style='border-width: 0.1px;'>
+
                     <div>
-                        <button class="w-full mt-10 h-12 bg-blue-800 rounded-md font-bold text-white hover:shadow-md hover:bg-blue-900">ยืนยันการสั่งซื้อ</button>
+                        <button class="w-full mt-5 h-12 bg-blue-800 rounded-md font-bold text-white hover:shadow-md hover:bg-blue-900">ยืนยันการสั่งซื้อ</button>
                     </div>
                 </div>
 
