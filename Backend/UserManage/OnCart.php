@@ -7,7 +7,7 @@
   if (isset($_SESSION['tokenJWT']) || isset($_SESSION['tokenGoogle'])) {
     $id = getID();
     $_SESSION['productOnCart'] = countCart($id);
-  } else {
+  } else if (isset($_SESSION['cart'])){
     $key = array_keys($_SESSION['cart']);
     $_SESSION['productOnCart'] = count($key);
   }
