@@ -33,4 +33,14 @@
     $stmt->close();
     return $result;
   }
+
+  function getQtyFromCart($CustomerID, $productID) {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT Qty FROM CART_LIST WHERE ProID = ? AND CusID = ?");
+    $stmt->bind_param("is", $productID, $CustomerID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+  }
 ?>

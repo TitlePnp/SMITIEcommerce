@@ -156,9 +156,9 @@ use \Firebase\JWT\JWT;
 
         } */
 
-        .productImage:hover {
-            /* box-shadow: 0 5px 15px black; */
-        }
+        /*.productImage:hover {
+             box-shadow: 0 5px 15px black; 
+        }*/
     </style>
 
 <body>
@@ -194,9 +194,29 @@ use \Firebase\JWT\JWT;
                         echo "<p class='text-md'><b>ผู้เขียน:</b> " . $row['Author'] . "</p>";
                         echo "<p class='text-md'><b>หมวดหมู่:</b> " . $row['TypeName'] . "</p>";
                         echo "<p class='text-md'><b>เรื่องย่อ:</b> " . $row['Description'] . "</p>";
-                        echo "<div class='flex mt-5 items-center w-full rounded-md bg-red-100 h-16'>";
-                        echo "<span class='font-bold text-2xl ml-5'>" . $row['PricePerUnit'] . " </span>";
-                        echo "<span class='font-medium text-lg ml-2'> บาท</span>";
+                        echo "<div class='p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50' role='alert'/>";
+                        echo "<span class='text-3xl font-bold'>{$row['PricePerUnit']}</span> บาท";
+                        echo "</div>";
+                        echo "<div class='quantity-controls'>";
+                        echo "<div class='flex items-center'>";
+                        echo "<p class='text-base font-normal mr-3'>จำนวน: </p>";
+                        echo "<button type='button' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>";
+                        echo "<input type='number' min='1' max='{$row['StockQty']}' value='1' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>";
+                        echo "<button type='button' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>";
+                        echo "</div>";
+                        echo "<p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
+                        echo "<div class='flex'>";
+                        echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
+                        echo "<input type='hidden' name='quantityHidden' value=''>";
+                        echo "<button id='add-to-cart-button' class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>เพิ่มลงในตะกร้า";
+                        echo "<img src='../../Pictures/shopping-cart.png' alt='cart icon' class='w-6 h-6 ml-2'
+              style='filter: grayscale(100%) contrast(0);'></button>";
+                        echo "<form action='Payment.php' method='post'>";
+                        echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
+                        echo "<input type='hidden' name='quantityHidden' value=''>";
+                        echo "<button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3'>ซื้อสินค้า</button>";
+                        echo "</form>";
+                        echo "</div>";
                         echo "</div>"
                         ?>
                     </div>
@@ -205,18 +225,18 @@ use \Firebase\JWT\JWT;
 
             <section class="relative overflow-hidden pt-8">
                 <div class="flex mb-5 justify-between">
-                    <h1 class="font-bold text-2xl">สินค้าลดราคา</h1>
+                    <h1 class="font-bold text-2xl">สินค้าแนะนำ</h1>
                     <h1 class="font-regular text-lg ">ดูทั้งหมด ></h1>
                 </div>
-                <i id='leftPointer' class='bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
-                <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
+                <i id='leftPointer' class='leftPointer bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
+                <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
                     $result = selectShowProduct();
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='product-card w-64 h-4/5 mr-5'>";
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
-                        echo "<span class='productDiscount absolute top-2.5 left-2.5 px-1.5 py-1.5 bg-red-700 text-white font-medium rounded-md'>-10%</span>";
+                        // echo "<span class='productDiscount absolute top-2.5 left-2.5 px-1.5 py-1.5 bg-red-700 text-white font-medium rounded-md'>-10%</span>";
 
                         echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
                         echo "<img id='imageProduct' class='productImage hover:cursor-pointer rounded-lg border-2 w-full h-96 min-h-80 object-fill' src='" . $row['ImageSource'] . "' alt='product'>";
@@ -234,13 +254,15 @@ use \Firebase\JWT\JWT;
 
                         echo "<p id='productType' class='uppercase text-lg font-bold mt-2 overflow-hidden text-ellipsis whitespace-nowrap'>" . $row['TypeName'] . "</p>";
 
-                        echo "<form id='detialProduct' method='POST' action='#'>";
-                        echo "<p id='productName' class='uppercase text-md font-semibold mt-1 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
-                        echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
+                        echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
+                        echo "<p id='productName' class='nameToDetail uppercase text-md font-semibold mt-1 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
+                        echo "<input type='hidden' name='proID' value='" . $row['ProID'] . "'>";
+                        echo "<input type='hidden' name='typeName' value='" . $row['TypeName'] . "'>";
                         echo "</form>";
 
-                        echo "<span class='font-semibold text-lg'>ราคา: " . ($row['PricePerUnit'] - ($row['PricePerUnit'] * 10 / 100)) . " ฿</span>";
-                        echo "<span class='line-through text-md opacity-50 ml-2'>" . $row['PricePerUnit'] . " ฿</span>";
+                        // echo "<span class='font-semibold text-lg'>ราคา: " . ($row['PricePerUnit'] - ($row['PricePerUnit'] * 10 / 100)) . " </span>";
+                        // echo "<span class='line-through text-md opacity-50 ml-2'>" . $row['PricePerUnit'] . " ฿</span>";
+                        echo "<span class='font-bold text-lg'>ราคา: " . $row['PricePerUnit'] . " บาท</span>";
                         echo "</div>";
                         echo "</div>";
                     };
@@ -253,8 +275,8 @@ use \Firebase\JWT\JWT;
                     <h1 class="font-bold text-2xl">สินค้ายอดนิยม</h1>
                     <h1 class="font-regular text-lg ">ดูทั้งหมด</h1>
                 </div>
-                <i id='leftPointer' class='bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
-                <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
+                <i id='leftPointer' class='leftPointer bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
+                <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
                     $result = selectShowProduct();
@@ -277,13 +299,16 @@ use \Firebase\JWT\JWT;
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
 
+                        echo "<p id='productType' class='uppercase text-lg font-bold mt-2 overflow-hidden text-ellipsis whitespace-nowrap'>" . $row['TypeName'] . "</p>";
+
+
                         echo "<form id='detialProduct' method='POST' action='#'>";
-                        echo "<p id='productName' class='uppercase text-md font-semibold mt-2 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
+                        echo "<p id='productName' class='nameToDetail uppercase text-md font-semibold mt-2 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         echo "</form>";
 
                         // echo "<span class='font-bold text-lg'>" . ($row['PricePerUnit'] - ($row['PricePerUnit'] * 10 / 100)) . " ฿</span>";
-                        echo "<span class='text-lg font-bold'>" . $row['PricePerUnit'] . " ฿</span>";
+                        echo "<span class='font-bold text-lg'>ราคา: " . $row['PricePerUnit'] . " บาท</span>";
                         echo "</div>";
                         echo "</div>";
                     };
@@ -295,8 +320,9 @@ use \Firebase\JWT\JWT;
                 <div class="flex mb-5 justify-between">
                     <h1 class="font-bold text-2xl">สินค้าใหม่</h1>
                     <h1 class="font-regular text-lg ">ดูทั้งหมด</h1>
-                </div> <i id='leftPointer' class='bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
-                <i id='rightPointer' class='bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
+                </div>
+                <i id='leftPointer' class='leftPointer bx bxs-chevron-left absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%"></i>
+                <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
                     $result = selectShowProduct();
@@ -319,18 +345,23 @@ use \Firebase\JWT\JWT;
                         echo "</div>";
                         echo "<div class='px-2.5 w-full h-full min-h-32'>";
 
-                        echo "<form id='detialProduct' method='POST' action='#'>";
-                        echo "<p id='productName' class='uppercase text-md font-semibold mt-2 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
+                        echo "<p id='productType' class='uppercase text-lg font-bold mt-2 overflow-hidden text-ellipsis whitespace-nowrap'>" . $row['TypeName'] . "</p>";
+
+                        echo "<form id='detialProduct' method='POST' action='ProductDetail.php'>";
+                        echo "<p id='productName' class='nameToDetail uppercase text-md font-semibold mt-2 overflow-hidden text-ellipsis whitespace-nowrap hover:text-blue-500 cursor-pointer'>" . $row['ProName'] . "</p>";
                         echo "<input type='hidden' name='productID' value='" . $row['ProID'] . "'>";
                         echo "</form>";
 
                         // echo "<span class='font-bold text-lg'>" . ($row['PricePerUnit'] - ($row['PricePerUnit'] * 10 / 100)) . " ฿</span>";
-                        echo "<span class='font-bold text-lg'>" . $row['PricePerUnit'] . " ฿</span>";
+                        // echo "<span class='font-bold text-lg'>" . $row['PricePerUnit'] . " ฿</span>";
+                        echo "<span class='font-bold text-lg'>ราคา: " . $row['PricePerUnit'] . " บาท</span>";
                         echo "</div>";
                         echo "</div>";
                     };
                     ?>
                 </div>
+            </section>
+            
         </div>
 
         <?php
@@ -347,25 +378,24 @@ use \Firebase\JWT\JWT;
             const slides = document.querySelectorAll('.slider img'); // เลือกทุกภาพใน slider
             const totalSlides = slides.length; // นับจำนวนภาพทั้งหมด
 
-            // 1. สร้างตัวแปร JavaScript สำหรับ .product-container, #leftPointer, และ #rightPointer.
-            var productContainer = document.querySelector('.product-container');
-            var leftPointer = document.querySelector('#leftPointer');
-            var rightPointer = document.querySelector('#rightPointer');
+            $(document).ready(function() {
+                var scrollAmount = 200; // จำนวนที่ต้องการเลื่อน
+                var scrollDuration = 50; // ระยะเวลาที่ต้องการให้การเลื่อนเสร็จสิ้น (มิลลิวินาที)
 
-            // 2. สร้าง event listener สำหรับการคลิกที่ #leftPointer และ #rightPointer.
-            leftPointer.addEventListener('click', function() {
-                // 3. ใน event listener, ใช้ scrollBy ใน .product-container เพื่อเลื่อนสินค้าไปทางซ้าย.
-                productContainer.scrollBy({
-                    left: -260,
-                    behavior: 'smooth'
+                $('.leftPointer').each(function() {
+                    $(this).click(function() {
+                        $(this).siblings('.product-container').animate({
+                            scrollLeft: "-=" + scrollAmount + "px"
+                        }, scrollDuration);
+                    });
                 });
-            });
 
-            rightPointer.addEventListener('click', function() {
-                // 3. ใน event listener, ใช้ scrollBy ใน .product-container เพื่อเลื่อนสินค้าไปทางขวา.
-                productContainer.scrollBy({
-                    left: 260,
-                    behavior: 'smooth'
+                $('.rightPointer').each(function() {
+                    $(this).click(function() {
+                        $(this).siblings('.product-container').animate({
+                            scrollLeft: "+=" + scrollAmount + "px"
+                        }, scrollDuration);
+                    });
                 });
             });
 
@@ -406,6 +436,14 @@ use \Firebase\JWT\JWT;
                 });
             });
 
+            const nameProduct = document.querySelectorAll('.nameToDetail');
+            nameProduct.forEach((name) => {
+                name.addEventListener('click', () => {
+                    var form = name.parentElement;
+                    form.submit();
+                });
+            });
+
             $(document).ready(function() {
                 $('.addCartBtn').click(function() {
                     var productID = $(this).next('input[name="productID"]').val();
@@ -418,6 +456,63 @@ use \Firebase\JWT\JWT;
                         },
                         success: function() {
                             location.reload();
+                        }
+                    });
+                });
+            });
+
+            document.querySelectorAll('.quantity-controls').forEach(function(control) {
+                var decreaseButton = control.querySelector('.decrease');
+                var increaseButton = control.querySelector('.increase');
+                var quantityInput = control.querySelector('.quantity');
+                var quantityHidden = control.querySelector('input[name="quantityHidden"]');
+
+                decreaseButton.addEventListener('click', function() {
+                    var currentQuantity = parseInt(quantityInput.value, 10);
+                    if (currentQuantity > 1) {
+                        quantityInput.value = currentQuantity - 1;
+                        quantityHidden.value = quantityInput.value;
+                    }
+                });
+
+                increaseButton.addEventListener('click', function() {
+                    var currentQuantity = parseInt(quantityInput.value, 10);
+                    var maxQuantity = parseInt(quantityInput.max, 10);
+                    if (currentQuantity < maxQuantity) {
+                        quantityInput.value = currentQuantity + 1;
+                        quantityHidden.value = quantityInput.value;
+                    }
+                });
+                quantityInput.addEventListener('input', function() {
+                    var currentQuantity = parseInt(quantityInput.value, 10);
+                    if (isNaN(currentQuantity)) {
+                        quantityInput.value = "1";
+                    } else {
+                        var maxQuantity = parseInt(quantityInput.max, 10);
+                        if (currentQuantity > maxQuantity) {
+                            quantityInput.value = maxQuantity;
+                            quantityHidden.value = quantityInput.value;
+                        } else if (currentQuantity === 0) {
+                            quantityInput.value = "1";
+                            quantityHidden.value = quantityInput.value;
+                        }
+                    }
+                    quantityHidden.value = quantityInput.value;
+                });
+                quantityHidden.value = quantityInput.value;
+            });
+
+            $(document).ready(function() {
+                $('#add-to-cart-button').click(function() {
+                    $.ajax({
+                        type: 'POST',
+                        url: '../../Backend/CartQuery/AddToCart.php',
+                        data: {
+                            proID: $('input[name="proID"]').val(),
+                            quantityHidden: $('input[name="quantityHidden"]').val()
+                        },
+                        success: function() {
+                            window.location.href = '../../Frontend/MainPage/Cart.php';
                         }
                     });
                 });
