@@ -139,15 +139,13 @@
         <div class="text-white text-center mb-2 md:mb-0"> ราคารวมทั้งหมด: <span id="total"></span> บาท</div>
         <div class="justify-end">
           <form action='SummaryOrder.php' method='post'>
-            <input type='hidden' name='proID' value='{$proID}'>
-            <input type='hidden' name='quantityHidden' value=''>
+            <input type='hidden' name='select-proID' value=''>
             <button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded'>ซื้อสินค้า</button>
           </form>
         </div>
       </div>
     </footer>
-  <div>
-
+  </div>
 <script>
   /* Decrease, Increase QTY */
   document.querySelectorAll('.quantity-controls').forEach(function(control, index) {
@@ -211,22 +209,7 @@
   /* CHECK BOX */
   $(document).ready(function(){
     updateTotal();
-    $('#checkbox-all').click(function(){
-      if ($(this).is(':checked')) {
-        $('input[type="checkbox"]').prop('checked', true);
-      } else{
-        $('input[type="checkbox"]').prop('checked', false);
-      }
-      updateTotal();
-    });
-    $('input[type="checkbox"]').click(function(){
-      updateTotal();
-    });
-  });
-
-  $(document).ready(function(){
-    updateTotal();
-    $('#checkbox-all-last').click(function(){
+    $('#checkbox-all, #checkbox-all-last').click(function(){
       if ($(this).is(':checked')) {
         $('input[type="checkbox"]').prop('checked', true);
       } else{
@@ -297,6 +280,23 @@
       }
     });
   }
+
+  /* บังคับให้เลือกสินค้าก่อน */
+  $('form').on('submit', function(e) {
+    var count = 0;
+    var checkedProIds = [];
+    $('input[type="checkbox"]').each(function() {
+      if ($(this).is(':checked')) {
+        count++;
+        checkedProIds.push($(this).closest('tr').find('input[name="proID"]').val());
+      }
+    });
+    $('input[name="select-proID"]').val(checkedProIds.join(','));
+    if (count === 0) {
+      e.preventDefault();
+      alert('กรุณาเลือกสินค้าที่ต้องการซื้อ');
+    }
+  });
 </script>
 </body>
 </html>
