@@ -14,7 +14,7 @@ function getGoogleUserInfo($googleID)
         customer.CusLName, 
         customer.Sex, 
         customer.Tel, 
-        customer.Address 
+        customer.Address, 
         customer.Province,
         customer.Postcode
     FROM 
