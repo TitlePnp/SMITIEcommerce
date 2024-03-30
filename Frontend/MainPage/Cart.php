@@ -138,7 +138,7 @@
         </div>
         <div class="text-white text-center mb-2 md:mb-0"> ราคารวมทั้งหมด: <span id="total"></span> บาท</div>
         <div class="justify-end">
-          <form action='SummaryOrder.php' method='post'>
+          <form action='NewSummaryOrder.php' method='post'>
             <input type='hidden' name='select-proID' value=''>
             <button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded'>ซื้อสินค้า</button>
           </form>
