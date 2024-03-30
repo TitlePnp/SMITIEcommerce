@@ -10,7 +10,9 @@ if (isset($_SESSION['tokenJWT'])) {
     echo "No Token<br>";
 }
 
-if (isset($_POST['RecvFName']) && isset($_POST['RecvLName']) && isset($_POST['sex']) && isset($_POST['RecvTel']) && isset($_POST['RecvAddr']) && isset($_POST['payment'])) {
+// var_dump($_POST);
+
+if (isset($_POST['RecvFName']) && isset($_POST['RecvLName']) && isset($_POST['RecvTel']) && isset($_POST['RecvAddr']) && isset($_POST['payment'])) {
     $RecvFName = $_POST['RecvFName'];
     $RecvLName = $_POST['RecvLName'];
     $RecvSex = $_POST['sex'];
@@ -21,17 +23,17 @@ if (isset($_POST['RecvFName']) && isset($_POST['RecvLName']) && isset($_POST['se
     $newInvoiceID = getNewInvoiceID();
     echo "getNewInvoiceID Success : " . $newInvoiceID . "<br>";
     insertReceiver($RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr);
-    // echo "Insett Recv Success";
+    echo "Insett Recv Success";
     $receiverID = getRecvID();
-    // echo "getRecvID Success : " . $receiverID . "<br>"; 
+    echo "getRecvID Success : " . $receiverID . "<br>"; 
     insertReceiverList($receiverID);
-    // echo "Insert RecvList Success<br>";
+    echo "Insert RecvList Success<br>";
     insertInvoiceOrder($newInvoiceID, $RecvPayment);
-    // echo "Insert InvoiceOrder Success<br>";
+    echo "Insert InvoiceOrder Success<br>";
     $invoiceID = getInvoiceID();
-    // echo "getInvoiceID Success : " . $invoiceID . "<br>";
+    echo "getInvoiceID Success : " . $invoiceID . "<br>";
     insertInvoice_list($invoiceID, $_SESSION['cart']);
-    // echo "InsertInvoice list Success";
+    echo "InsertInvoice list Success";
     $_SESSION['InvoiceID'] = $invoiceID;
     $_SESSION['ReceiverID'] = $receiverID;
     header("Location: ../../Frontend/MainPage/ThankOrder.php");

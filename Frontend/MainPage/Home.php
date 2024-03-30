@@ -156,9 +156,9 @@ use \Firebase\JWT\JWT;
 
         } */
 
-        .productImage:hover {
-            /* box-shadow: 0 5px 15px black; */
-        }
+        /*.productImage:hover {
+             box-shadow: 0 5px 15px black; 
+        }*/
     </style>
 
 <body>
@@ -361,6 +361,7 @@ use \Firebase\JWT\JWT;
                     ?>
                 </div>
             </section>
+            
         </div>
 
         <?php
