@@ -1,7 +1,7 @@
 <?php
   require '../../Backend/Authorized/UserAuthorized.php';
   require '../../Backend/Authorized/ManageHeader.php';
-  include '../../Backend/MainPage/CartDetail.php';
+  include '../../Backend/CartQuery/CartDetail.php';
   $invoiceID = "กรุณากรอกหมายเลขคำสั่งซื้อ";
   if (isset($_POST['invoiceID'])) {
     $invoiceID = $_POST['invoiceID'];

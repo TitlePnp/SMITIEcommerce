@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/JQL.min.js"></script>
+<script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/typeahead.bundle.js"></script>
+<link rel="stylesheet" href="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.css">
+<script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.js"></script>
+</head>
+<body>
+    <input type="text" id="district">
+    <input type="text" id="amphoe">
+    <input type="text" id="province">
+    <input type="text" id="zipcode">
+<script>
+    
+$.Thailand({
+    autocomplete_size: 5,
+    $district: $('#district'), // input ของตำบล
+    $amphoe: $('#amphoe'), // input ของอำเภอ
+    $province: $('#province'), // input ของจังหวัด
+    $zipcode: $('#zipcode'), // input ของรหัสไปรษณีย์
+});
+
+</script>
+</body>
+</html>
