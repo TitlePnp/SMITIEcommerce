@@ -31,4 +31,17 @@
       header('Location: ../../Frontend/MainPage/Home.php');
       exit();
   }
+
+  function getUserName() {
+    $user = null;
+    if (isset($_SESSION['tokenJWT'])) {
+      $jwt = $_SESSION['tokenJWT'];
+      $key = "SECRETKEY_SMITIECOM_CLIENT";
+      $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
+      $user = $decoded->user;
+    } elseif (isset($_SESSION['tokenGoogle'])) {
+      $user = getGoogleUserInfo($_SESSION['name']);
+    }
+    return $user;
+  }
 ?>
