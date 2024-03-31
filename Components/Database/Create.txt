@@ -24,14 +24,14 @@ CREATE TABLE CUSTOMER_ACCOUNT (
 -- ตารางเก็บข้อมูลคนจ่ายเงิน --
 CREATE TABLE PAYER (
     PayerID     INT             AUTO_INCREMENT  PRIMARY KEY,
-    TaxID       CHAR(13)        ,
+    PayerTaxID       CHAR(13)        ,
     PayerFName  VARCHAR(20)     NOT NULL,
     PayerLName	VARCHAR(20)     NOT NULL,
-    Sex			VARCHAR(1),
-    Tel			CHAR(10)        NOT NULL,
-    Address		VARCHAR(80)     NOT NULL,
-    Province    VARCHAR(20) NOT NULL,
-    Postcode    VARCHAR(5) NOT NULL,
+    PayerSex			VARCHAR(1),
+    PayerTel			CHAR(10)        NOT NULL,
+    PayerAddress		VARCHAR(80)     NOT NULL,
+    PayerProvince    VARCHAR(20) NOT NULL,
+    PayerPostcode    VARCHAR(5) NOT NULL,
     CusID       INT             NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 );
@@ -50,11 +50,11 @@ CREATE TABLE RECEIVER (
     RecvID		INT	        AUTO_INCREMENT  PRIMARY KEY,
     RecvFName	VARCHAR(20) NOT NULL,
     RecvLName	VARCHAR(20)	NOT NULL,
-    Sex			VARCHAR(1),
-    Tel			CHAR(10)	NOT NULL,
-    Address		VARCHAR(80)	NOT NULL,
-    Province    VARCHAR(20) NOT NULL,
-    Postcode    VARCHAR(5) NOT NULL,
+    RecvSex			VARCHAR(1),
+    RecvTel			CHAR(10)	NOT NULL,
+    RecvAddress		VARCHAR(80)	NOT NULL,
+    RecvProvince    VARCHAR(20) NOT NULL,
+    RecvPostcode    VARCHAR(5) NOT NULL,
     CusID       INT         NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 );
@@ -108,10 +108,12 @@ CREATE TABLE INVOICE_ORDER (
     CusID       INT         NOT NULL,
     RecvID      INT         NOT NULL,
     PayerID     INT         NOT NULL,
+    TotalPrice  VARCHAR(255) NOT NULL,
+    Vat         VARCHAR(255) NOT NULL,
+    Channel     VARCHAR(20) NOT NULL,
     StartDate   DATETIME    NOT NULL,
     EndDate     DATETIME    NOT NULL,
     Status		VARCHAR(10)	DEFAULT 'OnHand',
-    Channel     VARCHAR(255) NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
     FOREIGN KEY (RecvID) REFERENCES RECEIVER(RecvID),
     FOREIGN KEY (PayerID) REFERENCES PAYER(PayerID)

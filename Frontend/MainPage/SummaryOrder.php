@@ -23,8 +23,6 @@ if (isset($_SESSION["tokenJWT"])) {
 $proIds = explode(',', $_POST['select-proID']);
 $proIds = array_filter($proIds);
 
-// var_dump($proIds);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,6 +60,10 @@ $proIds = array_filter($proIds);
 
 <body>
     <form id="PaymentForm" method="POST">
+        <?php
+        $proIdsString = implode(',', $proIds);
+        echo "<input type='hidden' name='ProIds' value='{$proIdsString}'>";
+        ?>
         <div class="px-28 py-5">
             <div class="flex flex-row border-2 rounded-lg py-5 bg-gray-50">
                 <div class="flex flex-col w-full p-10">
@@ -407,12 +409,11 @@ $proIds = array_filter($proIds);
                     <p class="font-bold text-xl mb-2">รายการสินค้า</p>
                     <div class="flex flex-col border bg-white rounded-md p-5">
                         <?php
-                        $totoalPrice = 0;
                         if ($isMember) {
                             foreach ($proIds as $proId) {
                                 $row = showCartSession($proId)->fetch_assoc();
                                 $qty = getQtyFromCart($CusID, $proId)->fetch_assoc();
-                                $totoalPrice += $row['PricePerUnit'] * $qty['Qty'];
+                                $totalPrice += $row['PricePerUnit'] * $qty['Qty'];
                                 echo "<div class='flex flex-row mb-5 w-full h-34'>";
                                 echo "<div class=''>";
                                 echo "<img src='{$row['ImageSource']}' class='w-24 h-32 objec-fill'>";
@@ -428,11 +429,10 @@ $proIds = array_filter($proIds);
                                 echo "<hr class='border border-gray-300 border-5 mb-5 rounded-md w-full' style='border-width: 1px;'>";
                             }
                         } else {
-                            $totalPrice = 0;
                             foreach ($proIds as $proId) {
                                 $row = showCartSession($proId)->fetch_assoc();
                                 $qty = $_SESSION['cart'][$proId];
-                                $totoalPrice += $row['PricePerUnit'] * $qty;
+                                $totalPrice += $row['PricePerUnit'] * $qty;
                                 echo "<div class='flex flex-row mb-5 w-full h-34'>";
                                 echo "<div class=''>";
                                 echo "<img src='{$row['ImageSource']}' class='w-24 h-32 objec-fill'>";
@@ -452,15 +452,15 @@ $proIds = array_filter($proIds);
                         <div class="flex flex-col">
                             <div class="flex justify-between mb-5">
                                 <?php
-                                $totoalPriceFormat = number_format($totoalPrice, 2);
+                                $totalPriceFormat = number_format($totalPrice, 2);
                                 ?>
                                 <p class="font-semibold text-md">ราคารวม: </p>
-                                <p class="font-md text-md"><?php echo $totoalPriceFormat; ?> บาท</p>
+                                <p class="font-md text-md"><?php echo $totalPriceFormat; ?> บาท</p>
                                 <input type="hidden" name="TotalPrice" value="<?php echo $totalPrice ?>">
                             </div>
                             <div class="flex justify-between">
                                 <?php
-                                $vat = $totoalPrice * 0.07;
+                                $vat = $totalPrice * 0.07;
                                 $vatFormat = number_format($vat, 2);
                                 ?>
                                 <p class="font-semibold text-md">Vat 7%: </p>
@@ -473,7 +473,7 @@ $proIds = array_filter($proIds);
 
                         <div class="flex justify-between">
                             <?php
-                            $totalPrice = $totoalPrice + $vat;
+                            $totalPrice = $totalPrice + $vat;
                             $totalPriceFormat = number_format($totalPrice, 2);
                             ?>
                             <p class="font-semibold text-xl">ราคาสุทธิ: </p>
@@ -486,8 +486,8 @@ $proIds = array_filter($proIds);
                             <button onclick="submitForm()" type="button" class="w-full mt-5 h-12 bg-blue-800 rounded-md font-bold text-white hover:shadow-md hover:bg-blue-900">ยืนยันการสั่งซื้อ</button>
                         </div>
                     </div>
-                    <!-- <p id="CheckStatus"></p>
-                    <p id="CheckSubmit"></p> -->
+                    <!-- <p id="CheckStatus"></p> -->
+                    <!-- <p id="CheckSubmit"></p> -->
                 </div>
             </div>
         </div>
@@ -758,7 +758,6 @@ $proIds = array_filter($proIds);
                     RecvAddrError.style.display = "block";
                     RecvAddrInput.style.borderColor = "red";
                     RecvAddrStatus = false;
-
                 } else {
                     RecvAddrError.style.display = "none";
                     RecvAddrInput.style.borderColor = "rgb(229 231 235)";
@@ -856,6 +855,16 @@ $proIds = array_filter($proIds);
             //     "taxIDStatus: " + taxIDStatus + "<br>" +
             //     "fillAllRecvBox: " + fillAllRecvBox + "<br>" +
             //     "sameAddrStatus: " + sameAddrStatus + "<br>";
+
+            // show all Recv value
+            // document.getElementById('CheckSubmit').innerHTML = "RecvFName: " + RecvFNameBox.value + "<br>" +
+            //     "RecvLName: " + RecvLNameBox.value + "<br>" +
+            //     "RecvTel: " + RecvTelBox.value + "<br>" +
+            //     "RecvEmail: " + RecvEmailBox.value + "<br>" +
+            //     "RecvAddr: " + RecvAddrInput.value + "<br>" +
+            //     "RecvProvince: " + RecvProvinceBox.value + "<br>" +
+            //     "RecvPostcode: " + RecvPostcodeBox.value + "<br>";
+
         }
 
         function submitForm() {
@@ -888,9 +897,9 @@ $proIds = array_filter($proIds);
                 if (fillAllPayerBox) {
                     sameAddrError.style.display = "none";
                     RecvFNameBox.value = PayerFNameBox.value;
-                    RecvFNameBox.disabled = true;
+                    RecvFNameBox.readOnly = true;
                     RecvLNameBox.value = PayerLNameBox.value;
-                    RecvLNameBox.disabled = true;
+                    RecvLNameBox.readOnly = true;
                     RecvSexBox.value = PayerSexBox.value;
                     for (var i = 0; i < PayerSexBox.length; i++) {
                         if (PayerSexBox[i].checked) {
@@ -899,15 +908,16 @@ $proIds = array_filter($proIds);
                         }
                     }
                     RecvTelBox.value = PayerTelBox.value;
-                    RecvTelBox.disabled = true;
+                    RecvTelBox.readOnly = true;
                     RecvEmailBox.value = PayerEmailBox.value;
-                    RecvEmailBox.disabled = true;
+                    RecvEmailBox.readOnly = true;
                     RecvAddrInput.value = PayerAddrInput.value
-                    RecvAddrInput.disabled = true;
+                    RecvAddrInput.readOnly = true;
                     RecvProvinceBox.value = PayerProvinceBox.value;
-                    RecvProvinceBox.disabled = true;
+                    RecvProvinceBox.readOnly = true;
                     RecvPostcodeBox.value = PayerPostcodeBox.value;
-                    RecvPostcodeBox.disabled = true;
+                    RecvPostcodeBox.readOnly = true;
+                    // formCheck();
                 } else {
                     sameAddr.checked = false;
                     sameAddrStatus = false;
@@ -919,19 +929,19 @@ $proIds = array_filter($proIds);
                 sameAddrStatus = false;
                 sameAddrError.style.display = "none";
                 RecvFNameBox.value = "";
-                RecvFNameBox.disabled = false;
+                RecvFNameBox.readOnly = false;
                 RecvLNameBox.value = "";
-                RecvLNameBox.disabled = false;
+                RecvLNameBox.readOnly = false;
                 RecvTelBox.value = "";
-                RecvTelBox.disabled = false;
+                RecvTelBox.readOnly = false;
                 RecvEmailBox.value = "";
-                RecvEmailBox.disabled = false;
+                RecvEmailBox.readOnly = false;
                 RecvAddrInput.value = "";
-                RecvAddrInput.disabled = false;
+                RecvAddrInput.readOnly = false;
                 RecvProvinceBox.value = "";
-                RecvProvinceBox.disabled = false;
+                RecvProvinceBox.readOnly = false;
                 RecvPostcodeBox.value = "";
-                RecvPostcodeBox.disabled = false;
+                RecvPostcodeBox.readOnly = false;
             }
         });
 
@@ -984,8 +994,8 @@ $proIds = array_filter($proIds);
             qrCheckIcon.style.display = "block";
             codBox.style.borderColor = "rgb(229 231 235)";
             codCheckIcon.style.display = "none";
-            PaymentMethod.values = "MobileBanking";
-            PaymentMethodCheckValue = PaymentMethod.values;
+            PaymentMethod.value = "MobileBanking";
+            PaymentMethodCheckValue = PaymentMethod.value;
         });
 
         codBox.addEventListener('click', () => {
@@ -994,18 +1004,18 @@ $proIds = array_filter($proIds);
             codCheckIcon.style.display = "block";
             qrBox.style.borderColor = "rgb(229 231 235)";
             qrCheckIcon.style.display = "none";
-            PaymentMethod.values = "CashOnDelivery";
-            PaymentMethodCheckValue = PaymentMethod.values;
+            PaymentMethod.valus = "CashOnDelivery";
+            PaymentMethodCheckValue = PaymentMethod.value;
         });
 
         //auto fill address
-        $.Thailand({
-            autocomplete_size: 5,
-            // $district: $('#district'),
-            // $amphoe: $('#subdistrict'),
-            // $province: $('#PayerProvince'),
-            // $zipcode: $('#PayerPostcode'),
-        });
+        // $.Thailand({
+        //     autocomplete_size: 5,
+        //     // $district: $('#district'),
+        //     // $amphoe: $('#subdistrict'),
+        //     // $province: $('#PayerProvince'),
+        //     // $zipcode: $('#PayerPostcode'),
+        // });
     </script>
 </body>
 
