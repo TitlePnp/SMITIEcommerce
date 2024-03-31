@@ -2,36 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet">
-  <style>
-    .nav-style {
-      color: white;
-      border-radius: 0.375rem;
-      /* px-3 */
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-      /* py-2 */
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
-    }
-
-    .nav-style:hover, [aria-current="page"] {
-      background-color: white;
-      color: black;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 <body>
-    <form action="ProductDetail.php" method="post">
-      <label for="proID">proid:</label><br>
-      <input type="text" id="proID" name="proID" value="1"><br>
-  <label for="typeName">type name:</label><br>
-  <input type="text" id="typeName" name="typeName" value="comic"><br><br>
-  <input type="submit" value="Submit">
-    </form>
+  <input type="checkbox" name="check" id="checkBox">
+  <input type="text" id="int">
+  <input type="text" id="rev">
+  <script>
+    const checkBox = document.getElementById('checkBox');
+    const p = document.getElementById('rev');
+    const int = document.getElementById('int');
+    checkBox.addEventListener('change', () => {
+      if (checkBox.checked) {
+        // p.style.display = 'none';
+        p.value = int.value;
+      } else {
+        p.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>
