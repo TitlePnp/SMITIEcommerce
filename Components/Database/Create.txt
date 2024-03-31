@@ -21,20 +21,25 @@ CREATE TABLE CUSTOMER_ACCOUNT (
 
 -- ตารางเก็บข้อมูลคนจ่ายเงิน --
 CREATE TABLE PAYER (
-    TaxID       CHAR(13)        PRIMARY KEY,
+    PayerID     INT             AUTO_INCREMENT  PRIMARY KEY,
+    TaxID       CHAR(13)        ,
     PayerFName  VARCHAR(20)     NOT NULL,
     PayerLName	VARCHAR(20)     NOT NULL,
     Sex			VARCHAR(1),
     Tel			CHAR(10)        NOT NULL,
-    Address		VARCHAR(80)     NOT NULL 
+    Address		VARCHAR(80)     NOT NULL,
+    Province    VARCHAR(20) NOT NULL,
+    Postcode    VARCHAR(5) NOT NULL,
+    CusID       INT             NOT NULL,
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 );
 -- ตารางเก็บรายชื่อผู้จ่ายเงิน (สำหรับลูกค้า) --
 CREATE TABLE PAYER_LIST (
     CusID       INT         NOT NULL,
     NumID       INT         NOT NULL,
-    TaxID       CHAR(13)	NOT NULL,
+    PayerID     INT	        NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
-    FOREIGN KEY (TaxID) REFERENCES PAYER(TaxID),
+    FOREIGN KEY (PayerID) REFERENCES PAYER(PayerID),
     CONSTRAINT PayerList PRIMARY KEY (CusID, NumID)
 );
 
@@ -45,7 +50,11 @@ CREATE TABLE RECEIVER (
     RecvLName	VARCHAR(20)	NOT NULL,
     Sex			VARCHAR(1),
     Tel			CHAR(10)	NOT NULL,
-    Address		VARCHAR(80)	NOT NULL
+    Address		VARCHAR(80)	NOT NULL,
+    Province    VARCHAR(20) NOT NULL,
+    Postcode    VARCHAR(5) NOT NULL,
+    CusID       INT         NOT NULL,
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 );
 -- ตารางเก็บรายชื่อผู้รับ (สำหรับลูกค้า) --
 CREATE TABLE RECEIVER_LIST (
@@ -95,11 +104,15 @@ CREATE TABLE PRODUCT (
 CREATE TABLE INVOICE_ORDER (
     InvoiceID   CHAR(10)    PRIMARY KEY,
     CusID       INT         NOT NULL,
+    RecvID      INT         NOT NULL,
+    PayerID     INT         NOT NULL,
     StartDate   DATETIME    NOT NULL,
     EndDate     DATETIME    NOT NULL,
     Status		VARCHAR(10)	DEFAULT 'OnHand',
     Channel     VARCHAR(255) NOT NULL,
-    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
+    FOREIGN KEY (RecvID) REFERENCES RECEIVER(RecvID),
+    FOREIGN KEY (PayerID) REFERENCES PAYER(PayerID)
 );
 -- ตารางเก็บข้อมูลรายละเอียดของใบแจ้งหนี้ --
 CREATE TABLE INVOICE_LIST (
@@ -136,8 +149,11 @@ CREATE TABLE RECEIPT (
     Payment     LONGBLOB,
     Status      VARCHAR(10)     DEFAULT 'Pending',
     Channel     VARCHAR(10)     NOT NULL,
+    PayerID     INT             NOT NULL,
+    RecvID        INT             NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
-    FOREIGN KEY (TaxID) REFERENCES PAYER(TaxID),
+    FOREIGN KEY (PayerID) REFERENCES PAYER(PayerID),
+    FOREIGN KEY (RecvID) REFERENCES RECEIVER(RecvID),
     FOREIGN KEY (InvoiceID) REFERENCES INVOICE_ORDER(InvoiceID)
 );
 -- ตารางเก็บข้อมูลรายละเอียดของใบเสร็จ --
