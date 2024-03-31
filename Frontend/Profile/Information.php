@@ -31,7 +31,7 @@
     <form action="../../Backend/Profile/InsertInfo.php" method="POST">
       <input type="hidden" name="id" value="<?php echo $id; ?>">
       <h2 class="leading-7 mb-1">ข้อมูลส่วนตัวของฉัน</h2>
-      <p class="text-sm/[17px] leading-6 text-gray-600 pl-5 pb-2">ยินดีต้อนรับคุณ <?php echo getUserName(); ?>! โปรดระบุข้อมูลของคุณ คุณสามารถยกเลิก หรือ กรอกข้อมูลภายหลังได้</p>
+      <p class="text-sm/[17px] leading-6 text-gray-600 pl-5 pb-2">ยินดีต้อนรับคุณ <strong class="text-base"><?php echo getUserName(); ?></strong>! โปรดระบุข้อมูลของคุณ <span style="color:red; text-decoration: underline;">คุณสามารถยกเลิก หรือ กรอกข้อมูลภายหลังได้</span></p>
       <hr class="h-1 bg-gray-200 border-0 rounded mb-5">
       <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
         <div class="sm:col-span-3">

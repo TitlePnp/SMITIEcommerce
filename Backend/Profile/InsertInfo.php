@@ -15,4 +15,6 @@
   $stmt->bind_param("sssssssi", $fName, $lName, $sex, $tel, $address, $province, $postcode, $id);
   $stmt->execute();
   $stmt->close();
+  $connectDB->close();
+  header("Location: ../../Frontend/Profile/UserProfile.php");
 ?>
