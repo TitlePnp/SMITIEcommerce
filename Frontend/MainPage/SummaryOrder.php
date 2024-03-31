@@ -397,7 +397,25 @@ $proIds = array_filter($proIds);
                                 echo "<hr class='border border-gray-300 border-5 mb-5 rounded-md w-full' style='border-width: 1px;'>";
                             }
                         } else {
-                            //loop to use showProductSession function
+                            $totalPrice = 0;
+                            foreach ($proIds as $proId) {
+                                $row = showCartSession($proId)->fetch_assoc();
+                                $qty = $_SESSION['cart'][$proId];
+                                $totoalPrice += $row['PricePerUnit'] * $qty;
+                                echo "<div class='flex flex-row mb-5 w-full h-34'>";
+                                echo "<div class=''>";
+                                echo "<img src='{$row['ImageSource']}' class='w-24 h-32 objec-fill'>";
+                                echo "</div>";
+                                echo "<div class='ml-3 w-3/4 flex flex-col'>";
+                                echo "<p class='font-semibold text-xl'>{$row['ProName']}</p>";
+                                echo "<p class=' text-sm'>จำนวน {$qty} เล่ม</p>";
+                                echo "<div class='flex flex-col justify-end h-full'>";
+                                echo "<p class='text-sm font-semibold'>ราคา {$row['PricePerUnit']} บาท</p>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "<hr class='border border-gray-300 border-5 mb-5 rounded-md w-full' style='border-width: 1px;'>";
+                            }
                         }
                         ?>
                         <div class="flex flex-col">
@@ -832,7 +850,6 @@ $proIds = array_filter($proIds);
             PaymentMethod.values = "CashOnDelivery";
             PaymentMethodCheckValue = PaymentMethod.values;
         });
-
     </script>
 </body>
 
