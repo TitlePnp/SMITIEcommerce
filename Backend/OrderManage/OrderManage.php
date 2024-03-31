@@ -111,7 +111,7 @@ function insertInvoiceOrder($InvoiceID, $payment)
 
     if ($CusID !== null) {
         $status = 'Ordered';
-        $stmt = $connectDB->prepare("INSERT INTO invoice_order(InvoiceID, CusID, StartDate, EndDate, Status, Channel) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = $connectDB->prepare("INSERT INTO invoice_order(InvoiceID, CusID, StartDate, EndDate, Status, Channel, TotalPrice, Vat) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssss", $InvoiceID, $CusID, $StartDate, $EndDate, $status, $payment);
         $stmt->execute();
         $stmt->close();
