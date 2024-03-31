@@ -6,7 +6,9 @@ CREATE TABLE CUSTOMER (
     CusLName	VARCHAR(20),
     Sex         VARCHAR(1),
     Tel         CHAR(10),
-    Address     VARCHAR(80)
+    Address     VARCHAR(80),
+    Province    VARCHAR(255),
+    Postcode    VARCHAR(5)
 );
 -- ตารางบัญชี --
 CREATE TABLE CUSTOMER_ACCOUNT (

@@ -1,3 +1,6 @@
+-- INSERT GUEST --
+INSERT INTO CUSTOMER (CusID, CusFName, CusLName, Sex, Tel, Address, Province, Postcode) VALUES (1, '', '', '', '', '', '', '');
+
 -- INSERT PRODUCT_TYPE --
 INSERT INTO PRODUCT_TYPE (TypeName) VALUES ('comic');
 INSERT INTO PRODUCT_TYPE (TypeName) VALUES ('knowledge');
