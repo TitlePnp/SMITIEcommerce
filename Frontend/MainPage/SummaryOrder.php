@@ -452,9 +452,11 @@ $proIds = array_filter($proIds);
                         <hr class='border border-gray-300 my-6 rounded-md w-full' style='border-width: 0.1px;'>
 
                         <div>
-                            <button onclick="formCheck()" type="button" class="w-full mt-5 h-12 bg-blue-800 rounded-md font-bold text-white hover:shadow-md hover:bg-blue-900">ยืนยันการสั่งซื้อ</button>
+                            <button onclick="submitForm()" type="button" class="w-full mt-5 h-12 bg-blue-800 rounded-md font-bold text-white hover:shadow-md hover:bg-blue-900">ยืนยันการสั่งซื้อ</button>
                         </div>
                     </div>
+                    <!-- <p id="CheckStatus"></p>
+                    <p id="CheckSubmit"></p> -->
                 </div>
             </div>
         </div>
@@ -541,6 +543,7 @@ $proIds = array_filter($proIds);
                 RecvFNameError.innerHTML = "*กรุณากรอกชื่อจริง";
                 RecvFNameError.style.display = "block";
                 RecvFNameBox.style.borderColor = "red";
+                RecvFNameStatus = false;
             } else {
                 RecvFNameError.style.display = "none";
                 RecvFNameBox.style.borderColor = "rgb(229 231 235)";
@@ -551,6 +554,7 @@ $proIds = array_filter($proIds);
                 RecvLNameError.innerHTML = "*กรุณากรอกนามสกุล";
                 RecvLNameError.style.display = "block";
                 RecvLNameBox.style.borderColor = "red";
+                RecvLNameStatus = false;
             } else {
                 RecvLNameError.style.display = "none";
                 RecvLNameBox.style.borderColor = "rgb(229 231 235)";
@@ -561,14 +565,17 @@ $proIds = array_filter($proIds);
                 RecvTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์";
                 RecvTelError.style.display = "block";
                 RecvTelBox.style.borderColor = "red";
+                RecvTelStatus = false;
             } else if (isNaN(RecvTelBox.value)) {
                 RecvTelError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
                 RecvTelError.style.display = "block";
                 RecvTelBox.style.borderColor = "red";
+                RecvTelStatus = false;
             } else if (RecvTelBox.value.length != 10) {
                 RecvTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก";
                 RecvTelError.style.display = "block";
                 RecvTelBox.style.borderColor = "red";
+                RecvTelStatus = false;
             } else {
                 RecvTelError.style.display = "none";
                 RecvTelBox.style.borderColor = "rgb(229 231 235)";
@@ -579,10 +586,12 @@ $proIds = array_filter($proIds);
                 RecvEmailError.innerHTML = "*กรุณากรอกอีเมล";
                 RecvEmailError.style.display = "block";
                 RecvEmailBox.style.borderColor = "red";
+                RecvEmailStatus = false;
             } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(RecvEmailBox.value)) {
                 RecvEmailError.innerHTML = "*กรุณากรอกรูปแบบอีเมลให้ถูกต้อง";
                 RecvEmailError.style.display = "block";
                 RecvEmailBox.style.borderColor = "red";
+                RecvEmailStatus = false;
             } else {
                 RecvEmailError.style.display = "none";
                 RecvEmailBox.style.borderColor = "rgb(229 231 235)";
@@ -594,6 +603,8 @@ $proIds = array_filter($proIds);
                 RecvAddrError.innerHTML = "*กรุณากรอกที่อยู่";
                 RecvAddrError.style.display = "block";
                 RecvAddrInput.style.borderColor = "red";
+                RecvAddrStatus = false;
+
             } else {
                 RecvAddrError.style.display = "none";
                 RecvAddrInput.style.borderColor = "rgb(229 231 235)";
@@ -605,6 +616,7 @@ $proIds = array_filter($proIds);
                 RecvProvinceError.innerHTML = "*กรุณากรอกจังหวัด";
                 RecvProvinceError.style.display = "block";
                 RecvProvinceBox.style.borderColor = "red";
+                RecvProvinceStatus = false;
             } else {
                 RecvProvinceError.style.display = "none";
                 RecvProvinceBox.style.borderColor = "rgb(229 231 235)";
@@ -616,14 +628,17 @@ $proIds = array_filter($proIds);
                 RecvPostcodeError.innerHTML = "*กรุณากรอกรหัสไปรษณีย์";
                 RecvPostcodeError.style.display = "block";
                 RecvPostcodeBox.style.borderColor = "red";
+                RecvPostcodeStatus = false;
             } else if (isNaN(RecvPostcodeBox.value)) {
                 RecvPostcodeError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
                 RecvPostcodeError.style.display = "block";
                 RecvPostcodeBox.style.borderColor = "red";
+                RecvPostcodeStatus = false;
             } else if (RecvPostcodeBox.value.length != 5) {
                 RecvPostcodeError.innerHTML = "*กรุณากรอกรหัสไปรษณีย์ให้ครบ 5 หลัก";
                 RecvPostcodeError.style.display = "block";
                 RecvPostcodeBox.style.borderColor = "red";
+                RecvPostcodeStatus = false;
             } else {
                 RecvPostcodeError.style.display = "none";
                 RecvPostcodeBox.style.borderColor = "rgb(229 231 235)";
@@ -730,10 +745,6 @@ $proIds = array_filter($proIds);
                 PayerAddrError.style.display = "none";
             }
 
-            if (taxIDCheck) {
-                taxIDStatus = checkTaxID();
-            }
-
             if (PaymentMethodCheckValue == "") {
                 PaymentMethodError.style.display = "block";
                 PaymentMethodStatus = false;
@@ -741,6 +752,52 @@ $proIds = array_filter($proIds);
                 PaymentMethodError.style.display = "none";
                 PaymentMethodStatus = true;
             }
+
+            if (taxIDCheck) {
+                checkTaxID();
+            }
+
+
+            /* -------------------------------------- For Debug --------------------------------------*/
+            //taxShow show all status for debug
+            // document.getElementById('CheckStatus').innerHTML = "RecvFNameStatus: " + RecvFNameStatus + "<br>" +
+            //     "RecvLNameStatus: " + RecvLNameStatus + "<br>" +
+            //     "RecvTelStatus: " + RecvTelStatus + "<br>" +
+            //     "RecvEmailStatus: " + RecvEmailStatus + "<br>" +
+            //     "RecvAddrStatus: " + RecvAddrStatus + "<br>" +
+            //     "RecvProvinceStatus: " + RecvProvinceStatus + "<br>" +
+            //     "RecvPostcodeStatus: " + RecvPostcodeStatus + "<br>" +
+            //     "PayerFNameStatus: " + PayerFNameStatus + "<br>" +
+            //     "PayerLNameStatus: " + PayerLNameStatus + "<br>" +
+            //     "PayerTelStatus: " + PayerTelStatus + "<br>" +
+            //     "PayerEmailStatus: " + PayerEmailStatus + "<br>" +
+            //     "PayerAddrStatus: " + PayerAddrStatus + "<br>" +
+            //     "PaymentMethodStatus: " + PaymentMethodStatus + "<br>" +
+            //     "taxIDStatus: " + taxIDStatus + "<br>" +
+            //     "fillAllRecvBox: " + fillAllRecvBox + "<br>" +
+            //     "sameAddrStatus: " + sameAddrStatus + "<br>";
+        }
+
+        function submitForm() {
+            formCheck();
+            if (taxIDCheck) {
+                if (RecvFNameStatus && RecvLNameStatus && RecvTelStatus && RecvEmailStatus && RecvAddrStatus &&
+                    RecvProvinceStatus && RecvPostcodeStatus && PayerFNameStatus && PayerLNameStatus && PayerTelStatus &&
+                    PayerEmailStatus && PayerAddrStatus && taxIDStatus && PaymentMethodStatus) {
+                    console.log("tax condition and all field pass");
+                    document.getElementById('PaymentForm').action = '../../Backend/OrderManage/OrderController.php';
+                    document.getElementById('PaymentForm').submit();
+                }
+            } else {
+                if (RecvFNameStatus && RecvLNameStatus && RecvTelStatus && RecvEmailStatus && RecvAddrStatus &&
+                    RecvProvinceStatus && RecvPostcodeStatus && PayerFNameStatus && PayerLNameStatus && PayerTelStatus &&
+                    PayerEmailStatus && PayerAddrStatus && PaymentMethodStatus) {
+                    console.log("all field pass");
+                    document.getElementById('PaymentForm').action = '../../Backend/OrderManage/OrderController.php';
+                    document.getElementById('PaymentForm').submit();
+                }
+            }
+
         }
 
         //Same address script as when user checked this box ajax will send data to payer input box
@@ -765,7 +822,7 @@ $proIds = array_filter($proIds);
                     PayerTelBox.disabled = true;
                     PayerEmailBox.value = RecvEmailBox.value;
                     PayerEmailBox.disabled = true;
-                    PayerAddrInput.value = RecvAddrInput.value;
+                    PayerAddrInput.value = RecvAddrInput.value + " " + RecvProvinceBox.value + " " + RecvPostcodeBox.value;
                     PayerAddrInput.disabled = true;
                 } else {
                     sameAddr.checked = false;
@@ -826,6 +883,8 @@ $proIds = array_filter($proIds);
                 } else {
                     taxID.style.display = 'none';
                     taxIDCheck = false;
+                    taxIDStatus = false;
+                    taxIDBox.value = "";
                 }
             });
         }
