@@ -409,6 +409,7 @@ $proIds = array_filter($proIds);
                     <p class="font-bold text-xl mb-2">รายการสินค้า</p>
                     <div class="flex flex-col border bg-white rounded-md p-5">
                         <?php
+                        $totalPrice = 0;
                         if ($isMember) {
                             foreach ($proIds as $proId) {
                                 $row = showCartSession($proId)->fetch_assoc();
@@ -465,7 +466,6 @@ $proIds = array_filter($proIds);
                                 ?>
                                 <p class="font-semibold text-md">Vat 7%: </p>
                                 <p class="font-md text-md"><?php echo $vatFormat; ?> บาท</p>
-                                <input type="hidden" name="Vat" value="<?php echo $vat ?>">
                             </div>
                         </div>
 
@@ -552,7 +552,7 @@ $proIds = array_filter($proIds);
         var sameAddr = document.getElementById('sameAddr');
         var sameAddrError = document.getElementById('sameAddrError');
         var sameAddrStatus = false;
-        var fillAllRecvBox = false;
+        var fillAllPayerBox = false;
 
         //define recv status each inputBox
         var RecvFNameStatus = false;
@@ -825,7 +825,10 @@ $proIds = array_filter($proIds);
             if (PaymentMethodCheckValue == "") {
                 PaymentMethodError.style.display = "block";
                 PaymentMethodStatus = false;
-            } else {
+            } else if (PaymentMethodCheckValue == "MobileBanking") {
+                PaymentMethodError.style.display = "none";
+                PaymentMethodStatus = true;
+            } else if (PaymentMethodCheckValue == "COD") {
                 PaymentMethodError.style.display = "none";
                 PaymentMethodStatus = true;
             }
@@ -853,8 +856,9 @@ $proIds = array_filter($proIds);
             //     "PayerPostcodeStatus: " + PayerPostcodeStatus + "<br>" +
             //     "PaymentMethodStatus: " + PaymentMethodStatus + "<br>" +
             //     "taxIDStatus: " + taxIDStatus + "<br>" +
-            //     "fillAllRecvBox: " + fillAllRecvBox + "<br>" +
-            //     "sameAddrStatus: " + sameAddrStatus + "<br>";
+            //     "fillAllPayerBox: " + fillAllPayerBox + "<br>" +
+            //     "sameAddrStatus: " + sameAddrStatus + "<br>" + 
+            //     "paymentMethodCheckValue: " + PaymentMethod.value + "<br>";
 
             // show all Recv value
             // document.getElementById('CheckSubmit').innerHTML = "RecvFName: " + RecvFNameBox.value + "<br>" +
@@ -994,8 +998,8 @@ $proIds = array_filter($proIds);
             qrCheckIcon.style.display = "block";
             codBox.style.borderColor = "rgb(229 231 235)";
             codCheckIcon.style.display = "none";
-            PaymentMethod.value = "MobileBanking";
-            PaymentMethodCheckValue = PaymentMethod.value;
+            PaymentMethodCheckValue = "MobileBanking";
+            document.querySelector('input[name="PaymentMethod"]').value = PaymentMethodCheckValue; // กำหนดค่าให้กับ input แบบ hidden
         });
 
         codBox.addEventListener('click', () => {
@@ -1004,8 +1008,8 @@ $proIds = array_filter($proIds);
             codCheckIcon.style.display = "block";
             qrBox.style.borderColor = "rgb(229 231 235)";
             qrCheckIcon.style.display = "none";
-            PaymentMethod.valus = "CashOnDelivery";
-            PaymentMethodCheckValue = PaymentMethod.value;
+            PaymentMethodCheckValue = "COD";
+            document.querySelector('input[name="PaymentMethod"]').value = PaymentMethodCheckValue; // กำหนดค่าให้กับ input แบบ hidden
         });
 
         //auto fill address

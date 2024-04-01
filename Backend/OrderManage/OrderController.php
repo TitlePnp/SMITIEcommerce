@@ -4,46 +4,120 @@ require_once "OrderManage.php";
 require_once "../UserManage/UserInfo.php";
 require_once "../../vendor/autoload.php";
 
+require_once "../../Backend/CartQuery/CartDetail.php";
+
 use Firebase\JWT\Key;
 use \Firebase\JWT\jwt;
-/* ----------------------------- CusID ------------------------------ */
 
-if (isset($_SESSION["tokenJWT"])) {
-    $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
-    $CusID = $decoded->cusid;
-    $userInfo = getUserInfoFromCusID($CusID);
-} else if (isset($_SESSION["tokenGoogle"])) {
-    $userInfo = getGoogleUserInfo($_SESSION["tokenGoogle"]);
-    $CusID = $userInfo['CusID'];
+$key = "SECRETKEY_SMITIECOM_CLIENT";
+
+
+date_default_timezone_set('Asia/Bangkok');
+
+/* ----------------------------- CusID ------------------------------ */
+try {
+    if (isset($_SESSION["tokenJWT"])) {
+        $jwt = $_SESSION["tokenJWT"];
+        $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
+        $CusID = $decoded->cusid;
+        $userInfo = getUserInfoFromCusID($CusID);
+    } else if (isset($_SESSION["tokenGoogle"])) {
+        $userInfo = getGoogleUserInfo($_SESSION["tokenGoogle"]);
+        $CusID = $userInfo['CusID'];
+    } else {
+        $CusID = 1;
+    }
+
+    /* ----------------------------- Process Field ------------------------------ */
+
+    //define all Post
+    $PayerFName = $_POST['PayerFName'];
+    $PayerLName = $_POST['PayerLName'];
+    $PayerSex = $_POST['PayerSex'];
+    $PayerTel = $_POST['PayerTel'];
+    $PayerAddr = $_POST['PayerAddr'];
+    $PayerProvince = $_POST['PayerProvince'];
+    $PayerPostcode = $_POST['PayerPostcode'];
+
+    $RecvFName = $_POST['RecvFName'];
+    $RecvLName = $_POST['RecvLName'];
+    $RecvSex = $_POST['RecvSex'];
+    $RecvTel = $_POST['RecvTel'];
+    $RecvAddr = $_POST['RecvAddr'];
+    $RecvProvince = $_POST['RecvProvince'];
+    $RecvPostcode = $_POST['RecvPostcode'];
+
+    $ProIds = $_POST['ProIds'];
+    $PaymentMethod = $_POST['PaymentMethod'];
+    $TotalPrice = $_POST['TotalPrice'];
+
+    $ProIds = explode(',', $ProIds);
+
+    if ($_POST['taxInvoice'] == 'Yes') {
+
+        $taxID = $_POST['taxID'];
+        $havePayer = getPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+
+        if ($havePayer == null) {
+            insertPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+            $lastPayerId = getLastPayerID($CusID);
+            insertPayerList($lastPayerId, $CusID);
+        }
+    } else if ($_POST['taxInvoice'] == 'No') {
+        $taxID = NULL;
+        $havePayer = getPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+        $taxID = "";
+        if ($havePayer == null) {
+            insertPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+            $lastPayerId = getLastPayerID($CusID);
+            insertPayerList($lastPayerId, $CusID);
+        }
+    }
+    $haveReceiver = getReceiver($RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr, $RecvProvince, $RecvPostcode, $CusID);
+    if ($haveReceiver == null) {
+        insertReceiver($RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr, $RecvProvince, $RecvPostcode, $CusID);
+        $lastReceiverId = getLastReceiverID($CusID);
+        insertReceiverList($lastReceiverId, $CusID);
+    }
+
+    $lastInvoiceID = getLastInvoiceID();
+    $newInvoiceID = incrementInvoiceID($lastInvoiceID);
+    $receiverID = getReceiver($RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr, $RecvProvince, $RecvPostcode, $CusID);
+    $payerID = getPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+    $vat = $TotalPrice * 0.07;
+    $startDate = date("Y-m-d H:i:s");
+    $endDate = date("Y-m-d H:i:s", strtotime("+1 day"));
+    insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
+    insertInvoiceList($CusID, $newInvoiceID, $ProIds);
+    if ($PaymentMethod == "COD") {
+        $_SESSION['InvoiceID'] = $newInvoiceID;
+        header("Location: ../../Frontend/Order/OrderSuccess.php");
+    }
+    else if ($PayemmntMethod == "COD") {
+        $_SESSION['InvoiceID'] = $newInvoiceID;
+        header("Location: ../../Frontend/Order/OrderSuccess.php");
+    }
+} catch (Exception $e) {
+    echo "Not Success";
 }
 
 /* ----------------------------- Debug Field ------------------------------ */
 
-$requiredFields = [
-    'taxID', 'PayerFName', 'PayerLName', 'PayerSex',
-    'PayerTel', 'PayerAddr', 'PayerProvince', 'PayerPostcode', 'RecvFName',
-    'RecvLName', 'RecvSex', 'RecvTel', 'RecvAddr', 'RecvProvince', 'RecvPostcode',
-    'ProIds', 'PaymentMethod', 'ProIds', 'TotalPrice'
-];
+// $requiredFields = [
+//     'taxID', 'PayerFName', 'PayerLName', 'PayerSex',
+//     'PayerTel', 'PayerAddr', 'PayerProvince', 'PayerPostcode', 'RecvFName',
+//     'RecvLName', 'RecvSex', 'RecvTel', 'RecvAddr', 'RecvProvince', 'RecvPostcode',
+//     'ProIds', 'PaymentMethod', 'ProIds', 'TotalPrice'
+// ];
 
-$missingFields = [];
+// $missingFields = [];
 
-foreach ($requiredFields as $field) {
-    if (!isset($_POST[$field])) {
-        $missingFields[] = $field;
-    }
-}
+// foreach ($requiredFields as $field) {
+//     if (!isset($_POST[$field])) {
+//         $missingFields[] = $field;
+//     }
+// }
 
-if (!empty($missingFields)) {
-    echo "The following fields are missing: " . implode(', ', $missingFields);
-}
-
-
-/* ----------------------------- Process Field ------------------------------ */
-
-if ($_POST['taxInvoice'] == 'Yes') {
-
-} else if ($_POST['taxInvoice'] == 'No') {
-
-    $proIds = explode(',', $_POST['ProIds']);
-}
+// if (!empty($missingFields)) {
+//     echo "The following fields are missing: " . implode(', ', $missingFields);
+// }
