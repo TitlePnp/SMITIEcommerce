@@ -30,18 +30,18 @@
 </head>
 <body>
   <!-- SECTION 1 -->
-  <nav class="sticky top-0 bg-[#062639] text-sm font-semibold tracking-wider" style="font-family: 'Kodchasan', semibold,serif;">
+  <nav class="sticky top-0 bg-[#062639] z-10 text-sm font-semibold tracking-wider" style="font-family: 'Kodchasan', semibold,serif;">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 relative flex h-12 items-center justify-between">
       <!-- logo -->
       <div>
         <a href="../../Frontend/MainPage/Home.php"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
       </div>
       <!-- search bar -->
-      <form class="mx-auto" style="width: 43%">
+      <form class="mx-auto" style="width: 43%" action="../../Frontend/Product/OnSearch.php" method="post">
         <div class="relative">
           <input type="text" class="text-sm w-full placeholder:italic bg-white border rounded-md py-2 px-3 
                   focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1"
-                  placeholder="ค้นหาสินค้าที่คุณต้องการ..." name="search"/>
+                  placeholder="ค้นหาสินค้าที่คุณต้องการ..." name="search" required/>
           <button type="submit" class="absolute right-0 top-0 bottom-0 bg-green-300 text-white hover:bg-green-500 rounded-r-md text-sm px-5 py-2.5">
             <img class="h-5 w-auto" src="../../Pictures/search.png" alt="logo">
           </button>

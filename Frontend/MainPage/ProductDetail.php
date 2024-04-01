@@ -48,7 +48,7 @@
 
         echo "<div class='lg:col-span-2 py-5'>";
           echo "<span class='bg-blue-900 text-white text-sm font-medium rounded px-2.5 py-1'>ชื่อเรื่อง</span>";
-          echo "<h1 class='text-4xl font-bold mt-3 mb-5 underline md:underline-offset-4 decoration-red-600 indent-8'>{$row['ProName']}</h1>";
+          echo "<h1 class='text-3xl font-bold mt-3 mb-5 underline md:underline-offset-4 decoration-red-600 indent-8 leading-relaxed'>{$row['ProName']}</h1>";
           echo "<p class='text-base font-normal pb-3'>ผู้เขียน: {$row['Author']}</p>";
           echo "<p class='text-base font-normal pb-3'>หมวดหมู่: {$row['TypeName']}</p>";
           echo "<div class='p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50' role='alert'/>";

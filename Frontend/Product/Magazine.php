@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet">
-  <title>หนังสือการ์ตูน</title>
+  <title>นิตยสาร</title>
   <style>
     * {
       font-family: Kodchasan;
@@ -63,7 +63,12 @@
               <h3 class='text-lg font-medium text-gray-900'><?php echo $proName; ?></h3>
             </button>
           </form>
-          <p class='mt-1 text-xs text-gray-500'><?php echo $row['Author']; ?></p>
+          <form action="OnSearch.php" method="post">
+            <input type="hidden" name="search" value="<?php echo $row['Author']; ?>">
+            <button type="submit" style="width: 100%; height: 100%; padding: 0; border: none; background: none;">
+              <p class='mt-1 text-xs text-gray-500 text-left hover:text-blue-900 hover:underline'><?php echo $row['Author']; ?></p>
+            </button>
+          </form>
           <div class='mt-2 text-center'>
             <p class='text-xl text-red-600 font-bold'><?php echo $row['PricePerUnit']; ?> บาท</p>
             <button class='add-to-cart-button bg-[#062639] hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded inline-block mt-4'>เพิ่มลงในตะกร้า</button>

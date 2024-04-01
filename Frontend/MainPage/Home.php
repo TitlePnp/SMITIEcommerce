@@ -232,7 +232,7 @@ use \Firebase\JWT\JWT;
                 <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
-                    $result = selectShowProduct();
+                    $result = selectShowProduct(7);
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='product-card w-64 h-4/5 mr-5'>";
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
@@ -279,7 +279,7 @@ use \Firebase\JWT\JWT;
                 <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
-                    $result = selectShowProduct();
+                    $result = selectShowProduct(7);
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='product-card w-64 h-4/5 mr-5'>";
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
@@ -325,7 +325,7 @@ use \Firebase\JWT\JWT;
                 <i id='rightPointer' class='rightPointer bx bxs-chevron-right absolute text-5xl z-10 hover:text-red-500 hover:cursor-pointer' style="top: 45%; right: 0px"></i>
                 <div class="product-container flex overflow-x-auto scroll-smooth ml-12 mr-12">
                     <?php
-                    $result = selectShowProduct();
+                    $result = selectShowProduct(7);
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='product-card w-64 h-4/5 mr-5'>";
                         echo "<div class='product-image h-full w-full relative overflow-hidden max-h-96'>";
