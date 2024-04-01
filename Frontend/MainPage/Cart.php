@@ -59,73 +59,72 @@
             $keys = array_keys($_SESSION['cart']);
             $quantity = array_values($_SESSION['cart']);
             for ($i = 0; $i < $count; $i++) {
-              $row = showCartSession($keys[$i])->fetch_assoc();
-              echo "<tr class='bg-white font-normal border-b'>";
-                echo "<td class='w-4 p-4'>";
-                  echo "<div class='flex items-center'>";
-                    echo "<input id='checkbox-product' type='checkbox' class='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded'>";
-                    echo "<label for='checkbox-product' class='sr-only'>checkbox</label>";
-                  echo "</div>";
-                echo "</td>";
-                echo "<td class='w-4 p-4'>";
-                  echo "<div style='height: 120px; width: 120px;'>";
-                    echo "<img src='{$row['ImageSource']}' alt='' class='h-full w-full object-cover rounded-lg object-center'>";
-                  echo "</div>";
-                echo "</td>";
-                $proName = mb_strlen($row['ProName']) > 20 ? mb_substr($row['ProName'], 0, 20) . '...' : $row['ProName'];
-                echo "<td scope='row' class='font-medium text-gray-900'>{$proName}</td>";
-                echo "<td class='text-center'}'>{$row['PricePerUnit']}</td>";
-                echo "<td>";
-                  echo "<div class='quantity-controls flex items-center justify-center'>";
-                    echo "<input type='hidden' name='proID' value='{$keys[$i]}'>";
-                    echo "<input type='hidden' name='quantityHidden' value=''>";
-                    echo "<input type='hidden' name='pricePerUnit' value='{$row['PricePerUnit']}'>";
-                    echo "<button type='submit' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>";
-                      echo "<input type='number' min='1' max='{$row['StockQty']}' value='{$quantity[$i]}' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>";
-                    echo "<button type='submit' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>";
-                    echo "</div>";
-                  echo "<p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
-                echo "</td>";
-                echo "<td class='text-center'><p class='sum'></p></td>";
-                echo "<td class='text-center'><button class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='{$keys[$i]}'>ลบ</button></td>";
-              echo "</tr>";
-            } 
+              $row = showCartSession($keys[$i])->fetch_assoc();?>
+              <tr class='bg-white font-normal border-b'>
+                <td class='w-4 p-4'>
+                  <div class='flex items-center'>
+                    <input id='checkbox-product' type='checkbox' class='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded'>
+                    <label for='checkbox-product' class='sr-only'>checkbox</label>
+                  </div>
+                </td>
+                <td class='w-4 p-4'>
+                  <div style='height: 120px; width: 120px;'>
+                    <img src='<?php echo $row['ImageSource'];?>' alt='' class='h-full w-full object-cover rounded-lg object-center'>
+                  </div>
+                </td>
+                <?php $proName = mb_strlen($row['ProName']) > 20 ? mb_substr($row['ProName'], 0, 20) . '...' : $row['ProName'];?>
+                <td scope='row' class='font-medium text-gray-900'><?php echo $proName;?></td>
+                <td class='text-center'><?php echo $row['PricePerUnit'];?></td>
+                <td>
+                  <div class='quantity-controls flex items-center justify-center'>
+                    <input type='hidden' name='proID' value='<?php echo $keys[$i];?>'>
+                    <input type='hidden' name='quantityHidden' value=''>
+                    <input type='hidden' name='pricePerUnit' value='<?php echo $row['PricePerUnit'];?>'>
+                    <button type='submit' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>
+                      <input type='number' min='1' max='<?php echo $row['StockQty'];?>' value='<?php echo $quantity[$i]?>' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>
+                    <button type='submit' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>
+                    </div>
+                  <p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด <?php echo $row['StockQty'];?> เล่ม</p>
+                </td>
+                <td class='text-center'><p class='sum'></p></td>
+                <td class='text-center'><button class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='<?php echo $keys[$i];?>'>ลบ</button></td>
+              </tr>
+      <?php } 
           } else { /* FOR DB */
               $rows = showCartDB(getID());
               while ($row = $rows->fetch_assoc()) {
-                $id = $row['ProID'];
-                echo "<tr class='bg-white font-normal border-b'>";
-                  echo "<td class='w-4 p-4'>";
-                    echo "<div class='flex items-center'>";
-                      echo "<input id='checkbox-product' type='checkbox' class='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded'>";
-                      echo "<label for='checkbox-product' class='sr-only'>checkbox</label>";
-                    echo "</div>";
-                  echo "</td>";
-                  echo "<td class='w-4 p-4'>";
-                    echo "<div style='height: 120px; width: 120px;'>";
-                      echo "<img src='{$row['ImageSource']}' alt='' class='h-full w-full object-cover rounded-lg object-center'>";
-                    echo "</div>";
-                  echo "</td>";
-                  $proName = mb_strlen($row['ProName']) > 20 ? mb_substr($row['ProName'], 0, 20) . '...' : $row['ProName'];
-                  echo "<td scope='row' class='font-medium text-gray-900'>{$proName}</td>";
-                  echo "<td class='text-center'}'>{$row['PricePerUnit']}</td>";
-                  echo "<td>";
-                    echo "<div class='quantity-controls flex items-center justify-center'>";
-                      echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
-                      echo "<input type='hidden' name='quantityHidden' value=''>";
-                      echo "<input type='hidden' name='pricePerUnit' value='{$row['PricePerUnit']}'>";
-                      echo "<button type='submit' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>";
-                      echo "<input type='number' min='1' max='{$row['StockQty']}' value='{$row['Qty']}' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>";
-                      echo "<button type='submit' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>";
-                    echo "</div>";
-                    echo "<p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
-                  echo "</td>";
-                  echo "<td class='text-center'><p class='sum'}'></p></td>";
-                  echo "<td class='text-center'><button type='submit' class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='{$row['ProID']}'>ลบ</button></td>";
-                echo "</tr>";
-              }
-            }
-          ?>
+                $id = $row['ProID'];?>
+                <tr class='bg-white font-normal border-b'>
+                  <td class='w-4 p-4'>
+                    <div class='flex items-center'>
+                      <input id='checkbox-product' type='checkbox' class='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded'>
+                      <label for='checkbox-product' class='sr-only'>checkbox</label>
+                    </div>
+                  </td>
+                  <td class='w-4 p-4'>
+                    <div style='height: 120px; width: 120px;'>
+                      <img src='<?php echo $row['ImageSource'];?>' alt='' class='h-full w-full object-cover rounded-lg object-center'>
+                    </div>
+                  </td>
+            <?php $proName = mb_strlen($row['ProName']) > 20 ? mb_substr($row['ProName'], 0, 20) . '...' : $row['ProName'];?>
+                  <td scope='row' class='font-medium text-gray-900'><?php echo $proName;?></td>
+                  <td class='text-center'><?php echo $row['PricePerUnit'];?></td>
+                  <td>
+                    <div class='quantity-controls flex items-center justify-center'>
+                      <input type='hidden' name='proID' value='<?php echo $row['ProID'];?>'>
+                      <input type='hidden' name='quantityHidden' value=''>
+                      <input type='hidden' name='pricePerUnit' value='<?php echo $row['PricePerUnit'];?>'>
+                      <button type='submit' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>
+                        <input type='number' min='1' max='<?php echo $row['StockQty'];?>' value='<?php echo $row['Qty'];?>' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>
+                      <button type='submit' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>
+                    </div>
+                    <p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด <?php echo $row['StockQty'];?> เล่ม</p>
+                  </td>
+                  <td class='text-center'><p class='sum'></p></td>
+                  <td class='text-center'><button type='submit' class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='<?php echo $row['ProID'];?>'>ลบ</button></td>
+                </tr>
+        <?php }
+            }?>
         </tbody>
       </table>
     </div>
