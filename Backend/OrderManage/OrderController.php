@@ -92,15 +92,16 @@ try {
     $lastInvoiceID = getLastInvoiceID();
     $newInvoiceID = incrementInvoiceID($lastInvoiceID);
     $receiverID = getReceiver($RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr, $RecvProvince, $RecvPostcode, $CusID);
-    var_dump($ciphertext);
+    // var_dump($ciphertext);
     $payerID = getPayer($ciphertext, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
-    var_dump($payerID);
+    // var_dump($payerID);
     $vat = $TotalPrice * 0.07;
     $startDate = date("Y-m-d H:i:s");
     $endDate = date("Y-m-d H:i:s", strtotime("+1 day"));
     insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
     echo "Success";
+    
     if ($PaymentMethod == "MobileBanking") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
         header("Location: ../../Frontend/MainPage/Payment.php");
