@@ -36,8 +36,12 @@ use \Firebase\JWT\JWT;
 <body class="">
     <section class="h-full text-gray-600 mb-10">
         <div class="mx-auto flex flex-col max-w-3xl flex-wrap justify-center rounded-lg bg-white px-16 py-10 shadow-lg">
-            <div>
+            <div class="flex">
                 <p class="font-bold text-2xl text-black">ชำระผ่าน Qr code</p>
+            </div>
+            <div class="flex justify-between items-center">
+                <p>เลขคำสั่งซื้อ: <?php echo $_SESSION['InvoiceID'] ?></p>
+                <button class="block rounded-md border bg-red-500 px-4 py-2 text-white outline-none hover:shadow-md"><i class='bx bxs-file-pdf mr-2' style='color:#ffffff' ></i>ใบแจ้งหนี้</button>
             </div>
             <div class="flex flex-row mt-5 mx-auto">
                 <!-- QR Code Number Account & Uploadfile -->
@@ -60,7 +64,6 @@ use \Firebase\JWT\JWT;
                             <p id="countdown" class="mt-1 text-center font-medium text-red-500"></p>
                         </div>
                         <!-- component -->
-                        <button class="mx-auto block rounded-md border my-5 bg-blue-500 px-6 py-2 text-white outline-none">แจ้งการชำระเงิน</button>
                     </div>
                     <!-- Step Checkout -->
                     <div class="mt-10 max-w-sm md:ml-10 md:w-2/3 mx-auto">
@@ -102,10 +105,16 @@ use \Firebase\JWT\JWT;
                             <div class="flex-grow pl-4">
                                 <h2 class="title-font mb-1 text-sm tracking-wider font-semibold text-black">STEP 3</h2>
                                 <p class="font-laonoto leading-relaxed">
-                                    การโอนเงินเสร็จสมบูรณ์ กรุณารอเจ้าหน้าที่ตรวจสอบ คุณสามารถตรวจสอบสถานะการชำระเงินได้โดยไปที่หน้า <span> <b>Payments</b></span>.
+                                    หลังจากแจ้งการชำระเงิน กรุณารอเจ้าหน้าที่ตรวจสอบ คุณสามารถตรวจสอบสถานะการชำระเงินได้โดยไปที่หน้า <span> <b>Profile</b></span>. หรือรอรับการแจ้งเตือนผ่านทางอีเมล
                                 </p>
                             </div>
                         </div>
+                    </div>
+                    <div class="flex justify-between w-full">
+                        <button class="ml-5 block rounded-md border my-5 bg-blue-500 px-6 py-2 text-white outline-none hover:shadow-md">แจ้งการชำระเงิน</button>
+                    </div>
+                    <div class="mt-5">
+                        <p class="font-laonoto text-sm text-gray-600">*หมายเหตุ: หากไม่ชำระภายในเวลาที่กำหนด ระบบจะยกเลิกการสั่งซื้อโดยอัตโนมัติ</p>
                     </div>
                 </div>
             </div>

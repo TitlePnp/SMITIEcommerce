@@ -101,12 +101,12 @@ try {
     insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
     echo "Success";
-    if ($PaymentMethod == "COD") {
+    if ($PaymentMethod == "MobileBanking") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
-        header("Location: ../../Frontend/Order/Payment.php");
-    } else if ($PayemmntMethod == "COD") {
+        header("Location: ../../Frontend/MainPage/Payment.php");
+    } else if ($PaymentMethod == "COD") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
-        header("Location: ../../Frontend/Order/ThankOrder.php");
+        header("Location: ../../Frontend/MainPage/ThankOrder.php");
     }
 } catch (Exception $e) {
     echo $e;
