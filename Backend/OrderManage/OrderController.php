@@ -52,14 +52,23 @@ try {
     $TotalPrice = $_POST['TotalPrice'];
 
     $ProIds = explode(',', $ProIds);
+    // $ciphertext = "";
 
     if ($_POST['taxInvoice'] == 'Yes') {
 
         $taxID = $_POST['taxID'];
-        $havePayer = getPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+        $encryptionKey = openssl_random_pseudo_bytes(32);
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
+        $tag = 'SDFhiohsfihafsjizzsdf';
+        $ciphertext = openssl_encrypt($taxID, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
+
+        if ($ciphertext === false) {
+            die('การเข้ารหัสล้มเหลว');
+        }
+        $havePayer = getPayer($ciphertext, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
 
         if ($havePayer == null) {
-            insertPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+            insertPayer($ciphertext, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
             $lastPayerId = getLastPayerID($CusID);
             insertPayerList($lastPayerId, $CusID);
         }
@@ -83,22 +92,24 @@ try {
     $lastInvoiceID = getLastInvoiceID();
     $newInvoiceID = incrementInvoiceID($lastInvoiceID);
     $receiverID = getReceiver($RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr, $RecvProvince, $RecvPostcode, $CusID);
-    $payerID = getPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+    var_dump($ciphertext);
+    $payerID = getPayer($ciphertext, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+    var_dump($payerID);
     $vat = $TotalPrice * 0.07;
     $startDate = date("Y-m-d H:i:s");
     $endDate = date("Y-m-d H:i:s", strtotime("+1 day"));
     insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
-    if ($PaymentMethod == "COD") {
-        $_SESSION['InvoiceID'] = $newInvoiceID;
-        header("Location: ../../Frontend/Order/OrderSuccess.php");
-    }
-    else if ($PayemmntMethod == "COD") {
-        $_SESSION['InvoiceID'] = $newInvoiceID;
-        header("Location: ../../Frontend/Order/OrderSuccess.php");
-    }
+    echo "Success";
+    // if ($PaymentMethod == "COD") {
+    //     $_SESSION['InvoiceID'] = $newInvoiceID;
+    //     header("Location: ../../Frontend/Order/Payment.php");
+    // } else if ($PayemmntMethod == "COD") {
+    //     $_SESSION['InvoiceID'] = $newInvoiceID;
+    //     header("Location: ../../Frontend/Order/ThankOrder.php");
+    // }
 } catch (Exception $e) {
-    echo "Not Success";
+    echo $e;
 }
 
 /* ----------------------------- Debug Field ------------------------------ */

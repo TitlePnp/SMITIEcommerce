@@ -24,7 +24,7 @@ CREATE TABLE CUSTOMER_ACCOUNT (
 -- ตารางเก็บข้อมูลคนจ่ายเงิน --
 CREATE TABLE PAYER (
     PayerID     INT             AUTO_INCREMENT  PRIMARY KEY,
-    PayerTaxID       CHAR(13)        ,
+    PayerTaxID       CHAR(255)        ,
     PayerFName  VARCHAR(20)     NOT NULL,
     PayerLName	VARCHAR(20)     NOT NULL,
     PayerSex			VARCHAR(1),
@@ -148,7 +148,7 @@ CREATE TABLE RECEIPT (
     RecID       CHAR(10)        PRIMARY KEY,
     PayTime     DATETIME,
     CusID       INT             NOT NULL,
-    TaxID       CHAR(13),
+    TaxID       CHAR(20),
     InvoiceID   CHAR(10)        NOT NULL,
     Payment     LONGBLOB,
     Status      VARCHAR(10)     DEFAULT 'Pending',

@@ -9,7 +9,7 @@ $encryptionKey = openssl_random_pseudo_bytes(32);
 $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
 
 // สร้างแท็กสำหรับการตรวจสอบความถูกต้องของข้อมูล
-$tag = 'SDFhiohsfihafsjizzsdf';
+$tag = 'RecoverTag';
 
 // เข้ารหัสข้อมูล
 $ciphertext = openssl_encrypt($data, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
