@@ -23,8 +23,6 @@ if (isset($_SESSION["tokenJWT"])) {
 $proIds = explode(',', $_POST['select-proID']);
 $proIds = array_filter($proIds);
 
-// var_dump($proIds);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +36,11 @@ $proIds = array_filter($proIds);
     <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- JQYERY THAILAND.js -->
+    <script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/JQL.min.js"></script>
+    <script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/typeahead.bundle.js"></script>
+    <link rel="stylesheet" href="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.css">
+    <script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.js"></script>
 
     <title>SMITI Shop:Summary Order</title>
 
@@ -57,6 +60,10 @@ $proIds = array_filter($proIds);
 
 <body>
     <form id="PaymentForm" method="POST">
+        <?php
+        $proIdsString = implode(',', $proIds);
+        echo "<input type='hidden' name='ProIds' value='{$proIdsString}'>";
+        ?>
         <div class="px-28 py-5">
             <div class="flex flex-row border-2 rounded-lg py-5 bg-gray-50">
                 <div class="flex flex-col w-full p-10">
@@ -67,7 +74,7 @@ $proIds = array_filter($proIds);
 
                     <!-- ข้อมูลผู้รับ -->
                     <div class="py-2 flex-col">
-                        <p class="font-semibold text-lg">ข้อมูลผู้รับ</p>
+                        <p class="font-semibold text-lg">ข้อมูลผู้ส่ง</p>
 
                         <!-- ชื่อ-นามสกุล -->
                         <div class="flex flex-row">
@@ -76,178 +83,10 @@ $proIds = array_filter($proIds);
                                 <?php
                                 if ($isMember) {
                                     if ($userInfo["CusFName"] != "") {
-                                        echo "<input id='RecvFNameBox' name='RecvFName' value='{$userInfo["CusFName"]}' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                        echo "<input id='PayerFNameBox' name='PayerFName' value='{$userInfo["CusFName"]}' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                     } else {
-                                        echo "<input id='RecvFNameBox' name='RecvFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                        echo "<input id='PayerFNameBox' name='PayerFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                     }
-                                } else {
-                                    echo "<input id='RecvFNameBox' name='RecvFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                }
-                                ?>
-                                <span id="RecvFNameError" class="text-red-500 text-sm h-2"></span>
-                            </div>
-                            <div class="py-2 w-full ml-3">
-                                <p class="font-semibold mb-1">นามสกุล</p>
-                                <?php
-                                if ($isMember) {
-                                    if ($userInfo["CusLName"] != "") {
-                                        echo "<input id='RecvLNameBox' name='RecvLName' value='{$userInfo["CusLName"]}' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
-                                    } else {
-                                        echo "<input id='RecvLNameBox' name='RecvLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                    }
-                                } else {
-                                    echo "<input id='RecvLNameBox' name='RecvLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                }
-                                ?>
-                                <span id="RecvLNameError" class="text-red-500 text-sm h-2"></span>
-                            </div>
-                        </div>
-
-                        <!-- เบอร์โทร-เพศ -->
-                        <div class="flex flex-row">
-                            <div class="py-2 w-full mr-3">
-                                <p class="font-semibold mb-1">เบอร์โทรศัพท์</p>
-                                <?php
-                                if ($isMember) {
-                                    if ($userInfo["Tel"] != "") {
-                                        echo "<input id='RecvTelBox' name='RecvTel' value='{$userInfo["Tel"]}' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
-                                    } else {
-                                        echo "<input id='RecvTelBox' name='RecvTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                    }
-                                } else {
-                                    echo "<input id='RecvTelBox' name='RecvTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                }
-                                ?>
-                                <span id="RecvTelError" class="text-red-500 text-sm h-2"></span>
-                            </div>
-                            <div class="py-2 w-full ml-3">
-                                <p class="font-semibold mb-1">เพศ</p>
-                                <div class=" mt-3">
-                                    <?php
-                                    if ($isMember) {
-                                        if ($userInfo['Sex'] == 'M') {
-                                            echo '<input type="radio" name="RecvSex" value="M" checked> ชาย
-                                        <input type="radio" name="RecvSex" value="F"> หญิง
-                                        <input type="radio" name="RecvSex" value="N"> ไม่ระบุ';
-                                        } else if ($userInfo['Sex'] == 'F') {
-                                            echo '<input type="radio" name="RecvSex" value="M"> ชาย
-                                        <input type="radio" name="RecvSex" value="F" checked> หญิง
-                                        <input type="radio" name="RecvSex" value="N"> ไม่ระบุ';
-                                        } else {
-                                            echo '<input type="radio" name="RecvSex" value="M"> ชาย
-                                        <input type="radio" name="RecvSex" value="F"> หญิง
-                                        <input type="radio" name="RecvSex" value="N" checked> ไม่ระบุ';
-                                        }
-                                    } else {
-                                        echo '<input type="radio" name="RecvSex" value="M"> ชาย
-                                        <input type="radio" name="RecvSex" value="F"> หญิง
-                                        <input type="radio" name="RecvSex" value="N" checked> ไม่ระบุ';
-                                    }
-                                    ?>
-                                </div>
-                                <span id="RecvSexError" class="text-red-500 text-sm h-2"></span>
-                            </div>
-                        </div>
-
-                        <!-- อีเมล -->
-                        <div class="flex flex-row">
-                            <div class="py-2 w-full">
-                                <p class="font-semibold mb-1">อีเมล</p>
-                                <?php
-                                if ($isMember) {
-                                    if ($userInfo["Email"] != "") {
-                                        echo "<input id='RecvEmailBox' name='RecvEmail' value='{$userInfo["Email"]}' type='text' placeholder='กรุณากรอกอีเมล' class='border rounded-md h-10 w-full shadow-sm p-2'>";
-                                    } else {
-                                        echo "<input id='RecvEmailBox' name='RecvEmail' placeholder='กรุณากรอกอีเมล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                    }
-                                } else {
-                                    echo "<input id='RecvEmailBox' name='RecvEmail' placeholder='กรุณากรอกอีเมล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                }
-                                ?>
-                                <span id="RecvEmailError" class="text-red-500 text-sm h-2"></span>
-                            </div>
-                        </div>
-
-                        <!-- ที่อยู่ -->
-                        <div class="flex flex-row">
-                            <div class="py-2 w-full">
-                                <p class="font-semibold mb-1">ที่อยู่</p>
-                                <?php
-                                if ($isMember) {
-                                    if ($userInfo['Address'] != "") {
-                                        echo '<textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required>' . $userInfo['Address'] . '</textarea>';
-                                    } else {
-                                        echo '<textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
-                                    }
-                                } else {
-                                    echo '<textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
-                                }
-                                ?>
-                                <span id="RecvAddrError" class="text-red-500 text-sm h-2"></span>
-                            </div>
-                        </div>
-
-                        <!-- จังหวัด-รหัสไปรษณีย์ -->
-                        <div class="flex flex-row">
-                            <div class="py-2 w-full mr-3">
-                                <p class="font-semibold mb-1">จังหวัด</p>
-                                <?php
-                                if ($isMember) {
-                                    if ($userInfo["Province"] != "") {
-                                        echo "<input id='RecvProvinceBox' name='RecvProvince' value='{$userInfo["Province"]}' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
-                                    } else {
-                                        echo "<input id='RecvProvinceBox' name='RecvProvince' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                    }
-                                } else {
-                                    echo "<input id='RecvProvinceBox' name='RecvProvince' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                }
-                                ?>
-                                <span id="RecvProvinceError" class="text-red-500 text-sm h-2"></span>
-                            </div>
-                            <div class="py-2 w-full ml-3">
-                                <p class="font-semibold mb-1">รหัสไปรษณีย์</p>
-                                <?php
-                                if ($isMember) {
-                                    if ($userInfo["Postcode"] != "") {
-                                        echo "<input id='RecvPostcodeBox' name='RecvPostcode' value='{$userInfo["Postcode"]}' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
-                                    } else {
-                                        echo "<input id='RecvPostcodeBox' name='RecvPostcode' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                    }
-                                } else {
-                                    echo "<input id='RecvPostcodeBox' name='RecvPostcode' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
-                                }
-                                ?>
-                                <span id="RecvPostcodeError" class="text-red-500 text-sm h-2"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ------------------------------------------------------------------------------------------------------------- -->
-
-                    <hr class="border border-gray-300 border-5 my-10 rounded-md w-full" style="border-width: 1px;">
-
-                    <!-- ------------------------------------------------------------------------------------------------------------- -->
-
-
-                    <!-- ข้อมูลผู้ส่ง -->
-                    <span id="sameAddrError" class="text-red-500 text-sm h-2 text-right" style="display: none;">*กรุณากรอกข้อมูลผู้รับให้ครบถ้วน</span>
-                    <div class="py-2 flex-col">
-                        <div class="flex justify-between">
-                            <p class="font-semibold text-lg">ข้อมูลผู้ส่ง</p>
-                            <div class="flex mt-1.5">
-                                <?php ?>
-                                <input type="checkbox" name="sameAddr" id="sameAddr" class="ml-5">
-                                <p class="text-sm mt-1 ml-2">ใช้ข้อมูลผู้รับ</p>
-                            </div>
-                        </div>
-
-                        <!-- ชื่อ-นามสกุล -->
-                        <div class="flex flex-row">
-                            <div class="py-2 w-full mr-3">
-                                <p class="font-semibold mb-1">ชื่อจริง</p>
-                                <?php
-                                if ($isMember) {
-                                    echo "<input id='PayerFNameBox' name='PayerFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                 } else {
                                     echo "<input id='PayerFNameBox' name='PayerFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                 }
@@ -258,7 +97,11 @@ $proIds = array_filter($proIds);
                                 <p class="font-semibold mb-1">นามสกุล</p>
                                 <?php
                                 if ($isMember) {
-                                    echo "<input id='PayerLNameBox' name='PayerLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                    if ($userInfo["CusLName"] != "") {
+                                        echo "<input id='PayerLNameBox' name='PayerLName' value='{$userInfo["CusLName"]}' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                    } else {
+                                        echo "<input id='PayerLNameBox' name='PayerLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                    }
                                 } else {
                                     echo "<input id='PayerLNameBox' name='PayerLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                 }
@@ -273,7 +116,11 @@ $proIds = array_filter($proIds);
                                 <p class="font-semibold mb-1">เบอร์โทรศัพท์</p>
                                 <?php
                                 if ($isMember) {
-                                    echo "<input id='PayerTelBox' name='PayerTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                    if ($userInfo["Tel"] != "") {
+                                        echo "<input id='PayerTelBox' name='PayerTel' value='{$userInfo["Tel"]}' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                    } else {
+                                        echo "<input id='PayerTelBox' name='PayerTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                    }
                                 } else {
                                     echo "<input id='PayerTelBox' name='PayerTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                 }
@@ -285,9 +132,19 @@ $proIds = array_filter($proIds);
                                 <div class=" mt-3">
                                     <?php
                                     if ($isMember) {
-                                        echo '<input type="radio" name="PayerSex" value="M"> ชาย
+                                        if ($userInfo['Sex'] == 'M') {
+                                            echo '<input type="radio" name="PayerSex" value="M" checked> ชาย
+                                        <input type="radio" name="PayerSex" value="F"> หญิง
+                                        <input type="radio" name="PayerSex" value="N"> ไม่ระบุ';
+                                        } else if ($userInfo['Sex'] == 'F') {
+                                            echo '<input type="radio" name="PayerSex" value="M"> ชาย
+                                        <input type="radio" name="PayerSex" value="F" checked> หญิง
+                                        <input type="radio" name="PayerSex" value="N"> ไม่ระบุ';
+                                        } else {
+                                            echo '<input type="radio" name="PayerSex" value="M"> ชาย
                                         <input type="radio" name="PayerSex" value="F"> หญิง
                                         <input type="radio" name="PayerSex" value="N" checked> ไม่ระบุ';
+                                        }
                                     } else {
                                         echo '<input type="radio" name="PayerSex" value="M"> ชาย
                                         <input type="radio" name="PayerSex" value="F"> หญิง
@@ -305,7 +162,11 @@ $proIds = array_filter($proIds);
                                 <p class="font-semibold mb-1">อีเมล</p>
                                 <?php
                                 if ($isMember) {
-                                    echo "<input id='PayerEmailBox' name='PayerEmail' placeholder='กรุณากรอกอีเมล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                    if ($userInfo["Email"] != "") {
+                                        echo "<input id='PayerEmailBox' name='PayerEmail' value='{$userInfo["Email"]}' type='text' placeholder='กรุณากรอกอีเมล' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                    } else {
+                                        echo "<input id='PayerEmailBox' name='PayerEmail' placeholder='กรุณากรอกอีเมล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                    }
                                 } else {
                                     echo "<input id='PayerEmailBox' name='PayerEmail' placeholder='กรุณากรอกอีเมล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                 }
@@ -320,12 +181,50 @@ $proIds = array_filter($proIds);
                                 <p class="font-semibold mb-1">ที่อยู่</p>
                                 <?php
                                 if ($isMember) {
-                                    echo '<textarea id="PayerAddrInput" name="PayerAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
+                                    if ($userInfo['Address'] != "") {
+                                        echo '<textarea id="PayerAddrInput" name="PayerAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required>' . $userInfo['Address'] . '</textarea>';
+                                    } else {
+                                        echo '<textarea id="PayerAddrInput" name="PayerAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
+                                    }
                                 } else {
                                     echo '<textarea id="PayerAddrInput" name="PayerAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
                                 }
                                 ?>
                                 <span id="PayerAddrError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                        </div>
+
+                        <!-- จังหวัด-รหัสไปรษณีย์ -->
+                        <div class="flex flex-row">
+                            <div class="py-2 w-full mr-3">
+                                <p class="font-semibold mb-1">จังหวัด</p>
+                                <?php
+                                if ($isMember) {
+                                    if ($userInfo["Province"] != "") {
+                                        echo "<input id='PayerProvinceBox' name='PayerProvince' value='{$userInfo["Province"]}' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                    } else {
+                                        echo "<input id='PayerProvinceBox' name='PayerProvince' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                    }
+                                } else {
+                                    echo "<input id='PayerProvinceBox' name='PayerProvince' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                }
+                                ?>
+                                <span id="PayerProvinceError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                            <div class="py-2 w-full ml-3">
+                                <p class="font-semibold mb-1">รหัสไปรษณีย์</p>
+                                <?php
+                                if ($isMember) {
+                                    if ($userInfo["Postcode"] != "") {
+                                        echo "<input id='PayerPostcodeBox' name='PayerPostcode' value='{$userInfo["Postcode"]}' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                    } else {
+                                        echo "<input id='PayerPostcodeBox' name='PayerPostcode' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                    }
+                                } else {
+                                    echo "<input id='PayerPostcodeBox' name='PayerPostcode' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                }
+                                ?>
+                                <span id="PayerPostcodeError" class="text-red-500 text-sm h-2"></span>
                             </div>
                         </div>
                     </div>
@@ -345,6 +244,140 @@ $proIds = array_filter($proIds);
                         </div>
                     </div>
                     <span id="Check"></span>
+
+                    <!-- ------------------------------------------------------------------------------------------------------------- -->
+
+                    <hr class="border border-gray-300 border-5 my-10 rounded-md w-full" style="border-width: 1px;">
+
+                    <!-- ------------------------------------------------------------------------------------------------------------- -->
+
+
+                    <!-- ข้อมูลผู้ส่ง -->
+                    <span id="sameAddrError" class="text-red-500 text-sm h-2 text-right" style="display: none;">*กรุณากรอกข้อมูลผู้ส่งให้ครบถ้วน</span>
+                    <div class="py-2 flex-col">
+                        <div class="flex justify-between">
+                            <p class="font-semibold text-lg">ข้อมูลผู้รับ</p>
+                            <div class="flex mt-1.5">
+                                <?php ?>
+                                <input type="checkbox" name="sameAddr" id="sameAddr" class="ml-5">
+                                <p class="text-sm mt-1 ml-2">ใช้ข้อมูลผู้ส่ง</p>
+                            </div>
+                        </div>
+
+                        <!-- ชื่อ-นามสกุล -->
+                        <div class="flex flex-row">
+                            <div class="py-2 w-full mr-3">
+                                <p class="font-semibold mb-1">ชื่อจริง</p>
+                                <?php
+                                if ($isMember) {
+                                    echo "<input id='RecvFNameBox' name='RecvFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                } else {
+                                    echo "<input id='RecvFNameBox' name='RecvFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                }
+                                ?>
+                                <span id="RecvFNameError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                            <div class="py-2 w-full ml-3">
+                                <p class="font-semibold mb-1">นามสกุล</p>
+                                <?php
+                                if ($isMember) {
+                                    echo "<input id='RecvLNameBox' name='RecvLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                } else {
+                                    echo "<input id='RecvLNameBox' name='RecvLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                }
+                                ?>
+                                <span id="RecvLNameError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                        </div>
+
+                        <!-- เบอร์โทร-เพศ -->
+                        <div class="flex flex-row">
+                            <div class="py-2 w-full mr-3">
+                                <p class="font-semibold mb-1">เบอร์โทรศัพท์</p>
+                                <?php
+                                if ($isMember) {
+                                    echo "<input id='RecvTelBox' name='RecvTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                } else {
+                                    echo "<input id='RecvTelBox' name='RecvTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                }
+                                ?>
+                                <span id="RecvTelError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                            <div class="py-2 w-full ml-3">
+                                <p class="font-semibold mb-1">เพศ</p>
+                                <div class=" mt-3">
+                                    <?php
+                                    if ($isMember) {
+                                        echo '<input type="radio" name="RecvSex" value="M"> ชาย
+                                        <input type="radio" name="RecvSex" value="F"> หญิง
+                                        <input type="radio" name="RecvSex" value="N" checked> ไม่ระบุ';
+                                    } else {
+                                        echo '<input type="radio" name="RecvSex" value="M"> ชาย
+                                        <input type="radio" name="RecvSex" value="F"> หญิง
+                                        <input type="radio" name="RecvSex" value="N" checked> ไม่ระบุ';
+                                    }
+                                    ?>
+                                </div>
+                                <span id="RecvSexError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                        </div>
+
+                        <!-- อีเมล -->
+                        <div class="flex flex-row">
+                            <div class="py-2 w-full">
+                                <p class="font-semibold mb-1">อีเมล</p>
+                                <?php
+                                if ($isMember) {
+                                    echo "<input id='RecvEmailBox' name='RecvEmail' placeholder='กรุณากรอกอีเมล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                } else {
+                                    echo "<input id='RecvEmailBox' name='RecvEmail' placeholder='กรุณากรอกอีเมล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                }
+                                ?>
+                                <span id="RecvEmailError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                        </div>
+
+                        <!-- ที่อยู่ -->
+                        <div class="flex flex-row">
+                            <div class="py-2 w-full">
+                                <p class="font-semibold mb-1">ที่อยู่</p>
+                                <?php
+                                if ($isMember) {
+                                    echo '<textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
+                                } else {
+                                    echo '<textarea id="RecvAddrInput" name="RecvAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
+                                }
+                                ?>
+                                <span id="RecvAddrError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                        </div>
+
+                        <!-- จังหวัด-รหัสไปรษณีย์ -->
+                        <div class="flex flex-row">
+                            <div class="py-2 w-full mr-3">
+                                <p class="font-semibold mb-1">จังหวัด</p>
+                                <?php
+                                if ($isMember) {
+                                    echo "<input id='RecvProvinceBox' name='RecvProvince' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                } else {
+                                    echo "<input id='RecvProvinceBox' name='RecvProvince' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                }
+                                ?>
+                                <span id="RecvProvinceError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                            <div class="py-2 w-full ml-3">
+                                <p class="font-semibold mb-1">รหัสไปรษณีย์</p>
+                                <?php
+                                if ($isMember) {
+                                    echo "<input id='RecvPostcodeBox' name='RecvPostcode' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                } else {
+                                    echo "<input id='RecvPostcodeBox' name='RecvPostcode' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
+                                }
+                                ?>
+                                <span id="RecvPostcodeError" class="text-red-500 text-sm h-2"></span>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- ------------------------------------------------------------------------------------------------------------- -->
 
@@ -376,12 +409,12 @@ $proIds = array_filter($proIds);
                     <p class="font-bold text-xl mb-2">รายการสินค้า</p>
                     <div class="flex flex-col border bg-white rounded-md p-5">
                         <?php
-                        $totoalPrice = 0;
+                        $totalPrice = 0;
                         if ($isMember) {
                             foreach ($proIds as $proId) {
                                 $row = showCartSession($proId)->fetch_assoc();
                                 $qty = getQtyFromCart($CusID, $proId)->fetch_assoc();
-                                $totoalPrice += $row['PricePerUnit'] * $qty['Qty'];
+                                $totalPrice += $row['PricePerUnit'] * $qty['Qty'];
                                 echo "<div class='flex flex-row mb-5 w-full h-34'>";
                                 echo "<div class=''>";
                                 echo "<img src='{$row['ImageSource']}' class='w-24 h-32 objec-fill'>";
@@ -397,26 +430,42 @@ $proIds = array_filter($proIds);
                                 echo "<hr class='border border-gray-300 border-5 mb-5 rounded-md w-full' style='border-width: 1px;'>";
                             }
                         } else {
-                            //loop to use showProductSession function
+                            foreach ($proIds as $proId) {
+                                $row = showCartSession($proId)->fetch_assoc();
+                                $qty = $_SESSION['cart'][$proId];
+                                $totalPrice += $row['PricePerUnit'] * $qty;
+                                echo "<div class='flex flex-row mb-5 w-full h-34'>";
+                                echo "<div class=''>";
+                                echo "<img src='{$row['ImageSource']}' class='w-24 h-32 objec-fill'>";
+                                echo "</div>";
+                                echo "<div class='ml-3 w-3/4 flex flex-col'>";
+                                echo "<p class='font-semibold text-xl'>{$row['ProName']}</p>";
+                                echo "<p class=' text-sm'>จำนวน {$qty} เล่ม</p>";
+                                echo "<div class='flex flex-col justify-end h-full'>";
+                                echo "<p class='text-sm font-semibold'>ราคา {$row['PricePerUnit']} บาท</p>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "<hr class='border border-gray-300 border-5 mb-5 rounded-md w-full' style='border-width: 1px;'>";
+                            }
                         }
                         ?>
                         <div class="flex flex-col">
                             <div class="flex justify-between mb-5">
                                 <?php
-                                $totoalPriceFormat = number_format($totoalPrice, 2);
+                                $totalPriceFormat = number_format($totalPrice, 2);
                                 ?>
                                 <p class="font-semibold text-md">ราคารวม: </p>
-                                <p class="font-md text-md"><?php echo $totoalPriceFormat; ?> บาท</p>
+                                <p class="font-md text-md"><?php echo $totalPriceFormat; ?> บาท</p>
                                 <input type="hidden" name="TotalPrice" value="<?php echo $totalPrice ?>">
                             </div>
                             <div class="flex justify-between">
                                 <?php
-                                $vat = $totoalPrice * 0.07;
+                                $vat = $totalPrice * 0.07;
                                 $vatFormat = number_format($vat, 2);
                                 ?>
                                 <p class="font-semibold text-md">Vat 7%: </p>
                                 <p class="font-md text-md"><?php echo $vatFormat; ?> บาท</p>
-                                <input type="hidden" name="Vat" value="<?php echo $vat ?>">
                             </div>
                         </div>
 
@@ -424,7 +473,7 @@ $proIds = array_filter($proIds);
 
                         <div class="flex justify-between">
                             <?php
-                            $totalPrice = $totoalPrice + $vat;
+                            $totalPrice = $totalPrice + $vat;
                             $totalPriceFormat = number_format($totalPrice, 2);
                             ?>
                             <p class="font-semibold text-xl">ราคาสุทธิ: </p>
@@ -434,9 +483,11 @@ $proIds = array_filter($proIds);
                         <hr class='border border-gray-300 my-6 rounded-md w-full' style='border-width: 0.1px;'>
 
                         <div>
-                            <button onclick="formCheck()" type="button" class="w-full mt-5 h-12 bg-blue-800 rounded-md font-bold text-white hover:shadow-md hover:bg-blue-900">ยืนยันการสั่งซื้อ</button>
+                            <button onclick="submitForm()" type="button" class="w-full mt-5 h-12 bg-blue-800 rounded-md font-bold text-white hover:shadow-md hover:bg-blue-900">ยืนยันการสั่งซื้อ</button>
                         </div>
                     </div>
+                    <!-- <p id="CheckStatus"></p> -->
+                    <!-- <p id="CheckSubmit"></p> -->
                 </div>
             </div>
         </div>
@@ -469,6 +520,8 @@ $proIds = array_filter($proIds);
         var PayerSexBox = document.getElementsByName('PayerSex');
         var PayerEmailBox = document.getElementById('PayerEmailBox');
         var PayerAddrInput = document.getElementById('PayerAddrInput');
+        var PayerProvinceBox = document.getElementById('PayerProvinceBox');
+        var PayerPostcodeBox = document.getElementById('PayerPostcodeBox');
 
         //define payerError element id
         var PayerFNameError = document.getElementById('PayerFNameError');
@@ -476,6 +529,8 @@ $proIds = array_filter($proIds);
         var PayerTelError = document.getElementById('PayerTelError');
         var PayerEmailError = document.getElementById('PayerEmailError');
         var PayerAddrError = document.getElementById('PayerAddrError');
+        var PayerProvinceError = document.getElementById('PayerProvinceError');
+        var PayerPostcodeError = document.getElementById('PayerPostcodeError');
 
         //define taxID element id
         var taxID = document.getElementById('taxIdDiv');
@@ -497,7 +552,7 @@ $proIds = array_filter($proIds);
         var sameAddr = document.getElementById('sameAddr');
         var sameAddrError = document.getElementById('sameAddrError');
         var sameAddrStatus = false;
-        var fillAllRecvBox = false;
+        var fillAllPayerBox = false;
 
         //define recv status each inputBox
         var RecvFNameStatus = false;
@@ -514,215 +569,328 @@ $proIds = array_filter($proIds);
         var PayerTelStatus = false;
         var PayerEmailStatus = false;
         var PayerAddrStatus = false;
+        var PayerProvinceStatus = false;
+        var PayerPostcodeStatus = false;
 
         //Form Check Format
         function formCheck() {
             //Check each input box
-            //Check recv Fname
-            if (RecvFNameBox.value == "") {
-                RecvFNameError.innerHTML = "*กรุณากรอกชื่อจริง";
-                RecvFNameError.style.display = "block";
-                RecvFNameBox.style.borderColor = "red";
+            //check payer Fname
+            if (PayerFNameBox.value == "") {
+                PayerFNameError.innerHTML = "*กรุณากรอกชื่อจริง";
+                PayerFNameError.style.display = "block";
+                PayerFNameBox.style.borderColor = "red";
+                PayerFNameStatus = false;
             } else {
-                RecvFNameError.style.display = "none";
-                RecvFNameBox.style.borderColor = "rgb(229 231 235)";
-                RecvFNameStatus = true;
-            }
-            //Check recv Lname
-            if (RecvLNameBox.value == "") {
-                RecvLNameError.innerHTML = "*กรุณากรอกนามสกุล";
-                RecvLNameError.style.display = "block";
-                RecvLNameBox.style.borderColor = "red";
-            } else {
-                RecvLNameError.style.display = "none";
-                RecvLNameBox.style.borderColor = "rgb(229 231 235)";
-                RecvLNameStatus = true;
-            }
-            //Check recv Tel
-            if (RecvTelBox.value == "") {
-                RecvTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์";
-                RecvTelError.style.display = "block";
-                RecvTelBox.style.borderColor = "red";
-            } else if (isNaN(RecvTelBox.value)) {
-                RecvTelError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
-                RecvTelError.style.display = "block";
-                RecvTelBox.style.borderColor = "red";
-            } else if (RecvTelBox.value.length != 10) {
-                RecvTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก";
-                RecvTelError.style.display = "block";
-                RecvTelBox.style.borderColor = "red";
-            } else {
-                RecvTelError.style.display = "none";
-                RecvTelBox.style.borderColor = "rgb(229 231 235)";
-                RecvTelStatus = true;
-            }
-            //Check recv Email
-            if (RecvEmailBox.value == "") {
-                RecvEmailError.innerHTML = "*กรุณากรอกอีเมล";
-                RecvEmailError.style.display = "block";
-                RecvEmailBox.style.borderColor = "red";
-            } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(RecvEmailBox.value)) {
-                RecvEmailError.innerHTML = "*กรุณากรอกรูปแบบอีเมลให้ถูกต้อง";
-                RecvEmailError.style.display = "block";
-                RecvEmailBox.style.borderColor = "red";
-            } else {
-                RecvEmailError.style.display = "none";
-                RecvEmailBox.style.borderColor = "rgb(229 231 235)";
-                RecvEmailStatus = true;
+                PayerFNameError.style.display = "none";
+                PayerFNameBox.style.borderColor = "rgb(229 231 235)";
+                PayerFNameStatus = true;
             }
 
-            //Check recv Address
-            if (RecvAddrInput.value == "") {
-                RecvAddrError.innerHTML = "*กรุณากรอกที่อยู่";
-                RecvAddrError.style.display = "block";
-                RecvAddrInput.style.borderColor = "red";
+            //check payer Lname
+            if (PayerLNameBox.value == "") {
+                PayerLNameError.innerHTML = "*กรุณากรอกนามสกุล";
+                PayerLNameError.style.display = "block";
+                PayerLNameBox.style.borderColor = "red";
+                PayerLNameStatus = false;
             } else {
-                RecvAddrError.style.display = "none";
-                RecvAddrInput.style.borderColor = "rgb(229 231 235)";
-                RecvAddrStatus = true;
+                PayerLNameError.style.display = "none";
+                PayerLNameBox.style.borderColor = "rgb(229 231 235)";
+                PayerLNameStatus = true;
             }
 
-            //Check recv Province
-            if (RecvProvinceBox.value == "") {
-                RecvProvinceError.innerHTML = "*กรุณากรอกจังหวัด";
-                RecvProvinceError.style.display = "block";
-                RecvProvinceBox.style.borderColor = "red";
+            //check payer Tel
+            if (PayerTelBox.value == "") {
+                PayerTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์";
+                PayerTelError.style.display = "block";
+                PayerTelBox.style.borderColor = "red";
+                PayerTelStatus = false;
+            } else if (isNaN(PayerTelBox.value)) {
+                PayerTelError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
+                PayerTelError.style.display = "block";
+                PayerTelBox.style.borderColor = "red";
+                PayerTelStatus = false;
+            } else if (PayerTelBox.value.length != 10) {
+                PayerTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก";
+                PayerTelError.style.display = "block";
+                PayerTelBox.style.borderColor = "red";
+                PayerTelStatus = false;
             } else {
-                RecvProvinceError.style.display = "none";
-                RecvProvinceBox.style.borderColor = "rgb(229 231 235)";
-                RecvProvinceStatus = true;
+                PayerTelError.style.display = "none";
+                PayerTelBox.style.borderColor = "rgb(229 231 235)";
+                PayerTelStatus = true;
             }
 
-            //Check recv Postcode
-            if (RecvPostcodeBox.value == "") {
-                RecvPostcodeError.innerHTML = "*กรุณากรอกรหัสไปรษณีย์";
-                RecvPostcodeError.style.display = "block";
-                RecvPostcodeBox.style.borderColor = "red";
-            } else if (isNaN(RecvPostcodeBox.value)) {
-                RecvPostcodeError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
-                RecvPostcodeError.style.display = "block";
-                RecvPostcodeBox.style.borderColor = "red";
-            } else if (RecvPostcodeBox.value.length != 5) {
-                RecvPostcodeError.innerHTML = "*กรุณากรอกรหัสไปรษณีย์ให้ครบ 5 หลัก";
-                RecvPostcodeError.style.display = "block";
-                RecvPostcodeBox.style.borderColor = "red";
+            //check payer Email
+            if (PayerEmailBox.value == "") {
+                PayerEmailError.innerHTML = "*กรุณากรอกอีเมล";
+                PayerEmailError.style.display = "block";
+                PayerEmailBox.style.borderColor = "red";
+                PayerEmailStatus = false;
+            } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(PayerEmailBox.value)) {
+                PayerEmailError.innerHTML = "*กรุณากรอกรูปแบบอีเมลให้ถูกต้อง";
+                PayerEmailError.style.display = "block";
+                PayerEmailBox.style.borderColor = "red";
+                PayerEmailStatus = false;
             } else {
-                RecvPostcodeError.style.display = "none";
-                RecvPostcodeBox.style.borderColor = "rgb(229 231 235)";
-                RecvPostcodeStatus = true;
+                PayerEmailError.style.display = "none";
+                PayerEmailBox.style.borderColor = "rgb(229 231 235)";
+                PayerEmailStatus = true;
             }
 
-            //check fill all recv box status
-            if (RecvFNameStatus && RecvLNameStatus && RecvTelStatus && RecvEmailStatus && RecvAddrStatus && RecvProvinceStatus && RecvPostcodeStatus && sameAddrStatus) {
-                fillAllRecvBox = true;
+            //check payer Address
+            if (PayerAddrInput.value == "") {
+                PayerAddrError.innerHTML = "*กรุณากรอกที่อยู่";
+                PayerAddrError.style.display = "block";
+                PayerAddrInput.style.borderColor = "red";
+                PayerAddrStatus = false;
             } else {
-                fillAllRecvBox = false;
+                PayerAddrError.style.display = "none";
+                PayerAddrInput.style.borderColor = "rgb(229 231 235)";
+                PayerAddrStatus = true;
+            }
+
+            //check payer Province
+            if (PayerProvinceBox.value == "") {
+                PayerProvinceError.innerHTML = "*กรุณากรอกจังหวัด";
+                PayerProvinceError.style.display = "block";
+                PayerProvinceBox.style.borderColor = "red";
+                PayerProvinceStatus = false;
+            } else {
+                PayerProvinceError.style.display = "none";
+                PayerProvinceBox.style.borderColor = "rgb(229 231 235)";
+                PayerProvinceStatus = true;
+            }
+
+            //check payer Postcode
+            if (PayerPostcodeBox.value == "") {
+                PayerPostcodeError.innerHTML = "*กรุณากรอกรหัสไปรษณีย์";
+                PayerPostcodeError.style.display = "block";
+                PayerPostcodeBox.style.borderColor = "red";
+                PayerPostcodeStatus = false;
+            } else if (isNaN(PayerPostcodeBox.value)) {
+                PayerPostcodeError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
+                PayerPostcodeError.style.display = "block";
+                PayerPostcodeBox.style.borderColor = "red";
+                PayerPostcodeStatus = false;
+            } else if (PayerPostcodeBox.value.length != 5) {
+                PayerPostcodeError.innerHTML = "*กรุณากรอกรหัสไปรษณีย์ให้ครบ 5 หลัก";
+                PayerPostcodeError.style.display = "block";
+                PayerPostcodeBox.style.borderColor = "red";
+                PayerPostcodeStatus = false;
+            } else {
+                PayerPostcodeError.style.display = "none";
+                PayerPostcodeBox.style.borderColor = "rgb(229 231 235)";
+                PayerPostcodeStatus = true;
+            }
+
+            //check fill all payer box status
+            if (PayerFNameStatus && PayerLNameStatus && PayerTelStatus && PayerEmailStatus && PayerAddrStatus && PayerProvinceStatus && PayerPostcodeStatus && sameAddrStatus) {
+                fillAllPayerBox = true;
+            } else {
+                fillAllPayerBox = false;
             }
 
             if (sameAddrStatus != true) {
-                //check payer Fname
-                if (PayerFNameBox.value == "") {
-                    PayerFNameError.innerHTML = "*กรุณากรอกชื่อจริง";
-                    PayerFNameError.style.display = "block";
-                    PayerFNameBox.style.borderColor = "red";
-                    PayerFNameStatus = false;
+                //Check recv Fname
+                if (RecvFNameBox.value == "") {
+                    RecvFNameError.innerHTML = "*กรุณากรอกชื่อจริง";
+                    RecvFNameError.style.display = "block";
+                    RecvFNameBox.style.borderColor = "red";
+                    RecvFNameStatus = false;
                 } else {
-                    PayerFNameError.style.display = "none";
-                    PayerFNameBox.style.borderColor = "rgb(229 231 235)";
-                    PayerFNameStatus = true;
+                    RecvFNameError.style.display = "none";
+                    RecvFNameBox.style.borderColor = "rgb(229 231 235)";
+                    RecvFNameStatus = true;
+                }
+                //Check recv Lname
+                if (RecvLNameBox.value == "") {
+                    RecvLNameError.innerHTML = "*กรุณากรอกนามสกุล";
+                    RecvLNameError.style.display = "block";
+                    RecvLNameBox.style.borderColor = "red";
+                    RecvLNameStatus = false;
+                } else {
+                    RecvLNameError.style.display = "none";
+                    RecvLNameBox.style.borderColor = "rgb(229 231 235)";
+                    RecvLNameStatus = true;
+                }
+                //Check recv Tel
+                if (RecvTelBox.value == "") {
+                    RecvTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์";
+                    RecvTelError.style.display = "block";
+                    RecvTelBox.style.borderColor = "red";
+                    RecvTelStatus = false;
+                } else if (isNaN(RecvTelBox.value)) {
+                    RecvTelError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
+                    RecvTelError.style.display = "block";
+                    RecvTelBox.style.borderColor = "red";
+                    RecvTelStatus = false;
+                } else if (RecvTelBox.value.length != 10) {
+                    RecvTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก";
+                    RecvTelError.style.display = "block";
+                    RecvTelBox.style.borderColor = "red";
+                    RecvTelStatus = false;
+                } else {
+                    RecvTelError.style.display = "none";
+                    RecvTelBox.style.borderColor = "rgb(229 231 235)";
+                    RecvTelStatus = true;
+                }
+                //Check recv Email
+                if (RecvEmailBox.value == "") {
+                    RecvEmailError.innerHTML = "*กรุณากรอกอีเมล";
+                    RecvEmailError.style.display = "block";
+                    RecvEmailBox.style.borderColor = "red";
+                    RecvEmailStatus = false;
+                } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(RecvEmailBox.value)) {
+                    RecvEmailError.innerHTML = "*กรุณากรอกรูปแบบอีเมลให้ถูกต้อง";
+                    RecvEmailError.style.display = "block";
+                    RecvEmailBox.style.borderColor = "red";
+                    RecvEmailStatus = false;
+                } else {
+                    RecvEmailError.style.display = "none";
+                    RecvEmailBox.style.borderColor = "rgb(229 231 235)";
+                    RecvEmailStatus = true;
                 }
 
-                //check payer Lname
-                if (PayerLNameBox.value == "") {
-                    PayerLNameError.innerHTML = "*กรุณากรอกนามสกุล";
-                    PayerLNameError.style.display = "block";
-                    PayerLNameBox.style.borderColor = "red";
-                    PayerLNameStatus = false;
+                //Check recv Address
+                if (RecvAddrInput.value == "") {
+                    RecvAddrError.innerHTML = "*กรุณากรอกที่อยู่";
+                    RecvAddrError.style.display = "block";
+                    RecvAddrInput.style.borderColor = "red";
+                    RecvAddrStatus = false;
                 } else {
-                    PayerLNameError.style.display = "none";
-                    PayerLNameBox.style.borderColor = "rgb(229 231 235)";
-                    PayerLNameStatus = true;
+                    RecvAddrError.style.display = "none";
+                    RecvAddrInput.style.borderColor = "rgb(229 231 235)";
+                    RecvAddrStatus = true;
                 }
 
-                //check payer Tel
-                if (PayerTelBox.value == "") {
-                    PayerTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์";
-                    PayerTelError.style.display = "block";
-                    PayerTelBox.style.borderColor = "red";
-                    PayerTelStatus = false;
-                } else if (isNaN(PayerTelBox.value)) {
-                    PayerTelError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
-                    PayerTelError.style.display = "block";
-                    PayerTelBox.style.borderColor = "red";
-                    PayerTelStatus = false;
-                } else if (PayerTelBox.value.length != 10) {
-                    PayerTelError.innerHTML = "*กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก";
-                    PayerTelError.style.display = "block";
-                    PayerTelBox.style.borderColor = "red";
-                    PayerTelStatus = false;
+                //Check recv Province
+                if (RecvProvinceBox.value == "") {
+                    RecvProvinceError.innerHTML = "*กรุณากรอกจังหวัด";
+                    RecvProvinceError.style.display = "block";
+                    RecvProvinceBox.style.borderColor = "red";
+                    RecvProvinceStatus = false;
                 } else {
-                    PayerTelError.style.display = "none";
-                    PayerTelBox.style.borderColor = "rgb(229 231 235)";
-                    PayerTelStatus = true;
+                    RecvProvinceError.style.display = "none";
+                    RecvProvinceBox.style.borderColor = "rgb(229 231 235)";
+                    RecvProvinceStatus = true;
                 }
 
-                //check payer Email
-                if (PayerEmailBox.value == "") {
-                    PayerEmailError.innerHTML = "*กรุณากรอกอีเมล";
-                    PayerEmailError.style.display = "block";
-                    PayerEmailBox.style.borderColor = "red";
-                    PayerEmailStatus = false;
-                } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(PayerEmailBox.value)) {
-                    PayerEmailError.innerHTML = "*กรุณากรอกรูปแบบอีเมลให้ถูกต้อง";
-                    PayerEmailError.style.display = "block";
-                    PayerEmailBox.style.borderColor = "red";
-                    PayerEmailStatus = false;
+                //Check recv Postcode
+                if (RecvPostcodeBox.value == "") {
+                    RecvPostcodeError.innerHTML = "*กรุณากรอกรหัสไปรษณีย์";
+                    RecvPostcodeError.style.display = "block";
+                    RecvPostcodeBox.style.borderColor = "red";
+                    RecvPostcodeStatus = false;
+                } else if (isNaN(RecvPostcodeBox.value)) {
+                    RecvPostcodeError.innerHTML = "*กรุณากรอกแค่ตัวเลขเท่านั้น";
+                    RecvPostcodeError.style.display = "block";
+                    RecvPostcodeBox.style.borderColor = "red";
+                    RecvPostcodeStatus = false;
+                } else if (RecvPostcodeBox.value.length != 5) {
+                    RecvPostcodeError.innerHTML = "*กรุณากรอกรหัสไปรษณีย์ให้ครบ 5 หลัก";
+                    RecvPostcodeError.style.display = "block";
+                    RecvPostcodeBox.style.borderColor = "red";
+                    RecvPostcodeStatus = false;
                 } else {
-                    PayerEmailError.style.display = "none";
-                    PayerEmailBox.style.borderColor = "rgb(229 231 235)";
-                    PayerEmailStatus = true;
+                    RecvPostcodeError.style.display = "none";
+                    RecvPostcodeBox.style.borderColor = "rgb(229 231 235)";
+                    RecvPostcodeStatus = true;
                 }
 
-                //check payer Address
-                if (PayerAddrInput.value == "") {
-                    PayerAddrError.innerHTML = "*กรุณากรอกที่อยู่";
-                    PayerAddrError.style.display = "block";
-                    PayerAddrInput.style.borderColor = "red";
-                    PayerAddrStatus = false;
-                } else {
-                    PayerAddrError.style.display = "none";
-                    PayerAddrInput.style.borderColor = "rgb(229 231 235)";
-                    PayerAddrStatus = true;
-                }
             } else {
-                PayerFNameStatus = true;
-                PayerLNameStatus = true;
-                PayerTelStatus = true;
-                PayerEmailStatus = true;
-                PayerAddrStatus = true;
-                PayerFNameBox.style.borderColor = "rgb(229 231 235)";
-                PayerFNameError.style.display = "none";
-                PayerLNameBox.style.borderColor = "rgb(229 231 235)";
-                PayerLNameError.style.display = "none";
-                PayerTelBox.style.borderColor = "rgb(229 231 235)";
-                PayerTelError.style.display = "none";
-                PayerEmailBox.style.borderColor = "rgb(229 231 235)";
-                PayerEmailError.style.display = "none";
-                PayerAddrInput.style.borderColor = "rgb(229 231 235)";
-                PayerAddrError.style.display = "none";
-            }
-
-            if (taxIDCheck) {
-                taxIDStatus = checkTaxID();
+                RecvFNameStatus = true;
+                RecvLNameStatus = true;
+                RecvTelStatus = true;
+                RecvEmailStatus = true;
+                RecvAddrStatus = true;
+                RecvProvinceStatus = true;
+                RecvPostcodeStatus = true;
+                RecvFNameBox.style.borderColor = "rgb(229 231 235)";
+                RecvFNameError.style.display = "none";
+                RecvLNameBox.style.borderColor = "rgb(229 231 235)";
+                RecvLNameError.style.display = "none";
+                RecvTelBox.style.borderColor = "rgb(229 231 235)";
+                RecvTelError.style.display = "none";
+                RecvEmailBox.style.borderColor = "rgb(229 231 235)";
+                RecvEmailError.style.display = "none";
+                RecvAddrInput.style.borderColor = "rgb(229 231 235)";
+                RecvAddrError.style.display = "none";
+                RecvProvinceBox.style.borderColor = "rgb(229 231 235)";
+                RecvProvinceError.style.display = "none";
+                RecvPostcodeBox.style.borderColor = "rgb(229 231 235)";
+                RecvPostcodeError.style.display = "none";
             }
 
             if (PaymentMethodCheckValue == "") {
                 PaymentMethodError.style.display = "block";
                 PaymentMethodStatus = false;
-            } else {
+            } else if (PaymentMethodCheckValue == "MobileBanking") {
+                PaymentMethodError.style.display = "none";
+                PaymentMethodStatus = true;
+            } else if (PaymentMethodCheckValue == "COD") {
                 PaymentMethodError.style.display = "none";
                 PaymentMethodStatus = true;
             }
+
+            if (taxIDCheck) {
+                checkTaxID();
+            }
+
+
+            /* -------------------------------------- For Debug --------------------------------------*/
+            //taxShow show all status for debug
+            // document.getElementById('CheckStatus').innerHTML = "RecvFNameStatus: " + RecvFNameStatus + "<br>" +
+            //     "RecvLNameStatus: " + RecvLNameStatus + "<br>" +
+            //     "RecvTelStatus: " + RecvTelStatus + "<br>" +
+            //     "RecvEmailStatus: " + RecvEmailStatus + "<br>" +
+            //     "RecvAddrStatus: " + RecvAddrStatus + "<br>" +
+            //     "RecvProvinceStatus: " + RecvProvinceStatus + "<br>" +
+            //     "RecvPostcodeStatus: " + RecvPostcodeStatus + "<br>" +
+            //     "PayerFNameStatus: " + PayerFNameStatus + "<br>" +
+            //     "PayerLNameStatus: " + PayerLNameStatus + "<br>" +
+            //     "PayerTelStatus: " + PayerTelStatus + "<br>" +
+            //     "PayerEmailStatus: " + PayerEmailStatus + "<br>" +
+            //     "PayerAddrStatus: " + PayerAddrStatus + "<br>" +
+            //     "PayerProvinceStatus: " + PayerProvinceStatus + "<br>" +
+            //     "PayerPostcodeStatus: " + PayerPostcodeStatus + "<br>" +
+            //     "PaymentMethodStatus: " + PaymentMethodStatus + "<br>" +
+            //     "taxIDStatus: " + taxIDStatus + "<br>" +
+            //     "fillAllPayerBox: " + fillAllPayerBox + "<br>" +
+            //     "sameAddrStatus: " + sameAddrStatus + "<br>" + 
+            //     "paymentMethodCheckValue: " + PaymentMethod.value + "<br>";
+
+            // show all Recv value
+            // document.getElementById('CheckSubmit').innerHTML = "RecvFName: " + RecvFNameBox.value + "<br>" +
+            //     "RecvLName: " + RecvLNameBox.value + "<br>" +
+            //     "RecvTel: " + RecvTelBox.value + "<br>" +
+            //     "RecvEmail: " + RecvEmailBox.value + "<br>" +
+            //     "RecvAddr: " + RecvAddrInput.value + "<br>" +
+            //     "RecvProvince: " + RecvProvinceBox.value + "<br>" +
+            //     "RecvPostcode: " + RecvPostcodeBox.value + "<br>";
+
+        }
+
+        function submitForm() {
+            formCheck();
+            if (taxIDCheck) {
+                if (RecvFNameStatus && RecvLNameStatus && RecvTelStatus && RecvEmailStatus && RecvAddrStatus &&
+                    RecvProvinceStatus && RecvPostcodeStatus && PayerFNameStatus && PayerLNameStatus && PayerTelStatus &&
+                    PayerEmailStatus && PayerAddrStatus && PayerProvinceStatus && PayerPostcodeStatus && taxIDStatus && PaymentMethodStatus) {
+                    console.log("tax condition and all field pass");
+                    document.getElementById('PaymentForm').action = '../../Backend/OrderManage/OrderController.php';
+                    document.getElementById('PaymentForm').submit();
+                }
+            } else {
+                if (RecvFNameStatus && RecvLNameStatus && RecvTelStatus && RecvEmailStatus && RecvAddrStatus &&
+                    RecvProvinceStatus && RecvPostcodeStatus && PayerFNameStatus && PayerLNameStatus && PayerTelStatus &&
+                    PayerEmailStatus && PayerAddrStatus && PayerProvinceStatus && PayerPostcodeStatus && PaymentMethodStatus) {
+                    console.log("all field pass");
+                    document.getElementById('PaymentForm').action = '../../Backend/OrderManage/OrderController.php';
+                    document.getElementById('PaymentForm').submit();
+                }
+            }
+
         }
 
         //Same address script as when user checked this box ajax will send data to payer input box
@@ -730,25 +898,30 @@ $proIds = array_filter($proIds);
             if (sameAddr.checked) {
                 sameAddrStatus = true;
                 formCheck();
-                if (fillAllRecvBox) {
+                if (fillAllPayerBox) {
                     sameAddrError.style.display = "none";
-                    PayerFNameBox.value = RecvFNameBox.value;
-                    PayerFNameBox.disabled = true;
-                    PayerLNameBox.value = RecvLNameBox.value;
-                    PayerLNameBox.disabled = true;
-                    PayerSexBox.value = RecvSexBox.value;
-                    for (var i = 0; i < RecvSexBox.length; i++) {
-                        if (RecvSexBox[i].checked) {
-                            PayerSexBox[i].checked = true;
+                    RecvFNameBox.value = PayerFNameBox.value;
+                    RecvFNameBox.readOnly = true;
+                    RecvLNameBox.value = PayerLNameBox.value;
+                    RecvLNameBox.readOnly = true;
+                    RecvSexBox.value = PayerSexBox.value;
+                    for (var i = 0; i < PayerSexBox.length; i++) {
+                        if (PayerSexBox[i].checked) {
+                            RecvSexBox[i].checked = true;
                             break;
                         }
                     }
-                    PayerTelBox.value = RecvTelBox.value;
-                    PayerTelBox.disabled = true;
-                    PayerEmailBox.value = RecvEmailBox.value;
-                    PayerEmailBox.disabled = true;
-                    PayerAddrInput.value = RecvAddrInput.value;
-                    PayerAddrInput.disabled = true;
+                    RecvTelBox.value = PayerTelBox.value;
+                    RecvTelBox.readOnly = true;
+                    RecvEmailBox.value = PayerEmailBox.value;
+                    RecvEmailBox.readOnly = true;
+                    RecvAddrInput.value = PayerAddrInput.value
+                    RecvAddrInput.readOnly = true;
+                    RecvProvinceBox.value = PayerProvinceBox.value;
+                    RecvProvinceBox.readOnly = true;
+                    RecvPostcodeBox.value = PayerPostcodeBox.value;
+                    RecvPostcodeBox.readOnly = true;
+                    // formCheck();
                 } else {
                     sameAddr.checked = false;
                     sameAddrStatus = false;
@@ -759,16 +932,20 @@ $proIds = array_filter($proIds);
                 sameAddr.checked = false;
                 sameAddrStatus = false;
                 sameAddrError.style.display = "none";
-                PayerFNameBox.value = "";
-                PayerFNameBox.disabled = false;
-                PayerLNameBox.value = "";
-                PayerLNameBox.disabled = false;
-                PayerTelBox.value = "";
-                PayerTelBox.disabled = false;
-                PayerEmailBox.value = "";
-                PayerEmailBox.disabled = false;
-                PayerAddrInput.value = "";
-                PayerAddrInput.disabled = false;
+                RecvFNameBox.value = "";
+                RecvFNameBox.readOnly = false;
+                RecvLNameBox.value = "";
+                RecvLNameBox.readOnly = false;
+                RecvTelBox.value = "";
+                RecvTelBox.readOnly = false;
+                RecvEmailBox.value = "";
+                RecvEmailBox.readOnly = false;
+                RecvAddrInput.value = "";
+                RecvAddrInput.readOnly = false;
+                RecvProvinceBox.value = "";
+                RecvProvinceBox.readOnly = false;
+                RecvPostcodeBox.value = "";
+                RecvPostcodeBox.readOnly = false;
             }
         });
 
@@ -808,6 +985,8 @@ $proIds = array_filter($proIds);
                 } else {
                     taxID.style.display = 'none';
                     taxIDCheck = false;
+                    taxIDStatus = false;
+                    taxIDBox.value = "";
                 }
             });
         }
@@ -819,8 +998,8 @@ $proIds = array_filter($proIds);
             qrCheckIcon.style.display = "block";
             codBox.style.borderColor = "rgb(229 231 235)";
             codCheckIcon.style.display = "none";
-            PaymentMethod.values = "MobileBanking";
-            PaymentMethodCheckValue = PaymentMethod.values;
+            PaymentMethodCheckValue = "MobileBanking";
+            document.querySelector('input[name="PaymentMethod"]').value = PaymentMethodCheckValue; // กำหนดค่าให้กับ input แบบ hidden
         });
 
         codBox.addEventListener('click', () => {
@@ -829,10 +1008,18 @@ $proIds = array_filter($proIds);
             codCheckIcon.style.display = "block";
             qrBox.style.borderColor = "rgb(229 231 235)";
             qrCheckIcon.style.display = "none";
-            PaymentMethod.values = "CashOnDelivery";
-            PaymentMethodCheckValue = PaymentMethod.values;
+            PaymentMethodCheckValue = "COD";
+            document.querySelector('input[name="PaymentMethod"]').value = PaymentMethodCheckValue; // กำหนดค่าให้กับ input แบบ hidden
         });
 
+        //auto fill address
+        // $.Thailand({
+        //     autocomplete_size: 5,
+        //     // $district: $('#district'),
+        //     // $amphoe: $('#subdistrict'),
+        //     // $province: $('#PayerProvince'),
+        //     // $zipcode: $('#PayerPostcode'),
+        // });
     </script>
 </body>
 

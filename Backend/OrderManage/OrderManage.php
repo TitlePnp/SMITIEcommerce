@@ -1,6 +1,9 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once "../../Components/ConnectDB.php";
 require_once "../../vendor/autoload.php";
+require_once "../../Backend/CartQuery/CartDetail.php";
 
 use Firebase\JWT\Key;
 use \Firebase\JWT\jwt;
@@ -9,165 +12,198 @@ $key = "SECRETKEY_SMITIECOM_CLIENT";
 
 date_default_timezone_set('Asia/Bangkok');
 
-function insertPayer($TaxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr)
+function getLastReceiverID($CusID)
 {
     global $connectDB;
-    $stmt = $connectDB->prepare("INSERT INTO Payer (TaxID, PayerFName, PayerLName, PayerSex, PayerTel, PayerAddr) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $TaxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr);
+    $stmt = $connectDB->prepare("SELECT RecvID FROM receiver WHERE CusID = ? ORDER BY RecvID DESC LIMIT 1;");
+    $stmt->bind_param("i", $CusID);
     $stmt->execute();
-    $stmt->close();
+    $stmt->store_result();
+    $stmt->bind_result($RecvID);
+    $stmt->fetch();
+    return $RecvID;
 }
 
-function insertPayerList($CusID, $TaxID)
+function insertReceiver($recvFName, $recvLName, $recvSex, $recvTel, $recvAddress, $recvProvince, $recvPostcode, $CusID)
 {
     global $connectDB;
-    if (!isset($_SESSION['tokenJWT']) && !isset($_SESSION['tokenGoogle'])) {
-        $stmt = $connectDB->prepare("SELECT MAX(NumID) AS MaxNumID FROM payer_list");
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $NumID = $result->fetch_assoc()['MaxNumID'] + 1;
-    } else if (isset($_SESSION['tokenJWT']) || isset($_SESSION['tokenGoogle'])) {
+    $stmt = $connectDB->prepare("INSERT INTO receiver(RecvFName, RecvLName, RecvSex, RecvTel, RecvAddress, RecvProvince, RecvPostcode, CusID) VALUES (?,?,?,?,?,?,?,?);");
+    $stmt->bind_param("sssssssi", $recvFName, $recvLName, $recvSex, $recvTel, $recvAddress, $recvProvince, $recvPostcode, $CusID);
+    $stmt->execute();
+    $stmt->close();
+};
+
+function insertReceiverList($recvID, $CusID)
+{
+    global $connectDB;
+    //query last NumID form receiver_list where CusID = ? 
+    $stmt = $connectDB->prepare("SELECT NumID FROM receiver_list WHERE CusID = ? ORDER BY NumID DESC LIMIT 1;");
+    $stmt->bind_param("i", $CusID);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($NumID);
+    $stmt->fetch();
+
+    if ($NumID == null) {
         $NumID = 1;
-    }
-    $stmt = $connectDB->prepare("INSERT INTO payer_list (CusID, NumID, TaxID) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $CusID, $NumID, $TaxID);
-    $stmt->execute();
-    $stmt->close();
-}
-
-function insertReceiver($RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr)
-{
-    global $connectDB;
-    $stmt = $connectDB->prepare("INSERT INTO Receiver (RecvFName, RecvLName, Sex, Tel, Address) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $RecvFName, $RecvLName, $RecvSex, $RecvTel, $RecvAddr);
-    $stmt->execute();
-}
-
-function insertReceiverList($recieverID)
-{
-    global $connectDB, $jwt, $key;
-    if (!isset($_SESSION['tokenJWT']) && !isset($_SESSION['tokenGoogle'])) {
-        $stmt = $connectDB->prepare("SELECT MAX(NumID) AS MaxNumID FROM receiver_list");
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $NumID = $result->fetch_assoc()['MaxNumID'] + 1;
-        $CusID = 1;
-    } else if (isset($_SESSION['tokenJWT']) || isset($_SESSION['tokenGoogle'])) {
-        if (isset($_SESSION['tokenJWT'])) {
-            $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
-            $CusID = $decoded->CusID;
-            $stmt = $connectDB->prepare("SELECT MAX(NumID) AS MaxNumID FROM receiver_list WHERE CusID = ?");
-            $stmt->bind_param("s", $CusID);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $NumID = $result->fetch_assoc()['MaxNumID'] + 1;
-        } else if (isset($_SESSION['tokenGoogle'])) {
-            $googleToken = $_SESSION['tokenGoogle'];
-            $stmt = $connectDB->prepare("SELECT CusID FROM customer_account WHERE GoogleID = ?");
-            $stmt->bind_param("s", $googleToken);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $CusID = $result->fetch_assoc()['CusID'];
-            $stmt = $connectDB->prepare("SELECT MAX(NumID) AS MaxNumID FROM receiver_list WHERE CusID = ?");
-            $stmt->bind_param("s", $CusID);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $NumID = $result->fetch_assoc()['MaxNumID'] + 1;
-        }
-    }
-    // Query last NumID from receiver_list where cusID = $CusID
-    // $stmt = $connectDB->prepare("SELECT MAX(NumID) AS MaxNumID FROM receiver_list WHERE CusID = ?");
-    // $stmt->bind_param("s", $CusID);
-    // $stmt->execute();
-    // $result = $stmt->get_result();
-    // $NumID = $result->fetch_assoc()['MaxNumID'] + 1;
-
-    $stmt = $connectDB->prepare("INSERT INTO receiver_list (CusID, NumID, RecvID) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $CusID, $NumID, $recieverID);
-    $stmt->execute();
-    $stmt->close();
-}
-
-
-function insertInvoiceOrder($InvoiceID, $payment)
-{
-    global $connectDB, $jwt, $key;
-    $StartDate = date("Y-m-d H:i:s");
-    $EndDate = date("Y-m-d H:i:s", strtotime($StartDate . ' + 1 day'));
-
-    if (isset($_SESSION['tokenJWT'])) {
-        $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
-        $CusID = $decoded->CusID;
-    } else if (isset($_SESSION['tokenGoogle'])) {
-        $googleToken = $_SESSION['tokenGoogle'];
-        $stmt = $connectDB->prepare("SELECT CusID FROM customer_account WHERE CusID = ?");
-        $stmt->bind_param("s", $googleToken);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $CusID = $result->fetch_assoc()['CusID'];
     } else {
-        $CusID = 1;
-    }
-
-    if ($CusID !== null) {
-        $status = 'Ordered';
-        $stmt = $connectDB->prepare("INSERT INTO invoice_order(InvoiceID, CusID, StartDate, EndDate, Status, Channel) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $InvoiceID, $CusID, $StartDate, $EndDate, $status, $payment);
-        $stmt->execute();
-        $stmt->close();
-    } else {
-        var_dump($CusID);
-    }
-}
-
-function insertInvoice_list($InvoiceID, $cart)
-{
-    global $connectDB;
-
-    $NumID = 1;
-    foreach ($cart as $ProductID => $Quantity) {
-        $stmt = $connectDB->prepare("INSERT INTO invoice_list(InvoiceID, NumID, ProID, Qty) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $InvoiceID, $NumID, $ProductID, $Quantity);
-        $stmt->execute();
         $NumID++;
     }
-    // $stmt->close();
+
+    $stmt = $connectDB->prepare("INSERT INTO receiver_list(CusID, NumID, RecvID) VALUES (?, ?, ?);");
+    $stmt->bind_param("iii", $CusID, $NumID, $recvID);
+    $stmt->execute();
+    $stmt->close();
 }
 
-function getNewInvoiceID()
+function getLastPayerID($CusID)
 {
     global $connectDB;
-
-    $stmt = $connectDB->prepare("SELECT InvoiceID FROM invoice_order ORDER BY CAST(SUBSTRING(InvoiceID FROM 2) AS UNSIGNED) DESC LIMIT 1");
+    $stmt = $connectDB->prepare("SELECT PayerID FROM payer WHERE CusID = ? ORDER BY PayerID DESC LIMIT 1;");
+    $stmt->bind_param("i", $CusID);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $lastInvoiceID = $result->fetch_assoc()['InvoiceID'];    // If there is no invoice in the database, return "N1"
-    if ($lastInvoiceID == null) {
-        return "N1";
+    $stmt->store_result();
+    $stmt->bind_result($PayerID);
+    $stmt->fetch();
+    return $PayerID;
+}
+
+function insertPayer($payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID)
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("INSERT INTO payer(PayerTaxID, PayerFName, PayerLName, PayerSex, PayerTel, PayerAddress, PayerProvince, PayerPostcode, CusID) VALUES (?,?,?,?,?,?,?,?,?);");
+    $stmt->bind_param("ssssssssi", $payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID);
+    $stmt->execute();
+    $stmt->close();
+}
+
+function insertPayerList($payerID, $CusID)
+{
+    global $connectDB;
+    //query last NumID form payer_list where CusID = ?
+    $stmt = $connectDB->prepare("SELECT NumID FROM payer_list WHERE CusID = ? ORDER BY NumID DESC LIMIT 1;");
+    $stmt->bind_param("i", $CusID);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($NumID);
+    $stmt->fetch();
+
+    if ($NumID == null) {
+        $NumID = 1;
+    } else {
+        $NumID++;
     }
-    //if have invoice in the database +1 ex N1 -> N2
-    $prefix = substr($lastInvoiceID, 0, 1); // Get the prefix (e.g., "N")
-    $number = intval(substr($lastInvoiceID, 1)); // Get the number (e.g., 1 from "N1")
-    $number++;
-    return $prefix . $number;
+
+    $stmt = $connectDB->prepare("INSERT INTO payer_list(CusID, NumID, PayerID) VALUES (?, ?, ?);");
+    $stmt->bind_param("iii", $CusID, $NumID, $payerID);
+    $stmt->execute();
+    $stmt->close();
 }
 
-function getInvoiceID()
+function getLastInvoiceID()
 {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT InvoiceID FROM invoice_order ORDER BY CAST(SUBSTRING(InvoiceID FROM 2) AS UNSIGNED) DESC LIMIT 1");
+    $stmt = $connectDB->prepare("SELECT InvoiceID FROM invoice_order WHERE InvoiceID LIKE 'IN%' ORDER BY CAST(SUBSTRING(InvoiceID, 3) AS UNSIGNED) DESC LIMIT 1;");
     $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt->store_result();
+    $stmt->bind_result($InvoiceID);
+    $stmt->fetch();
+
+    if ($stmt->num_rows == 0) {
+        $InvoiceID = "IN1";
+    }
+
     $stmt->close();
-    return $result->fetch_assoc()['InvoiceID'];
+    return $InvoiceID;
 }
 
-function getRecvID()
+function insertInvoice($InvoiceID, $CusID, $RecvID, $PayerID, $TotalPrice, $Vat, $Channel, $StartDate, $EndDate,)
 {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT MAX(RecvID) AS LastRecvID FROM receiver");
+    $Status = "Ordered";
+    $stmt = $connectDB->prepare("INSERT INTO invoice_order(InvoiceID, CusID, RecvID, PayerID, TotalPrice, Vat, Channel, StartDate, EndDate, Status) VALUES (?,?,?,?,?,?,?,?,?,?);");
+    $stmt->bind_param("siiiddssss", $InvoiceID, $CusID, $RecvID, $PayerID, $TotalPrice, $Vat, $Channel,  $StartDate, $EndDate, $Status);
     $stmt->execute();
-    $result = $stmt->get_result();
     $stmt->close();
-    return $result->fetch_assoc()['LastRecvID'];
+}
+
+function insertInvoiceList($CusID, $invoiceID, $ProIds)
+{
+    global $connectDB;
+    $NumID = 1;
+
+    if ($CusID != 1) {
+        foreach ($ProIds as $proId) {
+            $qtyQuery = getQtyFromCart($CusID, $proId)->fetch_assoc();
+            $qty = $qtyQuery['Qty'];
+            $stmt = $connectDB->prepare("INSERT INTO invoice_list(InvoiceID, NumID, ProID, Qty) VALUES (?, ?, ?, ?);");
+            $stmt->bind_param("siii", $invoiceID, $NumID, $proId, $qty);
+            $stmt->execute();
+            $NumID++;
+        }
+    } else if ($CusID == 1) {
+        foreach ($ProIds as $proId) {
+            $qty = $_SESSION['cart'][$proId];
+            $stmt = $connectDB->prepare("INSERT INTO invoice_list(InvoiceID, NumID, ProID, Qty) VALUES (?, ?, ?, ?);");
+            $stmt->bind_param("siii", $invoiceID, $NumID, $proId, $qty);
+            $stmt->execute();
+            $NumID++;
+        }
+    }
+}
+
+function getReceiver($recvFName, $recvLName, $recvSex, $recvTel, $recvAddress, $recvProvince, $recvPostcode, $CusID)
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT RecvID FROM receiver WHERE RecvFName = ? AND RecvLName = ? AND RecvSex = ? AND RecvTel = ? AND RecvAddress = ? AND RecvProvince = ? AND RecvPostcode = ? AND CusID = ?;");
+    $stmt->bind_param("sssssssi", $recvFName, $recvLName, $recvSex, $recvTel, $recvAddress, $recvProvince, $recvPostcode, $CusID);
+
+    // $stmt->execute();
+    // $result = $stmt->get_result();
+    // $row = $result->fetch_assoc();
+    // return $row['RecvID'];
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($RecvID);
+    $stmt->fetch();
+    return $RecvID;
+}
+
+function getPayer($payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID)
+{
+    global $connectDB;
+    $sql = "SELECT PayerID FROM payer WHERE PayerFName = ? AND PayerLName = ? AND PayerSex = ? AND PayerTel = ? AND PayerAddress = ? AND PayerProvince = ? AND PayerPostcode = ? AND CusID = ?";
+    if ($payerTaxID !== NULL) {
+        $sql = "SELECT PayerID FROM payer WHERE PayerTaxID = ? AND PayerFName = ? AND PayerLName = ? AND PayerSex = ? AND PayerTel = ? AND PayerAddress = ? AND PayerProvince = ? AND PayerPostcode = ? AND CusID = ?";
+    }
+    $stmt = $connectDB->prepare($sql);
+    if ($payerTaxID !== NULL) {
+        $stmt->bind_param("ssssssssi", $payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID);
+    } else {
+        $stmt->bind_param("sssssssi", $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID);
+    }
+
+    // $stmt->execute();
+    // $result = $stmt->get_result();
+    // $row = $result->fetch_assoc();
+    // return $row['PayerID'];
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($PayerID);
+    $stmt->fetch();
+    return $PayerID;
+}
+
+function incrementInvoiceID($InvoiceID)
+{
+    // ตัดตัวอักษร 'IN' ออก และเก็บเฉพาะตัวเลข
+    $numberPart = substr($InvoiceID, 2);
+
+    // เพิ่มค่าตัวเลขด้วย 1
+    $incrementedNumber = (int)$numberPart + 1;
+
+    // รวม 'IN' กับตัวเลขที่เพิ่มค่าแล้ว
+    $newInvoiceID = 'IN' . $incrementedNumber;
+
+    return $newInvoiceID;
 }
