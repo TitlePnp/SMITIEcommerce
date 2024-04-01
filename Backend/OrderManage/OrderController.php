@@ -101,13 +101,13 @@ try {
     insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
     echo "Success";
-    // if ($PaymentMethod == "COD") {
-    //     $_SESSION['InvoiceID'] = $newInvoiceID;
-    //     header("Location: ../../Frontend/Order/Payment.php");
-    // } else if ($PayemmntMethod == "COD") {
-    //     $_SESSION['InvoiceID'] = $newInvoiceID;
-    //     header("Location: ../../Frontend/Order/ThankOrder.php");
-    // }
+    if ($PaymentMethod == "COD") {
+        $_SESSION['InvoiceID'] = $newInvoiceID;
+        header("Location: ../../Frontend/Order/Payment.php");
+    } else if ($PayemmntMethod == "COD") {
+        $_SESSION['InvoiceID'] = $newInvoiceID;
+        header("Location: ../../Frontend/Order/ThankOrder.php");
+    }
 } catch (Exception $e) {
     echo $e;
 }
