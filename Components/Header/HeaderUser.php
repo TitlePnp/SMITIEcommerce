@@ -32,7 +32,7 @@
 </head>
 <body>
   <!-- SECTION 1 -->
-  <nav class="bg-[#062639] text-sm font-semibold tracking-wider" style="font-family: 'Kodchasan', semibold,serif;">
+  <nav class="sticky top-0 bg-[#062639] text-sm font-semibold tracking-wider" style="font-family: 'Kodchasan', semibold,serif;">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 relative flex h-12 items-center justify-between">
       <!-- logo -->
       <div>
@@ -108,11 +108,11 @@
         <!-- menu -->
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-10">
-            <a href="../folder/test.php" class="nav-style" aria-current="false">หนังสือการ์ตูน</a>
-            <a href="test1.php" class="nav-style" aria-current="false">หนังสือความรู้รอบตัว</a>
-            <a href="test1.php" class="nav-style" aria-current="false">หนังสือนวนิยาย</a>
-            <a href="#" class="nav-style" aria-current="false">หนังสือนิตยสาร</a>
-            <a href="#" class="nav-style" aria-current="false">หนังสือเตรียมสอบ</a>
+            <a href="../../Frontend/Product/Comic.php" class="nav-style" aria-current="false">หนังสือการ์ตูน</a>
+            <a href="../../Frontend/Product/Knowledge.php" class="nav-style" aria-current="false">หนังสือความรู้รอบตัว</a>
+            <a href="../../Frontend/Product/Novel.php" class="nav-style" aria-current="false">หนังสือนวนิยาย</a>
+            <a href="../../Frontend/Product/Magazine.php" class="nav-style" aria-current="false">หนังสือนิตยสาร</a>
+            <a href="../../Frontend/Product/General.php" class="nav-style" aria-current="false">หนังสือทั่วไป</a>
           </div>
         </div>
       </div>
@@ -122,9 +122,9 @@
         <div class="space-y-1 px-2 pb-3 pt-2 bg-[#062639]">
           <a href="#" class="nav-style block" aria-current="false">หนังสือการ์ตูน</a>
           <a href="test1.php" class="nav-style block" aria-current="false">หนังสือความรู้รอบตัว</a>
-          <a href="#" class="nav-style block" aria-current="false">หนังสือนวนิยาย</a>
-          <a href="#" class="nav-style block" aria-current="false">หนังสือนิตยสาร</a>
-          <a href="#" class="nav-style block" aria-current="false">หนังสือเตรียมสอบ</a>
+          <a href="#" class="nav-style block" aria-current="false">นวนิยาย</a>
+          <a href="#" class="nav-style block" aria-current="false">นิตยสาร</a>
+          <a href="#" class="nav-style block" aria-current="false">หนังสือทั่วไป</a>
         </div>
       </div>
     </div>
@@ -133,26 +133,24 @@
   <script>
     /* จะถูกทำทุกครั้งที่โหลดหน้่าใหม่ */
     window.onload = function() {
-        /* ตรวจสอบ URL ปัจจุบัน */
-        const currentPage = window.location.pathname;
-        /* ดึงลิงค์ทั้งหมดที่มี class 'nav-style' */
-        const links = document.getElementsByClassName('nav-style');
-        // console.log(currentPage);
-        /* วนลูปทุกลิงค์ */
-        for (let i = 0; i < links.length; i++) {
-            const link = links[i];
-            let linkPath = link.getAttribute('href');
-            linkPath = '/Regis-Login/' + linkPath;
-            /* ถ้า URL ของลิงค์มี folder ตรงกับ URL folder เดียวกันปัจจุบัน */
-            // console.log(linkPath);
-            if (linkPath === currentPage) {
-                /* ตั้งค่า aria-current เป็น 'page' */
-                link.setAttribute('aria-current', 'page');
-            } else {
-                /* ตั้งค่า aria-current เป็น 'false' */
-                link.setAttribute('aria-current', 'false');
-            }
+      /* ตรวจสอบ URL ปัจจุบัน */
+      const currentPage = window.location.pathname;
+      /* ดึงลิงค์ทั้งหมดที่มี class 'nav-style' */
+      const links = document.getElementsByClassName('nav-style');
+      /* วนลูปทุกลิงค์ */
+      for (let i = 0; i < links.length; i++) {
+        const link = links[i];
+        let linkPath = link.getAttribute('href');
+        linkPath = linkPath.replace('../..', '/SmitiShop');
+        /* ถ้า URL ของลิงค์มี folder ตรงกับ URL folder เดียวกันปัจจุบัน */
+        if (linkPath === currentPage) {
+            /* ตั้งค่า aria-current เป็น 'page' */
+            link.setAttribute('aria-current', 'page');
+        } else {
+            /* ตั้งค่า aria-current เป็น 'false' */
+            link.setAttribute('aria-current', 'false');
         }
+      }
     };
 
     /* จัดการ menu product dropdown */

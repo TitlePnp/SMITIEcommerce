@@ -123,4 +123,4 @@ INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, St
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('แค่ใช้ชีวิตธรรมดาในแต่ละวันนั่นคือความกล้าหาญแล้ว', 'ลูน่า', 'บันทึกของแต่ละวันอันแสนธรรมดาแต่เปี่ยมคุณค่าจากความกล้าหาญผ่านประสบการณ์ของผู้เขียนที่ต้องเผชิญกับความเจ็บปวดน้อยใหญ่มาตั้งแต่เด็ก ที่จะช่วยให้เราได้เห็นถึงความกล้าหาญและการรับมือกับปัญหาต่างๆ ในชีวิต โดยเชื่อมโยงกับเมนูอาหารที่จะกลายมาเป็น  “รสชาติของชีวิต”', 
-	'265', '225.50', '9', '../../Pictures/Product/general/luna39.jpeg', 'Active', NOW(), 5);
+	'265', '225.50', '9', '../../Pictures/Product/general/luna.jpeg', 'Active', NOW(), 5);
