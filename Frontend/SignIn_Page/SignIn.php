@@ -181,8 +181,13 @@ $authUrl = $client->createAuthUrl();
                     },
                     success: function(response) {
                         if (response === 'username exists') {
-                            // console.log('exist');
-                            LoginForm.submit();
+                            $.ajax({
+                                type: 'POST',
+                                url: '../../Backend/UserManage/ClearSession.php',
+                                success: function() {
+                                    LoginForm.submit();
+                                }
+                            });
                         } else {
                             errorBar.style.display = 'block';
                             errorBar.innerHTML = '*ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';

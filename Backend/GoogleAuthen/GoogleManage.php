@@ -1,7 +1,12 @@
 <?php
+require_once "../UserManage/SessionManage.php";
+clearSession();
+
 session_start();
 require '../../Components/ConnectDB.php';
 require 'Google_OAuth.php';
+
+
 
 if (isset($_GET['code'])) {
 

@@ -1,3 +1,7 @@
+<?php
+  require '../../Backend/UserManage/OnCart.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,18 +32,18 @@
 </head>
 <body>
   <!-- SECTION 1 -->
-  <nav class="bg-[#062639] text-sm font-semibold tracking-wider" style="font-family: 'Kodchasan', semibold,serif;">
+  <nav class="sticky top-0 bg-[#062639] z-10 text-sm font-semibold tracking-wider" style="font-family: 'Kodchasan', semibold,serif;">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 relative flex h-12 items-center justify-between">
       <!-- logo -->
       <div>
-        <a href="#"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
+        <a href="../../Frontend/MainPage/Home.php"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
       </div>
       <!-- search bar -->
-      <form class="mx-auto" style="width: 60%">
+      <form class="mx-auto" style="width: 60%" action="../../Frontend/Product/OnSearch.php" method="post">
         <div class="relative">
           <input type="text" class="text-sm w-full placeholder:italic bg-white border rounded-md py-2 px-3 
                   focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1"
-                  placeholder="ค้นหาสินค้าที่คุณต้องการ..." name="search"/>
+                  placeholder="ค้นหาสินค้าที่คุณต้องการ..." name="search" required/>
           <button type="submit" class="absolute right-0 top-0 bottom-0 bg-green-300 text-white hover:bg-green-500 rounded-r-md text-sm px-5 py-2.5">
             <img class="h-5 w-auto" src="../../Pictures/search.png" alt="logo">
           </button>
@@ -47,11 +51,11 @@
       </form>
       <!-- shopping cart -->
       <div class="relative inline-flex w-fit">
-        <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block 
-                  -translate-y-1/3 translate-x-1/6 rounded-full bg-red-600 p-2 text-xs">
+        <div class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block text-white
+                  -translate-y-1/3 translate-x-1/6 rounded-full bg-red-600 p-2 text-xs/[1px]"> <?php echo $_SESSION['productOnCart']; ?>
         </div>
         <button type="button" class="relative flex mr-3" id="cart" aria-expanded="false" aria-haspopup="true">
-          <a href="test1.php">
+          <a href="../../Frontend/MainPage/Cart.php">
             <img class="h-6 w-6 hover:scale-110"
             src="../../Pictures/shopping-cart.png" alt="shopping-cart">
           </a>
@@ -104,11 +108,11 @@
         <!-- menu -->
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-10">
-            <a href="../folder/test.php" class="nav-style" aria-current="false">หนังสือการ์ตูน</a>
-            <a href="test1.php" class="nav-style" aria-current="false">หนังสือความรู้รอบตัว</a>
-            <a href="test1.php" class="nav-style" aria-current="false">หนังสือนวนิยาย</a>
-            <a href="#" class="nav-style" aria-current="false">หนังสือนิตยสาร</a>
-            <a href="#" class="nav-style" aria-current="false">หนังสือเตรียมสอบ</a>
+            <a href="../../Frontend/Product/Comic.php" class="nav-style" aria-current="false">หนังสือการ์ตูน</a>
+            <a href="../../Frontend/Product/Knowledge.php" class="nav-style" aria-current="false">หนังสือความรู้รอบตัว</a>
+            <a href="../../Frontend/Product/Novel.php" class="nav-style" aria-current="false">หนังสือนวนิยาย</a>
+            <a href="../../Frontend/Product/Magazine.php" class="nav-style" aria-current="false">หนังสือนิตยสาร</a>
+            <a href="../../Frontend/Product/General.php" class="nav-style" aria-current="false">หนังสือทั่วไป</a>
           </div>
         </div>
       </div>
@@ -118,9 +122,9 @@
         <div class="space-y-1 px-2 pb-3 pt-2 bg-[#062639]">
           <a href="#" class="nav-style block" aria-current="false">หนังสือการ์ตูน</a>
           <a href="test1.php" class="nav-style block" aria-current="false">หนังสือความรู้รอบตัว</a>
-          <a href="#" class="nav-style block" aria-current="false">หนังสือนวนิยาย</a>
-          <a href="#" class="nav-style block" aria-current="false">หนังสือนิตยสาร</a>
-          <a href="#" class="nav-style block" aria-current="false">หนังสือเตรียมสอบ</a>
+          <a href="#" class="nav-style block" aria-current="false">นวนิยาย</a>
+          <a href="#" class="nav-style block" aria-current="false">นิตยสาร</a>
+          <a href="#" class="nav-style block" aria-current="false">หนังสือทั่วไป</a>
         </div>
       </div>
     </div>
@@ -129,26 +133,24 @@
   <script>
     /* จะถูกทำทุกครั้งที่โหลดหน้่าใหม่ */
     window.onload = function() {
-        /* ตรวจสอบ URL ปัจจุบัน */
-        const currentPage = window.location.pathname;
-        /* ดึงลิงค์ทั้งหมดที่มี class 'nav-style' */
-        const links = document.getElementsByClassName('nav-style');
-        // console.log(currentPage);
-        /* วนลูปทุกลิงค์ */
-        for (let i = 0; i < links.length; i++) {
-            const link = links[i];
-            let linkPath = link.getAttribute('href');
-            linkPath = '/Regis-Login/' + linkPath;
-            /* ถ้า URL ของลิงค์มี folder ตรงกับ URL folder เดียวกันปัจจุบัน */
-            // console.log(linkPath);
-            if (linkPath === currentPage) {
-                /* ตั้งค่า aria-current เป็น 'page' */
-                link.setAttribute('aria-current', 'page');
-            } else {
-                /* ตั้งค่า aria-current เป็น 'false' */
-                link.setAttribute('aria-current', 'false');
-            }
+      /* ตรวจสอบ URL ปัจจุบัน */
+      const currentPage = window.location.pathname;
+      /* ดึงลิงค์ทั้งหมดที่มี class 'nav-style' */
+      const links = document.getElementsByClassName('nav-style');
+      /* วนลูปทุกลิงค์ */
+      for (let i = 0; i < links.length; i++) {
+        const link = links[i];
+        let linkPath = link.getAttribute('href');
+        linkPath = linkPath.replace('../..', '/SmitiShop');
+        /* ถ้า URL ของลิงค์มี folder ตรงกับ URL folder เดียวกันปัจจุบัน */
+        if (linkPath === currentPage) {
+            /* ตั้งค่า aria-current เป็น 'page' */
+            link.setAttribute('aria-current', 'page');
+        } else {
+            /* ตั้งค่า aria-current เป็น 'false' */
+            link.setAttribute('aria-current', 'false');
         }
+      }
     };
 
     /* จัดการ menu product dropdown */

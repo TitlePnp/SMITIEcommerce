@@ -1,3 +1,6 @@
+-- INSERT GUEST --
+INSERT INTO CUSTOMER (CusID, CusFName, CusLName, Sex, Tel, Address, Province, Postcode) VALUES (1, '', '', '', '', '', '', '');
+
 -- INSERT PRODUCT_TYPE --
 INSERT INTO PRODUCT_TYPE (TypeName) VALUES ('comic');
 INSERT INTO PRODUCT_TYPE (TypeName) VALUES ('knowledge');
@@ -8,45 +11,45 @@ INSERT INTO PRODUCT_TYPE (TypeName) VALUES ('general');
 -- INSERT PRODUCT --
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('One Piece 86', 'EIICHIRO ODA', 'แผนลอบสังหารบิ๊กมันถูกเปิดเผยออกมาในที่สุด!! ทางเดียวที่จะสร้างบาดแผลให้กับร่างกายอันแข็งแกร่งของบิ๊กมันได้ คือต้องโจมตีที่จุดอ่อนจุดหนึ่งเท่านั้น.....เมื่อมีอุปสรรคอันยากเย็นแสนสาหัสอยู่ตรงหน้า แผนการของพวกลูฟี่ จะสำเร็จได้ด้วยดีหรือไม่!? การ์ตนผจญภัยกลางทะเลกว้างเพื่อตามหา One Piece!!', 
-	'50', '47.50', '975', '../Pictures/commic/onepiece86.jpeg', 'Active', NOW(), 1);
+	'50', '47.50', '975', '../../Pictures/Product/comic/onepiece86.jpeg', 'Active', NOW(), 1);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('Seize Today คุณจะเริ่มเมื่อไร ถ้าไม่ใช่', 'John Mason', '', 
-	'249', '211.65', '8', '../Pictures/commic/johnmazon.jpeg', 'Active', NOW(), 5);
+	'249', '211.65', '8', '../../Pictures/Product/general/johnmazon.jpeg', 'Active', NOW(), 5);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('ธี่หยด...แว่วเสียงครวญคลั่ง', 'กฤตานนท์', 'ไม่เคยมีที่ไหนเอากระทู้ดังจากพันทิพมาทำเป็นนิยายแบบนี้มาก่อน และเชื่อได้ว่าเป็นเรื่องจริงที่ผู้เขียนได้รับการถ่ายทอดจากคนที่ได้พบประสบการณ์นี้โดยตรง ท่ามกลางความหนาวและลมพัดหวีดหวิว  แว่วเสียงครวญ “ธี่หยด...ธี่หยด...” โหยหวนชวนเขย่าขวัญ ลือกันว่าภัยร้ายกำลังจะคืบคลานเข้ามายังหมู่บ้านเล็กๆ ห่างไกลความเจริญแห่งนี้ แต่ใครเล่าจะรู้ว่ามันได้เริ่มขึ้นแล้ว...และมันไม่ใช่แค่ภัยร้ายธรรมดา ลางร้ายทั้งหลายบ่งชี้ว่า “สิ่งลี้ลับ” นั้นกำลังคุกคามครอบครัวหนึ่ง และประสบการณ์หลอนประสาทนี้คงไม่มีทางเลือนหายไปจากความทรงจำพวกเขาแน่นอน หยาด และครอบครัวอาศัยอยู่แถบชนบท บ้านของเธอทำไร่ทำสวน แต่ฐานะของพ่อเธอถือว่าดีกว่าชาวบ้านละแวกนั้นอยู่โข ช่วงหน้าหนาวน้องสาวของเธอคนหนึ่งที่ชื่อ แย้ม เกิดป่วย ประจวบเหมาะกับที่ช่วงนี้มีข่าวลือเกี่ยวกับภัยร้ายต่างๆ เกี่ยวกับสิ่งลี้ลับทั้งหลาย นั่นจึงเป็นจุดเริ่มต้นของหายนะ หยาดได้รู้ได้เห็นเหตุการณ์ต่างๆ ที่คล้ายกับเป็นลางบอกเหตุบางอย่าง แต่เพราะยังเด็กเลยไม่ได้คิดอะไรมาก จนกระทั่งแย้มล้มป่วยหนักกว่าเดิม เธอจึงเริ่มปะติดปะต่อเหตุการณ์ต่างๆ ที่ได้พบเจอมา ทั้งเพื่อนร่วมชั้นที่เสียชีวิตอย่างผิดธรรมชาติ ทั้งการได้เจอหญิงสาวแปลกหน้าตรงศาลร้างระหว่างทางเดินกลับบ้าน ทั้งการได้ยินเสียงแปลกๆ ในตอนกลางคืน และการได้เจอกับ ยายช่วย หญิงชราผู้โดดเดี่ยวที่อาศัยอยู่คนเดียวท่ามกลางป่าเขา นอกจากนี้อาการของแย้มยังดูแปลกๆ บางครั้งดูเหมือนไม่ใช่แย้มผู้อ่อนโยนคนเดิม จนกระทั่งอาการของแย้มดูท่าจะไม่ไหว จ่ามหันต์ และลุงพุฒิ ผู้ได้ชื่อว่ามีวิชาอาคมก็เข้ามาช่วย แต่สายเกินไปเสียแล้ว ในเมื่อเจ้าสิ่งลี้ลับที่อาจจะเป็น “ปอบ” ตบะแก่กล้านี้ ได้กัดกินภายในตัวแย้มและครอบงำเธอเสียสิ้น แม้พี่ชายของหยาดทั้งสามคนจะช่วยกันตัดกอไผ่หลังบ้าน อันเป็นที่ซุกซ่อน “ของ” ของปอบตนนั้น และจัดการเผาให้เหี้ยนแล้วก็ตาม', 
-	'395', '335.75', '13', '../Pictures/commic/theeyhod.jpeg', 'Active', NOW(), 3);
+	'395', '335.75', '13', '../../Pictures/Product/novel/theeyhod.jpeg', 'Active', NOW(), 3);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('แพรว ฉ.1005 (เม.ย.67 นาย กรชิต / หนึ่ง สุริยน - ไมค์)', 'นิตยสารแพรว', '', 
-	'120', '115.50', '17', '../Pictures/commic/preaw-1005.jpeg', 'Active', NOW(), 4);
+	'120', '115.50', '17', '../../Pictures/Product/magazine/preaw-1005.jpeg', 'Active', NOW(), 4);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('ความลับสร้างธุรกิจเงินล้านที่ MBA ไม่ได้สอน', 'พิษณุ แดงประเสริฐ, สิทธิชัย แดงประเสริฐ', 'ความสำเร็จในการทำธุรกิจเป็นสิ่งที่นักธุรกิจทุกคนต้องการ  หลายสละเวลาพักผ่อนหรือเวลาของครอบครัวเพื่อไปเรียน  MBA  เพื่อเพิ่มพูนทักษะในการทำธุรกิจ ตั้งแต่เช้าจนถึงเย็นในวันเสาร์ อาทิตย์เป็นระยะเวลาเกือบสองปี เกือบทุกคนคาดหวังกับความรู้ที่ได้เรียนมาว่าต้องสามารถนำไปพัฒนาความรู้ของตนเอง หรือพัฒนาองค์กรเพิ่มขีดความสามารถด้านการแข่งขันให้สูงขึ้น', 
-	'215', '182.75', '15', '../Pictures/commic/mba.jpeg', 'Active', NOW(), 2);
+	'215', '182.75', '15', '../../Pictures/Product/knowledge/mba.jpeg', 'Active', NOW(), 2);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('One Piece 98', 'EIICHIRO ODA', 'ขณะที่ศึกตัดสินบนเกาะโอนิงะชิมะทวีความดุเดือด ยามาโดะผู้เป็นลูกสาวของไคโดได้ประกาศว่าจะขอต่อสู้เคียงข้างลูฟี่!? ขณะเดียวกัน ไคโดก็ประกาศเนื้อหาทั้งหมดของ "แผนการชินโอนิงะชิมะ" และเตรียมผนึกกำลังกับบิ๊กมันเพื่อนำโลกเข้าสู่ยุคแห่งความหวาดกลัว!!', 
-	'70', '66.50', '70', '../Pictures/commic/onepiece98.jpeg', 'Active', NOW(), 1);
+	'70', '66.50', '70', '../../Pictures/Product/comic/onepiece98.jpeg', 'Active', NOW(), 1);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('คู่มือพัฒนาแอปพลิเคชันแบบ Multi-Platform ด้วย .NET MAUI', 'ศุภชัย สมพานิช', 'เรียนรู้การพัฒนาแอปพลิเคชันที่รองรับการทำงานบน Mobile Apps (iOS และ Android), Web Apps และ Desktop App ในเวลาเดียวกันด้วย .Net MAUI โดยใช้ภาษา C# เป็นชุดเครื่องมือพัฒนา User Interface แบบข้ามแพลตฟอร์ม ครอบคลุมการพัฒนาทั้งในรูปแบบ Front End และ Back Emd มีตัวอย่างประกอบทุกหัวข้อ อธิบายอย่างเป็นขั้นตอน', 
-	'480', '432.00', '0', '../Pictures/commic/dotnet.jpeg', 'OutStock', NOW(), 2);
+	'480', '432.00', '0', '../../Pictures/Product/knowledge/dotnet.jpeg', 'OutStock', NOW(), 2);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('นับจากนี้ อยากทำดีกับตัวเองให้มากขึ้น', 'ชองอึนกิล', 'คนที่เราต้องคอยลอบสังเกตและใส่ใจจริงๆ คือตัวเราเองเรามักจะชั่งความสุขและไม่สุขผ่านการเปรียบเทียบตัวเองกับคนอื่น ต่างเคยอิจฉาผลงานที่คนใกล้ตัวทำสำเร็จ หรือเคยโล่งอกพอมองเห็นความไม่เป็นสุขของใครบางคน หากความสุขของเราจะถูกรับประกันด้วยสายตาของคนอื่น ตอนนี้ถึงเวลาที่จะหันกลับมาดูแลและใส่ใจหัวใจของตัวเองจริงๆ เสียที
  ผู้เขียนหนังสือเล่มนี้ตัดสินใจจะไม่ยึดติดอยู่กับตัวเลขที่โอบล้อมชีวิตแล้วทำให้ชีวิตเราไม่มีความสุข เธอบอกเล่าอย่างตรงไปตรงมาถึงการลองผิดลองถูกมากมาย นับตั้งแต่ปฏิเสธการเปรียบเทียบไปจนถึงหันกลับมาดูแลตัวเองกับสีของฤดูกาล ทั้งตอนที่เราร้อนรนวู่วามเมื่ออยู่ต่อหน้าการเริ่มต้นและตอนที่ต้องปลอบโยนใจอันร้อนรุ่มเหมือนฤดูร้อน ตอนที่เหี่ยวเฉาเพราะไม่สามารถทำสิ่งที่สังคมกำหนดไว้ สำเร็จได้ ตอนที่ลมหนาวพัดมายังใจที่กำลังแข็งเป็นน้ำแข็ง ตอนนี้ใจของเราอยู่ในฤดูไหนกัน?
 ในระหว่างที่อ่านหนังสือเล่มนี้ คุณจะได้สัมผัสกับคำแนะนำที่ทั้งอบอุ่นและเฉียบคมช่วยปลอบโยนใจของเธอ', 
-	'245', '208.50', '0', '../Pictures/commic/eungil.jpeg', 'Inactive', NOW(), 5);
+	'245', '208.50', '0', '../../Pictures/Product/general/eungil.jpeg', 'Inactive', NOW(), 5);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('ชีวจิต ฉ.591 (มี.ค.67 คู่มือรักษาสมดุลฯ)', 'ชีวจิต', '', 
-	'115', '100.00', '0', '../Pictures/commic/shewajit591.jpeg', 'Inactive', NOW(), 4);
+	'115', '100.00', '0', '../../Pictures/Product/magazine/shewajit591.jpeg', 'Inactive', NOW(), 4);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('บิงโก เกมฆาตกร ตอนที่ 3 เกมกบฏ', 'ปราปต์', '"ขีดขิน" พบกับ "กำพล" ศัลยแพทย์ผู้ค้นพบช่องโหว่ของเกมบิงโก ทั้งสองร่วมมือกันเพื่อตามหาตัวผู้สร้างเกมที่อยู่เบื้องหลังทุกสิ่งทุกอย่าง การก่อกบฏต่อเกมบิงโกได้เริ่มต้นขึ้น แต่อุปสรรคสำคัญคือผู้เล่นคนอื่นที่มีแนวคิดไม่เหมือนกัน วังวนความไม่ไว้วางใจในหมู่ผู้เล่นยังดำเนินต่อไป อีกทั้งเกมบิงโกยังหมายกำจัดใครก็ตามที่กล้าลุกขึ้นมาต่อสู้กับระบบ', 
-	'295', '250.75', '0', '../Pictures/commic/bingo3.jpeg', 'Inactive', NOW(), 3);
+	'295', '250.75', '0', '../../Pictures/Product/novel/bingo3.jpeg', 'Inactive', NOW(), 3);
 
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
@@ -54,73 +57,73 @@ INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, St
 ต่างมารวมตัวกันบนเวทีใหญ่ และบัดนี้การต่อสู้ อันดุเดือดก็กำลังจะ
 เปิดฉาก...ศึกตัดสินแห่งโอนิงะชิมะ มาถึงจุดเดือดครั้งยิ่งใหญ่ที่สุดแล้ว!!
 การ์ตูนผจญภัยกลางทะเลกว้างเพื่อตามหา One piece!!', 
-	'70', '66.50', '40', '../Pictures/commic/onepiece99.jpeg', 'Active', NOW(), 1);
+	'70', '66.50', '40', '../../Pictures/Product/comic/onepiece99.jpeg', 'Active', NOW(), 1);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('รวมพื้นฐานการสร้าง WEB', 'บัญชา ปะสีละเตสัง', 'ในการสร้างเว็บเพจ เราจำเป็นต้องนำความรู้พื้นฐานหลายอย่างมารวมเข้าด้วยกัน ซึ่งก็ได้แก่ HTML สำหรับจัดโครงร่างของเพจ แล้วยังต้องใช้ CSS เพื่อจัดรูปแบบของเพจให้เป็นระเบียบ สวยงามดูน่าใช้งานมากขึ้น และอาจนำเฟรมเวิร์กที่ชื่อ Bootstrap เข้ามาช่วยในการจัดรูปแบบร่วมกับ CSS ก็จะช่วยให้งานนั้นง่ายขึ้น นอกจากนี้อาจเขียนคำสั่งด้วย JavaScript เพื่อกำหนดการทำงานตามเงื่อนไข เเล้วหากต้องการเรียนรู้กระบวนการสร้างเว็บไซต์ให้ครบสมบูรณ์ทั้งหมด เราควรศึกษาให้ครอบคลุมถึงการทำงานทางฝั่งเซิร์ฟเวอร์ควบคู่กันไปด้วย และอันที่เหมาะสมที่สุดสำหรับผู้เริ่มต้นก็คือ PHP เพราะเรียนรู้ได้ง่าย เเละนิยมใช้กันอย่างแพร่หลาย โดยในหนังสือเล่มนี้ได้รวบรวมพื้นฐานที่สำคัญของ HTML, CSS, Bootstrap, JavaScript และ PHP ไว้อย่างครบครันซึ่งผู้เริ่มต้นศึกษาสามารถเรียนรู้ทุกอย่างได้จากหนังสือนี้เพียงเล่มเดียว', 
-	'345', '293.25', '15', '../Pictures/commic/web.jpeg', 'Active', NOW(), 2);
+	'345', '293.25', '15', '../../Pictures/Product/knowledge/web.jpeg', 'Active', NOW(), 2);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('บ้านและสวน ฉ.572 (เม.ย.67)', 'บ้านและสวน', '', 
-	'140', '127.50', '34', '../Pictures/commic/home-graden572.jpeg', 'Active', NOW(), 4);
+	'140', '127.50', '34', '../../Pictures/Product/magazine/home-graden572.jpeg', 'Active', NOW(), 4);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('ฉลาดเกมส์โกง BAD GENIUS', 'ร เรือในมหาสมุท', 'จุดเริ่มต้นของธุรกิจกลางสนามสอบมาจากการที่ "ลิน" อยากช่วยเพื่อนสนิทอย่าง "เกรซ" เพราะความจำเป็นบางอย่างทำให้เกรซมีคำตอบเดียวสำหรับการสอบครั้งนี้ คือเธอต้อง "ทำข้อสอบได้" เพียงเท่านั้น จากการช่วยเหลือเล็กๆ น้อยๆ นำไปสู่ภารกิจการโกงที่ใหญ่ขึ้นเรื่อยๆ แรงขับเคลื่อนของการกระทำจึงต่างไปจากเดิม จากนัำใจแปรเปลี่ยนเป็นเม็ดเงิน จนเมื่อสนามสอบระดับโลกกลายเป็นเกมส์ธุรกิจข้ามชาติ หากเป็นคุณ คำตอบสุดท้ายของเกมส์โกงนี้.. คืออะไร', 
-	'359', '305.15', '12', '../Pictures/commic/bad_genius.jpeg', 'Active', NOW(), 3);
+	'359', '305.15', '12', '../../Pictures/Product/novel/bad_genius.jpeg', 'Active', NOW(), 3);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('ลองใช้ชีวิตแบบโพสต์อิตดูไหม', 'โฮซา', ' ลองปรับการใช้ชีวิตให้ยืดหยุ่นให้ได้ แปะง่าย ลอกใหม่ ให้ชีวิตสะดวกขึ้นเหมือนกับโพสต์อิต แม้ว่าโพสต์อิตอาจเป็นความล้มเหลวของการเป็นกาว แต่มันก็ได้สร้างประวัติศาสตร์ให้วงการเครื่องเขียน  ดังนั้นในข้อเสียของมันก็มีข้อดีเต็มไปหมด จากที่คนเขียนเคยใช้ชีวิตเหมือนกาวช้างที่ต้องกระตือรือร้น พยายาม และยึดติดจนชีวิตหนักอึ้งและหนักหน่วง ลองเปลี่ยนมาใช้ชีวิตแบบโพสต์อิตที่แปะง่าย เสร็จงานก็หยิบออกโดยไม่ทิ้งร่องรอยเปรียบเหมือนการยืดหยุ่นได้ ไม่พยายามจนเกินกำลัง ปรับชีวิตให้เหมาะกับตัวเองอย่างมีความสุข และใช้ชีวิตแบบที่ตัวเองต้องการโดยไม่ต้องเปรียบเทียบกับใคร ๆ
 พร้อมกับเทคนิคปรับชีวิตเบาสบายอีกมากมายที่ทำให้ชีวิตเข้าที่ขึ้น', 
-	'70', '280.25', '11', '../Pictures/commic/hoza.jpeg', 'Active', NOW(), 5);
+	'70', '280.25', '11', '../../Pictures/Product/general/hoza.jpeg', 'Active', NOW(), 5);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('One Piece 106', 'EIICHIRO ODA', 'กลุ่มหมวกฟางเดินทางมาถึงเกาะแห่งอนาคต "เอ็กเฮด" ที่นั่นมีศูนย์วิจัยของ Dr. เวก้าพังค์ แถมยังเต็มไปถ่วยวิทยาการที่ไม่มีใครรู้จักมากมายทำเอาความอยากผจญภัยของลูฟ์ลุกโขนที่นวเลยทีเดียว!! แด่แล่ว CPO ก็บุกมาเพื่อกำจัดเวก่าพังค์!? การ์ดูนขอญภัยกลางทะเลกว่างเพื่อดามหา One Piece!!', 
-	'70', '66.50', '69', '../Pictures/commic/onepiece106.jpeg', 'Active', NOW(), 1);
+	'70', '66.50', '69', '../../Pictures/Product/comic/onepiece106.jpeg', 'Active', NOW(), 1);
 	
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('My Hero Academia 10', 'KOHEI HOROKOSHI', 'บาคุโกถูกวิลเลินลักพาตัวไปซะแล้ว! คนอื่นๆ ในคลาสเองก็พากันบาดเจ็บจากการบุกโจมตีครั้งนี้ ทำให้ยูเอถูกสังคมรุมตำหนิ ทุกๆ คน...รวมทั้งผมเองต่างก็ทำเรื่องที่ทำได้ไปแล้วนะ!! แต่ว่าจากนี้มันจะกลายเป็นยังไงต่อกันนะ? “Plus Ultra!!”', 
-	'50', '47.50', '100', '../Pictures/commic/myhero10.jpeg', 'Active', NOW(), 1);
+	'50', '47.50', '100', '../../Pictures/Product/comic/myhero10.jpeg', 'Active', NOW(), 1);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('หนึ่งนัด', 'ชัยกร หาญไฟฟ้า', 'นวนิยายเข้ารอบสุดท้ายรางวัลนายอินทร์อะวอร์ด แนวสืบสวนสอบสวน ประจำปีพุทธศักราช 2557 เรื่องราวสุดเข้มข้นซับซ้อนสุดหยั่ง ตั้งแต่ตัวอักษรแรกยันตัวอักษรสุดท้าย ถ่ายทอดชีวิตตลอดจนวิธีคิดของ ''เพชฌฆาตหนึ่งนัด'' ได้ละเอียดลึกซึ้งราวกับตัวผู้เขียนเป็นมือแม่นปืนเสียเอง กอปรกับมุมมองฉากเปิดเรื่องที่สะท้อนผ่านสายตาหลายตัวละครได้อย่างมีมิติราวภาพยนตร์ อยากให้คุณลองอ่านผลงานแนวสืบสวนสอบสวนฝีมือคนไทยเล่มนี้ดูเถิด ไม่ธรรมดาจริงๆ', 
-	'135', '68.00', '2', '../Pictures/commic/oneshoot.jpeg', 'Active', NOW(), 3);
+	'135', '68.00', '2', '../../Pictures/Product/novel/oneshoot.jpeg', 'Active', NOW(), 3);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('แพรว Wedding ฉบับที่ 14 (3/2564)', 'แพรว Wedding', 'พบทุกคำตอบของการแต่งงาน และคู่มือความสัมพันธ์ได้ที่นี่ เพราะความรักของคุณ...สำคัญสำหรับเรา งานแต่งงาน ความรั', 
-	'175', '170.00', '69', '../Pictures/commic/preaw-weddind2024-14.jpeg', 'Active', NOW(), 4);
+	'175', '170.00', '69', '../../Pictures/Product/magazine/preaw-weddind2024-14.jpeg', 'Active', NOW(), 4);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('My Hero Academia 13', 'KOHEI HOROKOSHI', '“การฝึกซ้อมกู้ภัย” ของการสอบใบอนุญาตชั่วคราวเริ่มแล้ว! พิจารณาสถานการณ์! รับมืออย่างรวดเร็ว! และสำคัญที่สุดคือจำเป็นต้องประสานงานกับพรรคพวก...BOOM! หวา อะไรน่ะ!? มีวิลเลินใกล้กับสถานปฐมพยาบาล!? ฉันก็ต้องรีบไปทำการกู้ภัยเดี๋ยวนี้แล้วสิ “Plus Ultra!!”', 
-	'50', '47.50', '33', '../Pictures/commic/myhero13.jpeg', 'Active', NOW(), 1);
+	'50', '47.50', '33', '../../Pictures/Product/comic/myhero13.jpeg', 'Active', NOW(), 1);
 	
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('My Hero Academia 25', 'KOHEI HOROKOSHI', 'อาการปวดหัวเหมือนจะแตกเป็นเสี่ยงๆ ที่มีมาจนถึงเมื่อกี้หายไปแล้ว... อา... นึกออกแล้ว... ความสุขที่รู้สึกถึงเป็นครั้งแรกเมื่อสมัยเด็กๆ สำหรับฉัน ความทรงจำที่มีร่วมกับครอบครัวไม่ใช่โศกนาฏกรรมจะสังคมที่มีฮีโร่เต็มไปหมดพรรค์นี้หรือจะอนาคตก็ไม่ต้องการ... พินาศมันไปซะให้หมดนั่นล่ะ!!', 
-	'70', '66.50', '10', '../Pictures/commic/myhero25.jpeg', 'Active', NOW(), 1);
+	'70', '66.50', '10', '../../Pictures/Product/comic/myhero25.jpeg', 'Active', NOW(), 1);
 	
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('My Hero Academia 39', 'KOHEI HOROKOSHI', 'เด็กที่อยากให้มองดูตัวเอง กับคุณพ่อที่ไม่ยอมหันหน้าเข้าหากันแล้วก็เด็กผู้หญิงที่ถูกยัดเยียด “ความธรรมดา”จนไม่อาจมีชีวิตอย่างที่ใจอยาก กับเพื่อนที่พยายามจะหันหน้าพูดคุยกันการคิดถึงใครสักคนเนี่ย มันก็มีบ้างที่เจ็บปวดจริงๆ แต่มันก้มีตรงที่ วิเศษ กับตรงที่มีความสุข ด้วยเหมือนกันนะฉันว่า!!!', 
-	'70', '66.50', '99', '../Pictures/commic/myhero39.jpeg', 'Active', NOW(), 1);
+	'70', '66.50', '99', '../../Pictures/Product/comic/myhero39.jpeg', 'Active', NOW(), 1);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('ถอดรหัสสกัดมะเร็ง The Cancer Code', 'Jason Fung', 'ในสมรภูมิสุขภาพ มนุษย์ต่อสู้กับ “มะเร็ง” มาตั้งแต่ยุคก่อนประวัติศาสตร์ มันคือศัตรูตัวฉกาจที่ขยายกองกำลังได้ไม่สิ้นสุด รุกรานได้ทั่วร่างกาย หลบหลีกภูมิคุ้มกันคล่องแคล่ว และพร้อมจะสังหารเราอย่างเลือดเย็น คำถามคือ มนุษยชาติจะเอาชีวิตรอดในสงครามมะเร็งได้อย่างไร ดร.เจสัน เฝิง ผู้เขียน วิทยาศาสตร์ความอ้วน (The Obesity Code) จะพาเราไปไขความลับสุขภาพกันอีกครั้ง พร้อมข้อค้นพบใหม่ที่ปฏิวัติวงการ ย้อนรอยสู่ต้นตอ “เมล็ดพันธุ์” ของมะเร็ง ตั้งแต่มะเร็งคืออะไร เกี่ยวข้องกับพันธุกรรมอย่างไร เหตุใดจึงรักษายากนัก แล้วสืบเสาะผ่าน “เนื้อดิน” หรือปัจจัยแวดล้อมที่อาจทำให้มะเร็งเติบโตอย่างโรคอ้วน อินซูลิน หรือพฤติกรรม พร้อมไขข้อข้องใจอย่างการตรวจคัดกรองมะเร็งช่วยได้จริงหรือไม่ โภชนาการส่งผลต่อมะเร็งอย่างไร และอะไรคือกลไกภูมิคุ้มกันที่อาจเป็นกุญแจสำคัญในการเอาชนะมะเร็ง เมื่อมะเร็งไม่ใช่เรื่องไกลตัว แต่คือภัยร้ายที่คุกคามเราได้ทุกเมื่อ หนังสือเล่มนี้จะมอบทั้งอาวุธและความหวังในการต่อสู้เพื่อยุติสงครามโรคที่ยืดเยื้อยาวนาน เมล็ดพันธุ์ของมะเร็งอาจอยู่ในตัวเราทุกคน แต่พลังที่จะเปลี่ยนแปลงเนื้อดินอยู่ในมือเรา', 
-	'435', '369.75', '0', '../Pictures/commic/cancercode.jpeg', 'Inative', NOW(), 2);
+	'435', '369.75', '0', '../../Pictures/Product/knowledge/cancercode.jpeg', 'Inative', NOW(), 2);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('JUST KEEP BUYING กลยุทธ์บริหารการเงินเพื่อสร้างความมั่งคั่ง', 'นิก มักจิอุลลี', 'ในJust Keep Buying บล็อกเกอร์การเงินชื่อดังอย่าง Nick Maggiulli รวบรวมตัวเลขเพื่อตอบคำถามที่ใหญ่ที่สุดในด้านการเงินส่วนบุคคลและการลงทุน ในขณะเดียวกันก็มอบวิธีที่พิสูจน์แล้วในการสร้างความมั่งคั่งของคุณในทันทีคุณจะได้เรียนรู้ว่าทำไมคุณถึงต้องออมน้อยกว่าที่คุณคิด เหตุใดการออมเงินสดเพื่อซื้อตลาดที่ลดลงจึงไม่ใช่ความคิดที่ดี วิธีเอาตัวรอด (และเจริญเติบโต) ในช่วงที่ตลาดตกต่ำ และอีกมากมาย โดยการปฏิบัติตามกลยุทธ์ที่เปิดเผยไว้ที่นี่ คุณสามารถทำหน้าที่ได้อย่างชาญฉลาดขึ้นและมีชีวิตที่มั่งคั่งยิ่งขึ้นในแต่ละวันและทุกวัน ถึงเวลาก้าวไปอีกขั้นในการเดินทางสร้างความมั่งคั่งของคุณ', 
-	'320', '272.00', '97', '../Pictures/commic/justkeepbuying.jpeg', 'Active', NOW(), 2);
+	'320', '272.00', '97', '../../Pictures/Product/knowledge/justkeepbuying.jpeg', 'Active', NOW(), 2);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('High school detective คู่ป่วนปริศนาไขคดีฆาตกรรม', 'K.Tears', 'อคิราห์ ผู้มีความสามารถประหลาดมาพบกับ อธิษฐาน เด็กหนุ่มผู้ก่อตั้งชมรมวิจัยทางทะเลวันและคืนที่เต็มไปด้วยสีสันแห่งปริศนาได้เริ่มต้นขึ้นแล้ว', 
-	'280', '238.00', '0', '../Pictures/commic/highschool_detective.jpeg', 'OutStock', NOW(), 3);
+	'280', '238.00', '0', '../../Pictures/Product/novel/highschool_detective.jpeg', 'OutStock', NOW(), 3);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('สุดสัปดาห์ Special คนหล่อฯปี17/Mark Tuan', 'สุดสัปดาห์สำนักพิมพ์', '', 
-	'399', '380.50', '0', '../Pictures/commic/suduapda2024-17.jpeg', 'OutStock', NOW(), 4);
+	'399', '380.50', '0', '../../Pictures/Product/magazine/suduapda2024-17.jpeg', 'OutStock', NOW(), 4);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('11 ทักษะเปลี่ยนมือใหม่ให้เป็นมืออาชีพ', 'โคมิยะ คาสุโยชิ', 'หลักแห่งการสร้างพลังให้พร้อมทํางานทุกรูปแบบ เทคนิคเอาตัวรอดของคนทํางานเก่งทุกยุคทุกสมัย หนังสือที่ดีที่สุดจากชุดหนังสือขายดีที่ขายไปแล้วกว่า', 
-	'395', '335.75', '0', '../Pictures/commic/komiya.jpeg', 'OutStock', NOW(), 5);
+	'395', '335.75', '0', '../../Pictures/Product/general/komiya.jpeg', 'OutStock', NOW(), 5);
 
 INSERT INTO PRODUCT (ProName, Author, Description, PricePerUnit, CostPerUnit, StockQty, ImageSource, Status, Update_Day , TypeID)
 	VALUES ('แค่ใช้ชีวิตธรรมดาในแต่ละวันนั่นคือความกล้าหาญแล้ว', 'ลูน่า', 'บันทึกของแต่ละวันอันแสนธรรมดาแต่เปี่ยมคุณค่าจากความกล้าหาญผ่านประสบการณ์ของผู้เขียนที่ต้องเผชิญกับความเจ็บปวดน้อยใหญ่มาตั้งแต่เด็ก ที่จะช่วยให้เราได้เห็นถึงความกล้าหาญและการรับมือกับปัญหาต่างๆ ในชีวิต โดยเชื่อมโยงกับเมนูอาหารที่จะกลายมาเป็น  “รสชาติของชีวิต”', 
-	'265', '225.50', '9', '../Pictures/commic/luna39.jpeg', 'Active', NOW(), 5);
+	'265', '225.50', '9', '../../Pictures/Product/general/luna.jpeg', 'Active', NOW(), 5);

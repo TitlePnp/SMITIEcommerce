@@ -7,7 +7,7 @@ use Firebase\JWT\JWT;
 $username = $_POST['username'];
 $password = $_POST['userpassword'];
 
-$stmt = $connectDB->prepare("SELECT `Password`, `Role` FROM customer_account WHERE UserName = ?");
+$stmt = $connectDB->prepare("SELECT `Password`, `Role`, `CusID` FROM customer_account WHERE UserName = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -15,16 +15,18 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc(); 
     $hashed_password = $row['Password']; 
+    $CusID = $row['CusID'];
 
     if (password_verify($password, $hashed_password)) {
         session_start();
         
         $key = "SECRETKEY_SMITIECOM_CLIENT";
         $payload = array(
+            "cusid" => $CusID,
             "user" => $username, 
             "role" => $row['Role'], 
             "iat" => time(),
-            "exp" => time() + (60*60)
+            "exp" => time() + (60*240)
         );
 
         $jwt = JWT::encode($payload, $key, 'HS256');

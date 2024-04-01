@@ -1,5 +1,7 @@
 <?php
     require "../../Components/ConnectDB.php";
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
     $username = $_POST['username'];
     $password = $_POST['userpassword'];
@@ -9,6 +11,7 @@
     } else {
         $email = "";
     }
+
     $stmt = $connectDB->prepare("INSERT INTO customer(CusFName, CusLName, Sex, Tel, Address) VALUES 
     ('', '', '', '', '')");
     $stmt->execute();
