@@ -49,3 +49,13 @@ function showOrderSplitPage($CusID, $offset, $limit)
     $stmt->close();
     return $result;
 }
+
+function getAddressAndPriceOrder($orderID) {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT p.PayerAddress, p.PayerProvince, p.PayerPostcode, r.RecvAddress, r.RecvProvince, r.RecvPostcode, iv.totalPrice, iv.channel, iv.vat FROM invoice_order iv JOIN payer p ON iv.PayerID = p.PayerID JOIN receiver r ON iv.RecvID = r.RecvID WHERE iv.InvoiceID = ?");
+    $stmt->bind_param("s", $orderID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+}

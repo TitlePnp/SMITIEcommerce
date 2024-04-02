@@ -11,6 +11,16 @@
     return $result;
   }
 
+  function selectProductByID($id) {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT * FROM product, product_type WHERE ProID = ?");
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+  }
+
   function selectShowProduct($limit) {
     global $connectDB;
     $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID ORDER BY RAND() LIMIT ?");

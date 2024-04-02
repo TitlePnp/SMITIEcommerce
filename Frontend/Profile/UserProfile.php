@@ -178,11 +178,11 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                         $result = getOrderDetail($CusID);
                         while ($order = $result->fetch_assoc()) {
                             if ($order['Status'] == 'Ordered') {
-                                OrderedOrder($order);
+                                OrderedOrder($order, $order['InvoiceID']);
                             } else if ($order['Status'] == 'Completed') {
-                                CompleteOrder($order);
+                                CompleteOrder($order, $order['InvoiceID']);
                             } else if ($order['Status'] == 'Cancel') {
-                                CancelOrder($order);
+                                CancelOrder($order, $order['InvoiceID']);
                             }
                         }
                         ?>
@@ -207,7 +207,7 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
 </html>
 
 <?php
-function CompleteOrder($order)
+function CompleteOrder($order, $invoiceID)
 {
     //while loop for order
     $result2 = getOrderListDetail($order['InvoiceID']);
@@ -237,13 +237,16 @@ function CompleteOrder($order)
     echo "           <p class='text-sm leading-6 text-gray-900 mr-2'>สถานะ:</p>";
     echo "           <p class='text-sm leading-6 text-green-500'>{$order['Status']}</p>";
     echo "</div>";
-    echo '            <p class="mt-1 text-xs leading-5 hover:text-blue-500 cursor-pointer text-gray-500">กดเพื่อดูรายละเอียดเพิ่มเติม</p>';
+    echo "<form action='../OrderStatus/OrderStatus.php' method='POST'>";
+    echo '            <button type="submit"><p id="seeStatus" class="mt-1 text-xs leading-5 hover:text-blue-500 cursor-pointer text-gray-500">กดเพื่อดูรายละเอียดเพิ่มเติม</p></button>';
+        echo "<input type='hidden' name='invoiceID' value='{$invoiceID}'>";
+    echo "</form>";
     echo '        </div>';
     echo '    </li>';
     echo '</ul>';
 };
 
-function OrderedOrder($order)
+function OrderedOrder($order, $invoiceID)
 {
     $result2 = getOrderListDetail($order['InvoiceID']);
     echo '<ul role="list" class="divide-y divide-gray-100 hover:bg-gray-100 px-2">';
@@ -272,13 +275,15 @@ function OrderedOrder($order)
     echo "           <p class='text-sm leading-6 text-gray-900 mr-2'>สถานะ:</p>";
     echo "           <p class='text-sm leading-6  text-blue-500'>{$order['Status']}</p>";
     echo "</div>";
-    echo '            <p class="mt-1 text-xs leading-5 hover:text-blue-500 cursor-pointer text-gray-500">กดเพื่อดูรายละเอียดเพิ่มเติม</p>';
+    echo "<form action='../OrderStatus/OrderStatus.php' method='POST'>";
+    echo '            <button type="submit"><p id="seeStatus" class="mt-1 text-xs leading-5 hover:text-blue-500 cursor-pointer text-gray-500">กดเพื่อดูรายละเอียดเพิ่มเติม</p></button>';
+    echo "<input type='hidden' name='invoiceID' value='{$invoiceID}'>";
     echo '        </div>';
     echo '    </li>';
     echo '</ul>';
 }
 
-function CancelOrder($order)
+function CancelOrder($order, $invoiceID)
 {
     $result2 = getOrderListDetail($order['InvoiceID']);
     echo '<ul role="list" class="divide-y divide-gray-100 hover:bg-gray-100 px-2">';
@@ -307,7 +312,9 @@ function CancelOrder($order)
     echo "           <p class='text-sm leading-6 text-gray-900 mr-2'>สถานะ:</p>";
     echo "           <p class='text-sm leading-6 text-red-500'>{$order['Status']}</p>";
     echo "</div>";
-    echo '            <p class="mt-1 text-xs leading-5 hover:text-blue-500 cursor-pointer text-gray-500">กดเพื่อดูรายละเอียดเพิ่มเติม</p>';
+    echo "<form action='../OrderStatus/OrderStatus.php' method='POST'>";
+    echo '            <button type="submit"><p id="seeStatus" class="mt-1 text-xs leading-5 hover:text-blue-500 cursor-pointer text-gray-500">กดเพื่อดูรายละเอียดเพิ่มเติม</p></button>';
+    echo "<input type='hidden' name='invoiceID' value='{$invoiceID}'>";
     echo '        </div>';
     echo '    </li>';
     echo '</ul>';
