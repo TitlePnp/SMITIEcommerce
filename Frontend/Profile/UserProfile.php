@@ -6,6 +6,19 @@ require '../../vendor/autoload.php';
 
 use Firebase\JWT\Key;
 use \Firebase\JWT\JWT;
+
+if (isset($_SESSION["tokenJWT"])) {
+    $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
+    $CusID = $decoded->cusid;
+    $userInfo = getUserInfoFromCusID($CusID);
+    $isMember = true;
+} else if (isset($_SESSION["tokenGoogle"])) {
+    $userInfo = getGoogleUserInfo($_SESSION["tokenGoogle"]);
+    $CusID = $userInfo['CusID'];
+    $isMember = true;
+} else {
+    header("Location: ../MainPage/Home.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,23 +46,37 @@ use \Firebase\JWT\JWT;
 
 <body>
     <div class="px-28 py-5">
+        <div class="mb-5 flex flex-col">
+            <div class="mb-5">
+                <a href="../MainPage/Home.php" class="hover:text-blue-800 text-blue-500 font-semibold"><i class='bx bx-arrow-back mr-2'></i>กลับไปหน้าร้านค้า</a>
+            </div>
+            <div class="">
+                <p class="font-bold text-bold text-2xl mb-2">บัญชีผู้ใช้งาน</p>
+                
+            </div>
+        </div>
         <div class="flex flex-row h-full">
-            <div class="flex flex-col w-full">
+            <div class="flex flex-col w-full w-4/12">
                 <div class="p-5 shadow-lg rounded-lg w-full flex">
                     <div class="w-4/12 flex justify-center items-center">
                         <i class='bx bxs-user-circle text-7xl'></i>
                     </div>
                     <div class="w-8/12 font-semibold mt-2 text-lg">
-                        <p>Joa</p>
+                        <?php
+                        // echo "<p>ชื่อ: " . $_SESSION['user']['name'] . "</p>";
+                        ?>
                     </div>
                 </div>
-                <div class="mt-5 p-5">
+                <div class="p-5 mt-5 shadow-lg rounded-lg w-full flex">
+                    <div class="w-4/12 flex">
+                        <h1 class="font-semibold text-lg">ข้อมูลผู้ใช้</h1>
+                    </div>
                 </div>
             </div>
             <div class="flex flex-row ml-5 w-8/12">
                 <div class="flex flex-col w-full">
                     <div class="p-5 shadow-lg rounded-lg w-full flex">
-                        <p>สถานะคำสั่งซื้อ</p>
+                        <p class="text-lg font-semibold">สถานะคำสั่งซื้อ</p>
                     </div>
                 </div>
             </div>

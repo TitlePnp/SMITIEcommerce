@@ -74,7 +74,7 @@ $proIds = array_filter($proIds);
 
                     <!-- ข้อมูลผู้รับ -->
                     <div class="py-2 flex-col">
-                        <p class="font-semibold text-lg">ข้อมูลผู้ส่ง</p>
+                        <p class="font-semibold text-lg">ข้อมูลผู้จ่าย</p>
 
                         <!-- ชื่อ-นามสกุล -->
                         <div class="flex flex-row">
