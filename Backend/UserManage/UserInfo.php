@@ -80,3 +80,13 @@ function getCusID($googleID)
     $row = $result->fetch_assoc();
     return $row['CusID'];
 }
+
+function getAllAddress($CusID)
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT c.Address, c.Province, c.Postcode, p.PayerAddress, p.PayerProvince, p.PayerPostcode FROM customer c JOIN Payer p ON c.CusID = ?");
+    $stmt->bind_param("s", $CusID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+}
