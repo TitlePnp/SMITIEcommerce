@@ -50,9 +50,9 @@
       <div>
         <form action="../../Backend/UploadPage/Upload.php" method="POST" enctype="multipart/form-data">
           <p class="font-medium p-2">หมายเลขคำสั่งซื้อ</p>
-          <input type="text" name="invoiceID" class="w-full h-12 px-3 py-2 text-sm placeholder-gray-400 border rounded-lg" placeholder="<?php echo $invoiceID?>" value="<?php $invoiceID?>" required />
-          <p class="font-normal pt-2 pl-5 text-red-500 text-sm" id="error-invoice"></p>
-          <p class="font-medium pl-2 mt-8 mb-3">อัปโหลดรูปภาพการชำระเงิน</p>
+          <input type="text" name="invoiceID" id="invoiceID" class="w-full h-12 px-3 py-2 text-sm placeholder-gray-400 border rounded-lg" placeholder="<?php echo $invoiceID?>" value="<?php $invoiceID?>" />
+          <p id="invoiceError" class="text-xs font-normal text-red-600 mt-2"></p>
+          <p class="font-medium pl-2 mt-8 mb-3">อัปโหลดรูปภาพการชำระเงิน<span id="fileError" class="text-xs font-normal text-red-600 ml-3"></span></p>
           <div class="flex items-center justify-center w-full">
             <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-100">
             <div class="flex flex-col items-center justify-center">
@@ -63,11 +63,11 @@
             <input id="dropzone-file" name="receipt" type="file" class="hidden" accept="image/png, image/jpeg,  image/jpg" ondrop="handleDrop()" required/>
             </label>
           </div> 
-          <button type="submit" class="w-full h-12 mt-8 text-white bg-blue-500 rounded-lg">ยืนยันการชำระเงิน</button>
+          <button type="submit" onclick="validateForm()" class="w-full h-12 mt-8 text-white bg-blue-500 rounded-lg">ยืนยันการชำระเงิน</button>
         </form>
       </div>
       <div style="border-left: 1px solid #ddd;">
-        <p class="font-medium p-5">รูปภาพที่อัปโหลด</p>
+        <p class="font-medium p-6">รูปภาพที่อัปโหลด</p>
         <img class="h-96 rounded-lg mx-auto mb-14" id="previewImg">
       </div>
     </div>
@@ -103,6 +103,34 @@
         previewImg.src = URL.createObjectURL(file);
       }
     };
+
+    const invoice = document.getElementById('invoiceID');
+    const invoiceError = document.getElementById('invoiceError');
+
+    const file = document.getElementById('dropzone-file');
+    const fileError = document.getElementById('fileError');
+
+    function validateForm() {
+      invoiceStatus = false;
+      if (invoice.value == '') {
+        invoiceError.innerHTML = 'กรุณากรอกหมายเลขคำสั่งซื้อ';
+        invoice.style.border = '1px solid red';
+      } else {
+        invoiceError.innerHTML = '';
+        invoice.style.border = '1px solid green';
+        invoiceStatus = true;
+      }
+
+      fileStatus = false;
+      if (file.value == '') {
+        fileError.innerHTML = 'กรุณาอัปโหลดรูป';
+        file.style.border = '1px solid red';
+      } else {
+        fileError.innerHTML = '';
+        file.style.border = '1px solid green';
+        fileStatus = true;
+      }
+    }
   </script>
 </body>
 </html>

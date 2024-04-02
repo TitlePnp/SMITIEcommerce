@@ -113,7 +113,7 @@ CREATE TABLE INVOICE_ORDER (
     Channel     VARCHAR(20) NOT NULL,
     StartDate   DATETIME    NOT NULL,
     EndDate     DATETIME    NOT NULL,
-    Status		VARCHAR(10)	DEFAULT 'OnHand',
+    Status		VARCHAR(10),
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
     FOREIGN KEY (RecvID) REFERENCES RECEIVER(RecvID),
     FOREIGN KEY (PayerID) REFERENCES PAYER(PayerID)
@@ -148,16 +148,13 @@ CREATE TABLE RECEIPT (
     RecID       CHAR(10)        PRIMARY KEY,
     PayTime     DATETIME,
     CusID       INT             NOT NULL,
-    TaxID       CHAR(20),
+    PayerID     INT             NOT NULL,
     InvoiceID   CHAR(10)        NOT NULL,
     Payment     LONGBLOB,
     Status      VARCHAR(10)     DEFAULT 'Pending',
     Channel     VARCHAR(10)     NOT NULL,
-    PayerID     INT             NOT NULL,
-    RecvID        INT             NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
     FOREIGN KEY (PayerID) REFERENCES PAYER(PayerID),
-    FOREIGN KEY (RecvID) REFERENCES RECEIVER(RecvID),
     FOREIGN KEY (InvoiceID) REFERENCES INVOICE_ORDER(InvoiceID)
 );
 -- ตารางเก็บข้อมูลรายละเอียดของใบเสร็จ --

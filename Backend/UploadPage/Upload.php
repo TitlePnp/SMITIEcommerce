@@ -20,17 +20,17 @@
       $image = $_FILES['receipt']['tmp_name'];
       $imgContent = file_get_contents($image);
       $recID = newRecID();
-      $taxID = getTaxID($invoiceID);
+      $payerID = getTaxID($invoiceID);
       $channel = 'Transfer';
       $date = date('Y-m-d H:i:s');
-      if ($taxID === NULL) {
+      if ($payerID === NULL) {
         $stmt = $connectDB->prepare("INSERT INTO RECEIPT (RecID, PayTime, CusID, InvoiceID, Payment, Channel) 
                                     VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssisss", $recID, $date, $id, $invoiceID, $imgContent, $channel);
       } else {
-        $stmt = $connectDB->prepare("INSERT INTO RECEIPT (RecID, PayTime, CusID, TaxID, InvoiceID, Payment, Channel) 
+        $stmt = $connectDB->prepare("INSERT INTO RECEIPT (RecID, PayTime, CusID, PayerID, InvoiceID, Payment, Channel) 
                                     VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssissss", $recID, $date, $id, $taxID, $invoiceID, $imgContent, $channel);
+        $stmt->bind_param("ssissss", $recID, $date, $id, $payerID, $invoiceID, $imgContent, $channel);
       }
       $stmt->execute();
       insertReceiptList($invoiceID, $recID);
@@ -75,12 +75,12 @@
 
   function getTaxID($invoiceID) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT ir.TaxID FROM INVOICE_ORDER ir WHERE ir.InvoiceID = ?");
+    $stmt = $connectDB->prepare("SELECT ir.PayerID FROM INVOICE_ORDER ir WHERE ir.InvoiceID = ?");
     $stmt->bind_param("s", $invoiceID);
     $stmt->execute();
     $result = $stmt->get_result();
     $fetchResult = $result->fetch_assoc();
-    $result = $fetchResult == NULL || !isset($fetchResult['TaxID']) ? NULL : $fetchResult['TaxID'];
+    $result = $fetchResult == NULL || !isset($fetchResult['PayerID']) ? NULL : $fetchResult['PayerID'];
     $stmt->close();
     return $result;
   }

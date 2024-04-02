@@ -5,6 +5,7 @@ require_once "../UserManage/UserInfo.php";
 require_once "../../vendor/autoload.php";
 
 require_once "../../Backend/CartQuery/CartDetail.php";
+require_once "../../Backend/CartQuery/DeleteFromCart.php";
 
 use Firebase\JWT\Key;
 use \Firebase\JWT\jwt;
@@ -100,13 +101,14 @@ try {
     $endDate = date("Y-m-d H:i:s", strtotime("+1 day"));
     insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
+    updateOnHand($ProIds);
     echo "Success";
     if ($PaymentMethod == "MobileBanking") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
-        header("Location: ../../Frontend/MainPage/Payment.php");
+        // header("Location: ../../Frontend/MainPage/Payment.php");
     } else if ($PaymentMethod == "COD") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
-        header("Location: ../../Frontend/MainPage/ThankOrder.php");
+        // header("Location: ../../Frontend/MainPage/ThankOrder.php");
     }
 } catch (Exception $e) {
     echo $e;

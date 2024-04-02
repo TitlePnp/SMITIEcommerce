@@ -272,7 +272,8 @@
       type: 'POST',
       url: '../../Backend/CartQuery/DeleteFromCart.php',
       data: {
-        proID: proID
+        proID: proID,
+        action: 'cancel'
       },
       success: function() {
         location.reload();
