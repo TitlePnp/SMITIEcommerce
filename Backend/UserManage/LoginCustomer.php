@@ -2,7 +2,12 @@
 require "../../Components/connectDB.php";
 require '../../vendor/autoload.php';
 
-use Firebase\JWT\JWT;
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+$dotenv->load();
+
+use Firebase\JWT\Key;
+use \Firebase\JWT\jwt;
+
 
 $username = $_POST['username'];
 $password = $_POST['userpassword'];
@@ -13,27 +18,27 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc(); 
-    $hashed_password = $row['Password']; 
+    $row = $result->fetch_assoc();
+    $hashed_password = $row['Password'];
     $CusID = $row['CusID'];
 
     if (password_verify($password, $hashed_password)) {
         session_start();
-        
-        $key = "SECRETKEY_SMITIECOM_CLIENT";
+
+        $key = $_ENV['JWT_KEY'];
         $payload = array(
             "cusid" => $CusID,
-            "user" => $username, 
-            "role" => $row['Role'], 
+            "user" => $username,
+            "role" => $row['Role'],
             "iat" => time(),
-            "exp" => time() + (60*240)
+            "exp" => time() + (60 * 240)
         );
 
         $jwt = JWT::encode($payload, $key, 'HS256');
 
         $_SESSION['tokenJWT'] = $jwt;
-        header('Location: ../../Frontend/MainPage/Home.php'); 
-        exit(); 
+        header('Location: ../../Frontend/MainPage/Home.php');
+        exit();
     } else {
         // var_dump("Wrong password");
         header('Location: ../../Frontend/SignIn_Page/SignIn.php');
@@ -44,4 +49,3 @@ if ($result->num_rows > 0) {
     header('Location: ../../Frontend/SignIn_Page/SignIn.php');
     exit();
 }
-?>
