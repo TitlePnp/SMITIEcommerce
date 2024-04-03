@@ -17,7 +17,7 @@ function getOrderListDetail($orderID)
 {
     global $connectDB;
 
-    $stmt = $connectDB->prepare("SELECT pd.ProName, il.Qty, r.Status FROM invoice_list il JOIN product pd ON il.ProID = pd.ProID JOIN receipt r ON r.InvoiceID = il.InvoiceID WHERE il.InvoiceID = ?");
+    $stmt = $connectDB->prepare("SELECT pd.ProName, il.Qty FROM invoice_list il JOIN product pd ON il.ProID = pd.ProID WHERE il.InvoiceID = ?");
     $stmt->bind_param("s", $orderID);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -66,7 +66,6 @@ function getReceiptStatus($invoiceID) {
     $stmt->bind_param("s", $invoiceID);
     $stmt->execute();
     $result = $stmt->get_result();
-    $stmt->close();
-    return $result;
-
+    $result = $result->fetch_assoc();
+    return $result['Status'];
 }

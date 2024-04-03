@@ -39,7 +39,11 @@ use \Firebase\JWT\JWT;
     $orderID = $_POST['invoiceID'];
     $orderListResult = getOrderListDetail($orderID);
     $Status = getReceiptStatus($orderID);
-    $Status = $Status->fetch_assoc();
+    // $Status = $Status->fetch_assoc();
+    if ($Status == NULL) {
+        $Status['Status'] = "Pending";
+    }
+
     ?>
     <div class="px-28 py-8">
         <a href="../Profile/UserProfile.php" class="hover:text-blue-800 text-blue-500 font-semibold"><i class='bx bx-arrow-back mr-2'></i>ย้อนกลับ</a>
