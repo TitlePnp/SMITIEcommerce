@@ -36,3 +36,23 @@ if ($originalData === false) {
 }
 
 echo "ข้อมูลต้นฉบับ: " . $originalData . "\n";
+
+// <?php
+// require_once "../../vendor/autoload.php";
+
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+// $dotenv->load();
+
+// use Firebase\JWT\Key;
+// use \Firebase\JWT\jwt;
+
+// $key = $_ENV['JWT_KEY'];
+
+// $taxID ="1234567891235";
+
+// $encryptionKey = $_ENV['ENCRYPT_KEY'];
+// $iv = $_ENV['IV'];
+// $tag = $_ENV['TAG'];
+// $ciphertext = openssl_encrypt($taxID, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
+
+// echo $ciphertext;

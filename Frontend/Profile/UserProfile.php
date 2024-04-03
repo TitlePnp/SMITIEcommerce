@@ -5,8 +5,14 @@ require_once "../../Backend/UserManage/UserInfo.php";
 require_once "../../Backend/OrderManage/OrderQuery.php";
 require '../../vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+$dotenv->load();
+
 use Firebase\JWT\Key;
-use \Firebase\JWT\JWT;
+use \Firebase\JWT\jwt;
+
+$key = $_ENV['JWT_KEY'];
+
 
 if (isset($_SESSION["tokenJWT"])) {
     $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
@@ -103,7 +109,7 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                                 <?php
                                 if ($userInfo['Sex'] == 'M') {
                                     echo "<input type='text' class='10/12 border-gray-300 ml-2' value='ชาย' disabled>";
-                                } else if ($userInfo['F']) {
+                                } else if ($userInfo['Sex'] == 'F') {
                                     echo "<input type='text' class='10/12 border-gray-300 ml-2' value='หญิง' disabled>";
                                 } else {
                                     echo "<input type='text' class='10/12 border-gray-300 ml-2' value='ไม่ระบุ' disabled>";

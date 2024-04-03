@@ -36,8 +36,9 @@ if (isset($_GET['code'])) {
         $_SESSION['email'] = $email;
         $_SESSION['name'] = $name;
         $_SESSION['tokenGoogle'] = $userId;
+        require_once "../Log/LogManage.php";
+        insertLog("Login with Google", date("Y-m-d H:i:s"));
         header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
-        // print_r($_SESSION);
     } else {
         $stmt = $connectDB->prepare("INSERT INTO customer(CusID, CusFName, CusLName, Sex, Tel, Address) VALUES 
     ('',?,'','','','')");
@@ -58,6 +59,8 @@ if (isset($_GET['code'])) {
         $_SESSION['email'] = $email;
         $_SESSION['name'] = $name;
         $_SESSION['tokenGoogle'] = $userId;
+        require_once "../Log/LogManage.php";
+        insertLog("Login with Google", date("Y-m-d H:i:s"));
         header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
         // print_r($_SESSION);
 
