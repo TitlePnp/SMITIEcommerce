@@ -9,7 +9,7 @@ $encryptionKey = openssl_random_pseudo_bytes(32);
 $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
 
 // สร้างแท็กสำหรับการตรวจสอบความถูกต้องของข้อมูล
-$tag = 'RecoverTag';
+$tag = 'SDFhiohsfihafsjizzsdf';
 
 // เข้ารหัสข้อมูล
 $ciphertext = openssl_encrypt($data, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
@@ -22,6 +22,7 @@ if ($ciphertext === false) {
 echo "ข้อมูลที่เข้ารหัส: " . $ciphertext . "<br>";
 echo "IV: " . bin2hex($iv) . "<br>";
 echo "แท็ก: " . bin2hex($tag) . "<br>";
+echo "คีย์: " . bin2hex($encryptionKey) . "<br>";
 
 // คีย์สำหรับการถอดรหัส (ต้องตรงกับที่ใช้เข้ารหัส)
 $decryptionKey = $encryptionKey;
