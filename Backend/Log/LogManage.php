@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 require_once "../../Components/ConnectDB.php";
 require_once '../../vendor/autoload.php';
 require_once "../UserManage/UserInfo.php";
@@ -19,16 +19,12 @@ if (isset($_SESSION["tokenJWT"])) {
     $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
     $CusID = $decoded->cusid;
     $userInfo = getUserInfoFromCusID($CusID);
-    $isMember = true;
     var_dump($CusID);
 } else if (isset($_SESSION["tokenGoogle"])) {
     $userInfo = getGoogleUserInfo($_SESSION["tokenGoogle"]);
     $CusID = $userInfo['CusID'];
-    $isMember = true;
-    var_dump($CusID);
 }
 
-var_dump(findNumIDLog($CusID));
 
 
 function insertLog($Action, $Period)
@@ -38,6 +34,8 @@ function insertLog($Action, $Period)
     $NumID = findNumIDLog($CusID);
     $stmt = $connectDB->prepare("INSERT INTO access_log(CusID, NumID, Action, Period) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("iiss", $CusID, $NumID, $Action, $Period);
+    $stmt->execute();
+    $stmt->close();
 }
 
 function findNumIDLog($CusID)

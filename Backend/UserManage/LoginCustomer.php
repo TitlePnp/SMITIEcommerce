@@ -1,6 +1,9 @@
 <?php
 require "../../Components/connectDB.php";
 require '../../vendor/autoload.php';
+require_once "../Log/LogManage.php";
+
+date_default_timezone_set('Asia/Bangkok');
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
 $dotenv->load();
@@ -37,6 +40,7 @@ if ($result->num_rows > 0) {
         $jwt = JWT::encode($payload, $key, 'HS256');
 
         $_SESSION['tokenJWT'] = $jwt;
+        insertLog("Login with JWT", date("Y-m-d H:i:s"));;
         header('Location: ../../Frontend/MainPage/Home.php');
         exit();
     } else {
