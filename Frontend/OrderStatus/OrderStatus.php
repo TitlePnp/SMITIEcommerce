@@ -36,7 +36,13 @@ use \Firebase\JWT\JWT;
 
 <body class="bg-gray-200">
     <?php
-    $orderID = $_POST['invoiceID'];
+    if (isset($_POST['invoiceID'])) {
+        $orderID = $_POST['invoiceID'];
+    } else if (isset($_SESSION['InvoiceID'])) {
+        $orderID = $_SESSION['InvoiceID'];
+        unset($_SESSION['InvoiceID']);
+    }
+
     $orderListResult = getOrderListDetail($orderID);
     $Status = getReceiptStatus($orderID);
 
@@ -50,10 +56,15 @@ use \Firebase\JWT\JWT;
                 <?php
                 if ($Status == "Paid" || $Status == "Delivered" || $Status == "Complete") {
                     echo '<a class="mr-2" href=""><button class="py-2 bg-green-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-green-700">ใบเสร็จ</button></a>';
-                }
-                else {
-                    echo '<a class="mr-2" href=""><button class="py-2 bg-red-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-red-700">ใบ Invoice</button></a>';
-                    echo '<a class="ml-2" href=""><button class="py-2 bg-blue-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-blue-600">แจ้งการชำระเงิน</button></a>';
+                } else {
+                    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block">';
+                    echo '<button class="py-2 bg-red-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-red-700"><i class="bx bxs-file-pdf mr-3"></i>ใบแจ้งหนี้</button>';
+                    echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
+                    echo '</form>';
+                    echo '<form method="POST" action="../UploadPage/Upload.php" class="inline-block">';
+                    echo '<button class="ml-3 py-2 bg-blue-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-blue-600">แจ้งการชำระเงิน</button>';
+                    echo '<input type="hidden" name="invoiceID" value="' . $orderID . '">';
+                    echo '</form>';
                 }
                 ?>
             </div>
@@ -76,20 +87,20 @@ use \Firebase\JWT\JWT;
             echo "       <p class='text-gray-500 text-md'>{$ProductInfo['Description']}</p>";
             echo "       <div class='flex'>";
             echo "           <p class='text-black font-semibold'>ราคา: </p>";
-            echo "          <p class='text-black ml-2'>{$ProductInfo['PricePerUnit']}บาท</p>";
+            echo "          <p class='text-black ml-2'>{$ProductInfo['PricePerUnit']} บาท</p>";
             echo "        </div>";
             echo "       <div class='flex'>";
             echo "            <p class='text-black font-semibold'>จำนวน:</p>";
             echo "          <p class='text-black ml-2'>{$orderList['Qty']} เล่ม</p>";
             echo "        </div>";
-            echo "        <div class='flex'>";
-            echo "            <p class='text-black font-semibold'>ราคาสุทธิ:</p>";
-            $totalPrice = $orderList['Qty'] * $ProductInfo['PricePerUnit'];
-            $vat = $totalPrice * 0.07;
-            $totalPrice += $vat;
-            $totalPriceFormat = number_format($totalPrice, 2);
-            echo "            <p class='text-black ml-2'>{$totalPriceFormat} บาท</p>";
-            echo "       </div>";
+            // echo "        <div class='flex'>";
+            // echo "            <p class='text-black font-semibold'>ราคาสุทธิ:</p>";
+            // $totalPrice = $orderList['Qty'] * $ProductInfo['PricePerUnit'];
+            // $vat = $totalPrice * 0.07;
+            // $totalPrice += $vat;
+            // $totalPriceFormat = number_format($totalPrice, 2);
+            // echo "            <p class='text-black ml-2'>{$totalPriceFormat} บาท</p>";
+            // echo "       </div>";
             echo "    </div>";
             $orderDetail = getAddressAndPriceOrder($orderID);
             $orderDetail = $orderDetail->fetch_assoc();
@@ -121,8 +132,8 @@ use \Firebase\JWT\JWT;
             $OrderTotalPrice = $getOrderDetail['TotalPrice'];
 
             $vatFormat = number_format($vat, 2);
-            $InvoiceTotalPriceFormat = number_format($OrderTotalPrice, 2);
-            $SubtotalPrice = $OrderTotalPrice - $vat;
+            $InvoiceTotalPriceFormat = number_format($OrderTotalPrice + $vat, 2);
+            $SubtotalPrice = $OrderTotalPrice;
             $SubtotalPriceFormat = number_format($SubtotalPrice, 2);
 
             $PaymentMethod = $getOrderDetail['Channel'];
@@ -140,61 +151,120 @@ use \Firebase\JWT\JWT;
                 </div>
                 <div class="flex bg-gray-300 h-4 mt-5 rounded-md">
                     <?php
-                    if ($Status == "Pending") {
-                        echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
-                        echo "</div>";
-                        echo "</div>";
-                        echo "<div class='w-full flex'>";
-                        echo "    <div class='my-5 w-full text-blue-600'>";
-                        echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
-                        echo '    </div>';
-                        echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
-                        echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
-                        echo '    </div>';
-                        echo '  <div class="my-5 w-full mx-2 text-center">';
-                        echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
-                        echo '    </div>';
-                        echo '   <div class="my-5 w-full text-end">';
-                        echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
-                        echo '   </div>';
-                        echo '</div>';
-                    } else if ($Status == "Paid") {
-                        echo "<div class='bg-blue-600 h-4 w-8/12 rounded-md'>";
-                        echo "</div>";
-                        echo "</div>";
-                        echo "<div class='w-full flex'>";
-                        echo "    <div class='my-5 w-full text-blue-600'>";
-                        echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
-                        echo '    </div>';
-                        echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
-                        echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
-                        echo '    </div>';
-                        echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
-                        echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
-                        echo '    </div>';
-                        echo '   <div class="my-5 w-full text-end">';
-                        echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
-                        echo '   </div>';
-                        echo '</div>';
-                    } else if ($Status == "Delivered") {
-                        echo "<div class='bg-blue-600 h-4 w-full rounded-md'>";
-                        echo "</div>";
-                        echo "</div>";
-                        echo "<div class='w-full flex'>";
-                        echo "    <div class='my-5 w-full text-blue-600'>";
-                        echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
-                        echo '    </div>';
-                        echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
-                        echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
-                        echo '    </div>';
-                        echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
-                        echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
-                        echo '    </div>';
-                        echo '   <div class="my-5 w-full text-end text-blue-600">';
-                        echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
-                        echo '   </div>';
-                        echo '</div>';
+                    if ($PaymentMethod == "MobileBanking") {
+                        if ($Status == "Pending") {
+                            echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Paid") {
+                            echo "<div class='bg-blue-600 h-4 w-8/12 rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Delivered") {
+                            echo "<div class='bg-blue-600 h-4 w-full rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end text-blue-600">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        }
+                    } else if ($PaymentMethod == "COD") {
+                        if ($Status == "Pending") {
+                            echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">กำลังจัดสินค้า</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Paid") {
+                            echo "<div class='bg-blue-600 h-4 w-8/12 rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">กำลังจัดสินค้า</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Delivered") {
+                            echo "<div class='bg-blue-600 h-4 w-full rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">กำลังจัดสินค้า</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end text-blue-600">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        }
                     }
+
                     ?>
                     <!-- <div class="bg-blue-600 h-4 w-full rounded-md"> 2 5 8 full -->
                     <!-- This step is completed -->
@@ -222,7 +292,14 @@ use \Firebase\JWT\JWT;
                                 <p class="font-semibold">ช่องทางการชำระเงิน</p>
                             </div>
                             <div>
-                                <p><?php echo "{$PaymentMethod}" ?></p>
+                                <p class="text-md "><?php
+                                                    if ($PaymentMethod == "COD") {
+                                                        $PaymentMethod = "เก็บเงินปลายทาง";
+                                                    } else if ($PaymentMethod == "MobileBanking") {
+                                                        $PaymentMethod = "โอนผ่านบัญชีธนาคาร";
+                                                    }
+                                                    echo "{$PaymentMethod}"
+                                                    ?></p>
                             </div>
                         </div>
                         <div class="w-full">

@@ -1,7 +1,9 @@
 <?php
   require '../../Backend/Authorized/UserAuthorized.php';
   require '../../Backend/Authorized/ManageHeader.php';
+  require_once "../../Backend/ProductQuery/ProductDetail.php";
   include '../../Backend/CartQuery/CartDetail.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +61,9 @@
             $keys = array_keys($_SESSION['cart']);
             $quantity = array_values($_SESSION['cart']);
             for ($i = 0; $i < $count; $i++) {
-              $row = showCartSession($keys[$i])->fetch_assoc();?>
+              $row = showCartSession($keys[$i])->fetch_assoc();
+              $stockOnOrder = sumProductOnOrder($keys[$i]);
+              ?>
               <tr class='bg-white font-normal border-b'>
                 <td class='w-4 p-4'>
                   <div class='flex items-center'>
@@ -84,7 +88,7 @@
                       <input type='number' min='1' max='<?php echo $row['StockQty'];?>' value='<?php echo $quantity[$i]?>' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>
                     <button type='submit' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>
                     </div>
-                  <p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด <?php echo $row['StockQty'];?> เล่ม</p>
+                  <p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด <?php echo $row['StockQty'] - $stockOnOrder;?> เล่ม</p>
                 </td>
                 <td class='text-center'><p class='sum'></p></td>
                 <td class='text-center'><button class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='<?php echo $keys[$i];?>'>ลบ</button></td>
@@ -93,7 +97,9 @@
           } else { /* FOR DB */
               $rows = showCartDB(getID());
               while ($row = $rows->fetch_assoc()) {
-                $id = $row['ProID'];?>
+                $id = $row['ProID'];
+                $stockOnOrder = sumProductOnOrder($id);
+                ?>
                 <tr class='bg-white font-normal border-b'>
                   <td class='w-4 p-4'>
                     <div class='flex items-center'>
@@ -115,10 +121,10 @@
                       <input type='hidden' name='quantityHidden' value=''>
                       <input type='hidden' name='pricePerUnit' value='<?php echo $row['PricePerUnit'];?>'>
                       <button type='submit' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>
-                        <input type='number' min='1' max='<?php echo $row['StockQty'];?>' value='<?php echo $row['Qty'];?>' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>
+                        <input type='number' min='1' max='<?php echo $row['StockQty'] - $stockOnOrder;?>' value='<?php echo $row['Qty'];?>' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>
                       <button type='submit' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>
                     </div>
-                    <p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด <?php echo $row['StockQty'];?> เล่ม</p>
+                    <p class='text-center text-sm font-normal mt-3 text-neutral-600'>มีสินค้าทั้งหมด <?php echo $row['StockQty'] - $stockOnOrder;?> เล่ม</p>
                   </td>
                   <td class='text-center'><p class='sum'></p></td>
                   <td class='text-center'><button type='submit' class='delete bg-amber-400 hover:bg-amber-500 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3' data-proid='<?php echo $row['ProID'];?>'>ลบ</button></td>

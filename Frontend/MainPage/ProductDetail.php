@@ -5,6 +5,8 @@
   /* รับข้อมูล */
   $proID = $_POST['proID'];
   $type = $_POST['typeName'];
+
+  $stockOnOrder = sumProductOnOrder($proID);
 ?>
 
 <!DOCTYPE html>
@@ -68,10 +70,10 @@
             <div class='flex items-center'>
               <p class='text-base font-normal mr-3'>จำนวน: </p>
               <button type='button' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>
-              <input type='number' min='1' max='<?php echo $row['StockQty'];?>' value='1' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>
+              <input type='number' min='1' max='<?php echo $row['StockQty'] - $stockOnOrder;?>' value='1' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>
               <button type='button' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>
             </div>
-            <p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด <?php echo $row['StockQty'];?> เล่ม</p>
+            <p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด <?php echo $row['StockQty'] - $stockOnOrder;?> เล่ม</p>
             <div class='flex'>
               <input type='hidden' name='proID' value='<?php echo $proID;?>'>
               <input type='hidden' name='quantityHidden' value=''>
