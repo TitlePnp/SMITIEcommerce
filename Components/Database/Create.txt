@@ -55,6 +55,7 @@ CREATE TABLE RECEIVER (
     RecvAddress		VARCHAR(80)	NOT NULL,
     RecvProvince    VARCHAR(20) NOT NULL,
     RecvPostcode    VARCHAR(5) NOT NULL,
+    TAG         VARCHAR(255),
     CusID       INT         NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 );
@@ -97,6 +98,7 @@ CREATE TABLE PRODUCT (
 
 -- ตารางเก็บข้อมูลของคำสั่งซื้อ (ยังอยู่ในตะกร้า On-hand) --
 -- มีสถานะดังนี้
+    -- OnHand = เพิ่มสินค้าลงในตะกร้า (จองไว้ก่อน)
     -- Ordered = กดสั่งของแล้ว
     -- Cancel = ลบออกจากตะกร้า/เกินกำหนดเวลา
     -- Completed = จ่ายเงินแล้ว
