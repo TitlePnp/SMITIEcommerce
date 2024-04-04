@@ -4,8 +4,9 @@
   require '../../Components/ConnectDB.php';
   require '../../Backend/Authorized/GetID.php';
   $id = $_POST['id'];
-  $fName = $_POST['first-name'];
-  $lName = $_POST['last-name'];
+  echo $id;
+  $fName = $_POST['firstName'];
+  $lName = $_POST['lastName'];
   $sex = isset($_POST['sex']) ? $_POST['sex'] : "" ;
   $tel = $_POST['phone'];
   $address = "{$_POST['address']} ตำบล/แขวง {$_POST['district']} อำเภอ/เขต {$_POST['subdistrict']}";
@@ -16,5 +17,5 @@
   $stmt->execute();
   $stmt->close();
   $connectDB->close();
-  header("Location: ../../Frontend/Profile/UserProfile.php");
+  // header("Location: ../../Frontend/MainPage/Home.php");
 ?>

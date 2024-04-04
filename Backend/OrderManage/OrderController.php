@@ -4,6 +4,7 @@ require_once "OrderManage.php";
 require_once "../UserManage/UserInfo.php";
 require_once "../../vendor/autoload.php";
 require_once "../../Backend/CartQuery/CartDetail.php";
+require_once "../../Backend/CartQuery/DeleteFromCart.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
 $dotenv->load();
@@ -63,6 +64,7 @@ try {
         $iv = $_ENV['IV'];
         $tag = $_ENV['TAG'];
         $ciphertext = openssl_encrypt($taxID, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
+        $_SESSION['enDec'] = ['key' => $encryptionKey, 'iv' => $iv, 'tag' => $tag, 'ciphertext' => $ciphertext];
 
         if ($ciphertext === false) {
             die('การเข้ารหัสล้มเหลว');
@@ -102,6 +104,7 @@ try {
     $endDate = date("Y-m-d H:i:s", strtotime("+1 day"));
     insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
+    updateOnHand($ProIds);
     echo "Success";
 
     if ($PaymentMethod == "MobileBanking") {

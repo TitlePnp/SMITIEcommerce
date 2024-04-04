@@ -157,6 +157,15 @@ require_once "../../Backend/ProductQuery/ProductInfo.php";
         /*.productImage:hover {
              box-shadow: 0 5px 15px black; 
         }*/
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+
+        input[type="number"] {
+        -moz-appearance: textfield;
+        }
     </style>
 
 <body>
@@ -209,8 +218,8 @@ require_once "../../Backend/ProductQuery/ProductInfo.php";
                         echo "<button id='add-to-cart-button' class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>เพิ่มลงในตะกร้า";
                         echo "<img src='../../Pictures/shopping-cart.png' alt='cart icon' class='w-6 h-6 ml-2'
               style='filter: grayscale(100%) contrast(0);'></button>";
-                        echo "<form action='Payment.php' method='post'>";
-                        echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
+                        echo "<form action='SummaryOrder.php' method='post'>";
+                        echo "<input type='hidden' name='select-proID' value='{$row['ProID']}'>";
                         echo "<input type='hidden' name='quantityHidden' value=''>";
                         echo "<button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3'>ซื้อสินค้า</button>";
                         echo "</form>";

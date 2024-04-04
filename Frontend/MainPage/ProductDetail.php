@@ -78,8 +78,8 @@
               <button id='add-to-cart-button' class='bg-red-500/25 hover:bg-red-500/50 text-red-700 text-base font-normal py-2 px-4 rounded mt-3 border border-red-700 flex items-center'>
                 เพิ่มลงในตะกร้า <img src='../../Pictures/shopping-cart.png' alt='cart icon' class='w-6 h-6 ml-2'
               style='filter: grayscale(100%) contrast(0);'></button>
-              <form action='Payment.php' method='post'>
-                <input type='hidden' name='proID' value='<?php echo $proID;?>'>
+              <form action='SummaryOrder.php' method='post'>
+                <input type='hidden' name='select-proID' value='<?php echo $proID;?>'>
                 <input type='hidden' name='quantityHidden' value=''>
                 <button class='bg-red-500 hover:bg-red-600 text-white text-base font-normal py-2 px-4 rounded mt-3 ml-3'>ซื้อสินค้า</button>
               </form>
@@ -115,7 +115,7 @@
               </div>
               <div class='mt-4 flex justify-between'>
                 <h3 class='text-sm text-gray-700'>
-                  <span aria-hidden='true' class='absolute inset-0'></span><?echo $proName;?>
+                  <span aria-hidden='true' class='absolute inset-0'></span><?php echo $proName;?>
                 </h3>
                 <p class='text-sm font-medium text-gray-900'><?php echo $row['PricePerUnit'];?></p>
               </div>

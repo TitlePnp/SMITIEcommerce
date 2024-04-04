@@ -25,7 +25,6 @@ if (isset($_SESSION["tokenJWT"])) {
     $CusID = $userInfo['CusID'];
     $isMember = true;
 }
-
 $proIds = explode(',', $_POST['select-proID']);
 $proIds = array_filter($proIds);
 

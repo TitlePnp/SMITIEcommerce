@@ -1,6 +1,7 @@
 <?php
 require "../../Components/connectDB.php";
 require '../../vendor/autoload.php';
+require '../../Backend/Profile/GetInfo.php';
 require_once "../Log/LogManage.php";
 
 date_default_timezone_set('Asia/Bangkok');
@@ -10,7 +11,6 @@ $dotenv->load();
 
 use Firebase\JWT\Key;
 use \Firebase\JWT\jwt;
-
 
 $username = $_POST['username'];
 $password = $_POST['userpassword'];
@@ -40,9 +40,18 @@ if ($result->num_rows > 0) {
         $jwt = JWT::encode($payload, $key, 'HS256');
 
         $_SESSION['tokenJWT'] = $jwt;
-        insertLog("Login with JWT", date("Y-m-d H:i:s"));;
-        header('Location: ../../Frontend/MainPage/Home.php');
-        exit();
+        $noData = getInfo($CusID);
+        while ($row = $noData->fetch_assoc()) {
+            if ($row['CusFName'] == null) {
+                insertLog("Login with JWT", date("Y-m-d H:i:s"));;
+                header('Location: ../../Frontend/Profile/Information.php');
+                exit();
+            } else {
+                insertLog("Login with JWT", date("Y-m-d H:i:s"));;
+                header('Location: ../../Frontend/MainPage/Home.php'); 
+                exit(); 
+            }
+        }
     } else {
         // var_dump("Wrong password");
         header('Location: ../../Frontend/SignIn_Page/SignIn.php');
