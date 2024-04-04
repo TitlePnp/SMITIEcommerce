@@ -5,6 +5,7 @@ require_once "../UserManage/UserInfo.php";
 require_once "../../vendor/autoload.php";
 
 require_once "../../Backend/CartQuery/CartDetail.php";
+require_once "../../Backend/CartQuery/DeleteFromCart.php";
 
 use Firebase\JWT\Key;
 use \Firebase\JWT\jwt;
@@ -61,6 +62,7 @@ try {
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
         $tag = 'SDFhiohsfihafsjizzsdf';
         $ciphertext = openssl_encrypt($taxID, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
+        $_SESSION['enDec'] = ['key' => $encryptionKey, 'iv' => $iv, 'tag' => $tag, 'ciphertext' => $ciphertext];
 
         if ($ciphertext === false) {
             die('การเข้ารหัสล้มเหลว');
@@ -100,6 +102,7 @@ try {
     $endDate = date("Y-m-d H:i:s", strtotime("+1 day"));
     insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
+    updateOnHand($ProIds);
     echo "Success";
     
     if ($PaymentMethod == "MobileBanking") {

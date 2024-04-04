@@ -5,6 +5,7 @@ clearSession();
 session_start();
 require '../../Components/ConnectDB.php';
 require 'Google_OAuth.php';
+require '../../Backend/Profile/GetInfo.php';
 
 
 
@@ -36,7 +37,17 @@ if (isset($_GET['code'])) {
         $_SESSION['email'] = $email;
         $_SESSION['name'] = $name;
         $_SESSION['tokenGoogle'] = $userId;
-        header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
+        $noData = getInfo($CusID);
+        while ($row = $noData->fetch_assoc()) {
+            if ($row['CusFName'] == null) {
+                header('Location: http://localhost/SmitiShop/Frontend/Profile/Information.php');
+                exit();
+            } else {
+                header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
+                exit();
+            }
+        }
+        // header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
         // print_r($_SESSION);
     } else {
         $stmt = $connectDB->prepare("INSERT INTO customer(CusID, CusFName, CusLName, Sex, Tel, Address) VALUES 

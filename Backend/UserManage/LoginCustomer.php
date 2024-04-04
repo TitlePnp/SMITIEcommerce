@@ -1,6 +1,7 @@
 <?php
 require "../../Components/connectDB.php";
 require '../../vendor/autoload.php';
+require '../../Backend/Profile/GetInfo.php';
 
 use Firebase\JWT\JWT;
 
@@ -32,8 +33,16 @@ if ($result->num_rows > 0) {
         $jwt = JWT::encode($payload, $key, 'HS256');
 
         $_SESSION['tokenJWT'] = $jwt;
-        header('Location: ../../Frontend/MainPage/Home.php'); 
-        exit(); 
+        $noData = getInfo($CusID);
+        while ($row = $noData->fetch_assoc()) {
+            if ($row['CusFName'] == null) {
+                header('Location: ../../Frontend/Profile/Information.php');
+                exit();
+            } else {
+                header('Location: ../../Frontend/MainPage/Home.php'); 
+                exit(); 
+            }
+        }
     } else {
         // var_dump("Wrong password");
         header('Location: ../../Frontend/SignIn_Page/SignIn.php');
