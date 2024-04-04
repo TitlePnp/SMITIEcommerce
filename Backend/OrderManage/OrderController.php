@@ -4,7 +4,7 @@ require_once "OrderManage.php";
 require_once "../UserManage/UserInfo.php";
 require_once "../../vendor/autoload.php";
 require_once "../../Backend/CartQuery/CartDetail.php";
-require_once "../../Backend/CartQuery/DeleteFromCart.php";
+require_once "../../Backend/CartQuery/ClearCart.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
 $dotenv->load();
