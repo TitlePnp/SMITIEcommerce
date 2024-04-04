@@ -37,6 +37,8 @@ if (isset($_GET['code'])) {
         $_SESSION['email'] = $email;
         $_SESSION['name'] = $name;
         $_SESSION['tokenGoogle'] = $userId;
+        $row = $result->fetch_assoc();
+        $CusID = $row['CusID'];
         $noData = getInfo($CusID);
         while ($row = $noData->fetch_assoc()) {
             if ($row['CusFName'] == null) {

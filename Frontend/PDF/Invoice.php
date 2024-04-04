@@ -5,7 +5,6 @@
   $dotenv->load();
   $encryptionKey = $_ENV['ENCRYPT_KEY'];
   $iv = $_ENV['IV'];
-  $tag = $_ENV['TAG'];
   
   use Farzai\PromptPay\Generator;
   $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
@@ -177,7 +176,7 @@
       <tr class="information">
         <td colspan="5">
           <table>
-            <tr>              <td>
+            <tr>              
               <?php
                 $payer = PayerDetail($invoiceID);
                 while($row = $payer->fetch_assoc()) { 
@@ -188,10 +187,12 @@
                   $subdistrict = trim(substr($address, $indexSubdist));
                   $address = trim(substr($address, 0, $indexDist));
                   if ($row['PayerTaxID'] != null) {
+                    $tag = $row['TAG'];
+                    $tag = hex2bin($tag);
                     $taxID = openssl_decrypt($row['PayerTaxID'], 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
                   }
               ?>
-
+                <td>
                 <p class="company">ลูกค้า</p>
                 <p class="address"><?php echo $row['PayerFName'] . $row['PayerLName']?></p>
                 <p class="address"><?php echo $address . " " . $district?></p>

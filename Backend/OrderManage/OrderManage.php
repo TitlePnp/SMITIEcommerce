@@ -71,12 +71,11 @@ function getLastPayerID($CusID)
     return $PayerID;
 }
 
-function insertPayer($payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID)
+function insertPayer($payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID, $PayerTag)
 {
     global $connectDB;
-    $stmt = $connectDB->prepare("INSERT INTO payer(PayerTaxID, PayerFName, PayerLName, PayerSex, PayerTel, PayerAddress, PayerProvince, PayerPostcode, CusID) VALUES (?,?,?,?,?,?,?,?,?);");
-    $stmt->bind_param("ssssssssi", $payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID);
-    $stmt->execute();
+    $stmt = $connectDB->prepare("INSERT INTO payer(PayerTaxID, PayerFName, PayerLName, PayerSex, PayerTel, PayerAddress, PayerProvince, PayerPostcode, CusID, TAG) VALUES (?,?,?,?,?,?,?,?,?,?);");
+    $stmt->bind_param("ssssssssis", $payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID, $PayerTag);    $stmt->execute();
     $stmt->close();
 }
 

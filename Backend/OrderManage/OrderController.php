@@ -62,8 +62,10 @@ try {
         $taxID = $_POST['taxID'];
         $encryptionKey = $_ENV['ENCRYPT_KEY'];
         $iv = $_ENV['IV'];
-        $tag = $_ENV['TAG'];
+        // $tag = $_ENV['TAG'];
+        $tag = "";
         $ciphertext = openssl_encrypt($taxID, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
+        $tag = bin2hex($tag);
         $_SESSION['enDec'] = ['key' => $encryptionKey, 'iv' => $iv, 'tag' => $tag, 'ciphertext' => $ciphertext];
 
         if ($ciphertext === false) {
@@ -72,7 +74,7 @@ try {
         $havePayer = getPayer($ciphertext, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
 
         if ($havePayer == null) {
-            insertPayer($ciphertext, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+            insertPayer($ciphertext, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID, $tag);
             $lastPayerId = getLastPayerID($CusID);
             insertPayerList($lastPayerId, $CusID);
         }
@@ -81,7 +83,7 @@ try {
         $havePayer = getPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
         $taxID = "";
         if ($havePayer == null) {
-            insertPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
+            insertPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID, $tag);
             $lastPayerId = getLastPayerID($CusID);
             insertPayerList($lastPayerId, $CusID);
         }

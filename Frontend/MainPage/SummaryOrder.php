@@ -28,6 +28,8 @@ if (isset($_SESSION["tokenJWT"])) {
 $proIds = explode(',', $_POST['select-proID']);
 $proIds = array_filter($proIds);
 
+// var_dump($_POST['quantityHidden'])
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -418,7 +420,12 @@ $proIds = array_filter($proIds);
                         if ($isMember) {
                             foreach ($proIds as $proId) {
                                 $row = showCartSession($proId)->fetch_assoc();
-                                $qty = getQtyFromCart($CusID, $proId)->fetch_assoc();
+                                if (isset($quantityHidden)) {
+                                    $qty['Qty'] = $quantityHidden;
+                                } else {
+                                    $qty = getQtyFromCart($CusID, $proId)->fetch_assoc();
+                                }
+                                // $qty = getQtyFromCart($CusID, $proId)->fetch_assoc();
                                 $totalPrice += $row['PricePerUnit'] * $qty['Qty'];
                                 echo "<div class='flex flex-row mb-5 w-full h-34'>";
                                 echo "<div class=''>";

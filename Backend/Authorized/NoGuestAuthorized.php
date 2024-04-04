@@ -1,6 +1,7 @@
 <?php
 session_start();
-require '../../Backend/Authorized/GoogleIdRole.php';
+require 'GoogleIdRole.php';
+require_once '../../Backend/UserManage/UserInfo.php';
 require '../../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
 $dotenv->load();
@@ -44,7 +45,8 @@ function getUserName()
     $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
     $user = $decoded->user;
   } elseif (isset($_SESSION['tokenGoogle'])) {
-    $user = getGoogleUserInfo($_SESSION['name']);
+    $result = getGoogleUserInfo($_SESSION['tokenGoogle']);
+    $user = $result['UserName'];
   }
   return $user;
 }

@@ -141,14 +141,14 @@ use \Firebase\JWT\JWT;
                 <div class="flex bg-gray-300 h-4 mt-5 rounded-md">
                     <?php
                     if ($Status == "Pending") {
-                        echo "<div class='bg-blue-600 h-4 w-2/12 rounded-md'>";
+                        echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
                         echo "</div>";
                         echo "</div>";
                         echo "<div class='w-full flex'>";
                         echo "    <div class='my-5 w-full text-blue-600'>";
                         echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
                         echo '    </div>';
-                        echo '    <div class="my-5 w-full mx-2 text-center">';
+                        echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
                         echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
                         echo '    </div>';
                         echo '  <div class="my-5 w-full mx-2 text-center">';

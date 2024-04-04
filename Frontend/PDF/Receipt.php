@@ -189,11 +189,13 @@
                   $subdistrict = trim(substr($address, $indexSubdist));
                   $address = trim(substr($address, 0, $indexDist));
                   if ($row['PayerTaxID'] != null) {
+                    $tag = $row['TAG'];
+                    $tag = hex2bin($tag);
                     $taxID = openssl_decrypt($row['PayerTaxID'], 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
                     echo "<p class='address'>เลขประจำตัวผู้เสียภาษี: {$taxID}</p>";
                   }
               ?>
-
+                </td>
                 <p class="company">ลูกค้า</p>
                 <p class="address"><?php echo $row['PayerFName'] . $row['PayerLName']?></p>
                 <p class="address"><?php echo $address . " " . $district?></p>

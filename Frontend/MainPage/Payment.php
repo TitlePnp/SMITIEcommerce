@@ -46,8 +46,8 @@ use \Firebase\JWT\JWT;
             <div class="flex justify-between items-center">
                 <p>เลขคำสั่งซื้อ: <?php echo $_SESSION['InvoiceID'] ?></p>
                 <form action="../../Frontend/PDF/Invoice.php" method="POST">
-                  <input type="hidden" name="InvoiceID" value="<?php echo $_SESSION['InvoiceID'] ?>">
-                  <button type="submit" class="block rounded-md border bg-red-500 px-4 py-2 text-white outline-none hover:shadow-md"><i class='bx bxs-file-pdf mr-2' style='color:#ffffff' ></i>ใบแจ้งหนี้</button>
+                    <input type="hidden" name="InvoiceID" value="<?php echo $_SESSION['InvoiceID'] ?>">
+                    <button type="submit" class="block rounded-md border bg-red-500 px-4 py-2 text-white outline-none hover:shadow-md"><i class='bx bxs-file-pdf mr-2' style='color:#ffffff'></i>ใบแจ้งหนี้</button>
                 </form>
             </div>
             <div class="flex flex-row mt-5 mx-auto">
@@ -118,7 +118,10 @@ use \Firebase\JWT\JWT;
                         </div>
                     </div>
                     <div class="flex justify-between w-full">
-                        <button class="ml-5 block rounded-md border my-5 bg-blue-500 px-6 py-2 text-white outline-none hover:shadow-md">แจ้งการชำระเงิน</button>
+                        <form method="POST" action="../UploadPage/Upload.php">
+                            <button type="submit" class="ml-5 block rounded-md border my-5 bg-blue-500 px-6 py-2 text-white outline-none hover:shadow-md">แจ้งการชำระเงิน</button>
+                            <input type="hidden" name="invoiceID" value="<?php echo "{$_SESSION['InvoiceID']}" ?>">
+                        </form>
                     </div>
                     <div class="mt-5">
                         <p class="font-laonoto text-sm text-gray-600">*หมายเหตุ: หากไม่ชำระภายในเวลาที่กำหนด ระบบจะยกเลิกการสั่งซื้อโดยอัตโนมัติ</p>
