@@ -5,8 +5,14 @@ require_once "../../Backend/CartQuery/CartDetail.php";
 require_once "../../Backend/UserManage/UserInfo.php";
 require '../../vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+$dotenv->load();
+
 use Firebase\JWT\Key;
-use \Firebase\JWT\JWT;
+use \Firebase\JWT\jwt;
+
+$key = $_ENV['JWT_KEY'];
+
 
 $isMember = false;
 if (isset($_SESSION["tokenJWT"])) {

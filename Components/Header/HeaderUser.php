@@ -82,7 +82,7 @@
         <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-1 shadow-lg
                   ring-1 ring-black ring-opacity-5 focus:outline-none text-sm hidden" role="menu"
                   aria-orientation="vertical" aria-labelledby="user-button" tabindex="-1" id="user-menu">
-          <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-0">บัญชีผู้ใช้งาน</a>
+          <a href="../../Frontend/Profile/UserProfile.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-0">บัญชีผู้ใช้งาน</a>
           <a href="../../Backend/UserManage/Signout.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-1">ออกจากระบบ</a>
         </div>
       </div>

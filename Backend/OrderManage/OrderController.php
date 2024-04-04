@@ -3,14 +3,16 @@ session_start();
 require_once "OrderManage.php";
 require_once "../UserManage/UserInfo.php";
 require_once "../../vendor/autoload.php";
-
 require_once "../../Backend/CartQuery/CartDetail.php";
 require_once "../../Backend/CartQuery/DeleteFromCart.php";
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+$dotenv->load();
 
 use Firebase\JWT\Key;
 use \Firebase\JWT\jwt;
 
-$key = "SECRETKEY_SMITIECOM_CLIENT";
+$key = $_ENV['JWT_KEY'];
 
 
 date_default_timezone_set('Asia/Bangkok');
@@ -58,9 +60,9 @@ try {
     if ($_POST['taxInvoice'] == 'Yes') {
 
         $taxID = $_POST['taxID'];
-        $encryptionKey = openssl_random_pseudo_bytes(32);
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
-        $tag = 'SDFhiohsfihafsjizzsdf';
+        $encryptionKey = $_ENV['ENCRYPT_KEY'];
+        $iv = $_ENV['IV'];
+        $tag = $_ENV['TAG'];
         $ciphertext = openssl_encrypt($taxID, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
         $_SESSION['enDec'] = ['key' => $encryptionKey, 'iv' => $iv, 'tag' => $tag, 'ciphertext' => $ciphertext];
 
@@ -104,7 +106,7 @@ try {
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
     updateOnHand($ProIds);
     echo "Success";
-    
+
     if ($PaymentMethod == "MobileBanking") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
         header("Location: ../../Frontend/MainPage/Payment.php");

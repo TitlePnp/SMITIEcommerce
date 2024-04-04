@@ -5,10 +5,13 @@ require_once "../../Components/ConnectDB.php";
 require_once "../../vendor/autoload.php";
 require_once "../../Backend/CartQuery/CartDetail.php";
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+$dotenv->load();
+
 use Firebase\JWT\Key;
 use \Firebase\JWT\jwt;
 
-$key = "SECRETKEY_SMITIECOM_CLIENT";
+$key = $_ENV['JWT_KEY'];
 
 date_default_timezone_set('Asia/Bangkok');
 

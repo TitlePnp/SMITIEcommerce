@@ -4,8 +4,6 @@ require '../../Backend/Authorized/ManageHeader.php';
 require '../../vendor/autoload.php';
 require_once "../../Backend/ProductQuery/ProductInfo.php";
 
-use Firebase\JWT\Key;
-use \Firebase\JWT\JWT;
 ?>
 
 <!DOCTYPE html>
