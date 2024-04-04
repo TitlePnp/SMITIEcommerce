@@ -23,15 +23,10 @@
       $payerID = getTaxID($invoiceID);
       $channel = 'Transfer';
       $date = date('Y-m-d H:i:s');
-      if ($payerID === NULL) {
-        $stmt = $connectDB->prepare("INSERT INTO RECEIPT (RecID, PayTime, CusID, InvoiceID, Payment, Channel) 
-                                    VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssisss", $recID, $date, $id, $invoiceID, $imgContent, $channel);
-      } else {
-        $stmt = $connectDB->prepare("INSERT INTO RECEIPT (RecID, PayTime, CusID, PayerID, InvoiceID, Payment, Channel) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssissss", $recID, $date, $id, $payerID, $invoiceID, $imgContent, $channel);
-      }
+      $stmt = $connectDB->prepare("INSERT INTO RECEIPT (RecID, PayTime, CusID, PayerID, InvoiceID, TotalPrice, Vat, Payment, Channel) 
+                                    SELECT ?, ?, ?, ?, ?, i.TotalPrice, i.Vat, ?, ? FROM INVOICE_ORDER i 
+                                    WHERE i.InvoiceID = ?");
+      $stmt->bind_param("ssisssss", $recID, $date, $id, $payerID, $invoiceID, $imgContent, $channel, $invoiceID);
       $stmt->execute();
       insertReceiptList($invoiceID, $recID);
       $_SESSION['success'] = "อัปโหลดรูปภาพการชำระเงินสำเร็จ รอการตรวจสอบจากทางร้าน";

@@ -62,6 +62,7 @@ try {
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
         $tag = 'SDFhiohsfihafsjizzsdf';
         $ciphertext = openssl_encrypt($taxID, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
+        $_SESSION['enDec'] = ['key' => $encryptionKey, 'iv' => $iv, 'tag' => $tag, 'ciphertext' => $ciphertext];
 
         if ($ciphertext === false) {
             die('การเข้ารหัสล้มเหลว');
@@ -105,10 +106,10 @@ try {
     echo "Success";
     if ($PaymentMethod == "MobileBanking") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
-        // header("Location: ../../Frontend/MainPage/Payment.php");
+        header("Location: ../../Frontend/MainPage/Payment.php");
     } else if ($PaymentMethod == "COD") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
-        // header("Location: ../../Frontend/MainPage/ThankOrder.php");
+        header("Location: ../../Frontend/MainPage/ThankOrder.php");
     }
 } catch (Exception $e) {
     echo $e;

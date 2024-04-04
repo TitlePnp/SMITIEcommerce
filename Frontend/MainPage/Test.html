@@ -6,21 +6,9 @@
   <title>Document</title>
 </head>
 <body>
-  <input type="checkbox" name="check" id="checkBox">
-  <input type="text" id="int">
-  <input type="text" id="rev">
-  <script>
-    const checkBox = document.getElementById('checkBox');
-    const p = document.getElementById('rev');
-    const int = document.getElementById('int');
-    checkBox.addEventListener('change', () => {
-      if (checkBox.checked) {
-        // p.style.display = 'none';
-        p.value = int.value;
-      } else {
-        p.style.display = 'block';
-      }
-    });
-  </script>
+  <form action="../PDF/Receipt.php" method="POST">
+    <input type="text" name="ReceiptID" placeholder="invoice">
+    <button type="submit">Submit</button>
+  </form>
 </body>
 </html>

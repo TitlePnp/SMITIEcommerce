@@ -41,7 +41,10 @@ use \Firebase\JWT\JWT;
             </div>
             <div class="flex justify-between items-center">
                 <p>เลขคำสั่งซื้อ: <?php echo $_SESSION['InvoiceID'] ?></p>
-                <button class="block rounded-md border bg-red-500 px-4 py-2 text-white outline-none hover:shadow-md"><i class='bx bxs-file-pdf mr-2' style='color:#ffffff' ></i>ใบแจ้งหนี้</button>
+                <form action="../../Frontend/PDF/Invoice.php" method="POST">
+                  <input type="hidden" name="InvoiceID" value="<?php echo $_SESSION['InvoiceID'] ?>">
+                  <button type="submit" class="block rounded-md border bg-red-500 px-4 py-2 text-white outline-none hover:shadow-md"><i class='bx bxs-file-pdf mr-2' style='color:#ffffff' ></i>ใบแจ้งหนี้</button>
+                </form>
             </div>
             <div class="flex flex-row mt-5 mx-auto">
                 <!-- QR Code Number Account & Uploadfile -->
