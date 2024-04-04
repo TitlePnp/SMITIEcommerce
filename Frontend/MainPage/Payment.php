@@ -3,6 +3,7 @@ require_once "../../Backend/Authorized/UserAuthorized.php";
 require_once "../../Backend/Authorized/ManageHeader.php";
 require_once "../../Backend/CartQuery/CartDetail.php";
 require_once "../../Backend/UserManage/UserInfo.php";
+require_once "../../Backend/OrderManage/GetOrderInfo.php";
 require '../../vendor/autoload.php';
 
 use Farzai\PromptPay\Generator;
@@ -34,6 +35,9 @@ use \Firebase\JWT\JWT;
 </head>
 
 <body class="">
+    <?php
+    $invoiceDetail = getInvoiceInfo($_SESSION['InvoiceID']);
+    ?>
     <section class="h-full text-gray-600 mb-10">
         <div class="mx-auto flex flex-col max-w-3xl flex-wrap justify-center rounded-lg bg-white px-16 py-10 shadow-lg">
             <div class="flex">
@@ -51,7 +55,7 @@ use \Firebase\JWT\JWT;
                         $generator = new Generator();
                         $qrCode = $generator->generate(
                             target: "098-888-8888",
-                            amount: 100
+                            amount: $invoiceDetail['TotalPrice'] + $invoiceDetail['Vat']
                         );
                         ?>
                         <img class="mx-auto h-32 w-52 md:mt-0" src="../../Pictures/PromptPay.png" alt="">

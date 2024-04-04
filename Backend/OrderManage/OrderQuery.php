@@ -42,7 +42,8 @@ function showOrderSplitPage($CusID, $offset, $limit)
 {
     global $connectDB;
     $stmt = $connectDB->prepare(
-        "SELECT * FROM invoice_order WHERE CusID = ? ORDER BY FIELD(Status, 'Ordered') DESC, CAST(SUBSTRING(InvoiceID, 3) AS UNSIGNED) LIMIT ?, ?");
+        "SELECT * FROM invoice_order WHERE CusID = ? ORDER BY FIELD(Status, 'Ordered') DESC, CAST(SUBSTRING(InvoiceID, 3) AS UNSIGNED) LIMIT ?, ?"
+    );
     $stmt->bind_param("ssi", $CusID, $offset, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -50,7 +51,8 @@ function showOrderSplitPage($CusID, $offset, $limit)
     return $result;
 }
 
-function getAddressAndPriceOrder($orderID) {
+function getAddressAndPriceOrder($orderID)
+{
     global $connectDB;
     $stmt = $connectDB->prepare("SELECT p.PayerAddress, p.PayerProvince, p.PayerPostcode, r.RecvAddress, r.RecvProvince, r.RecvPostcode, iv.totalPrice, iv.channel, iv.vat FROM invoice_order iv JOIN payer p ON iv.PayerID = p.PayerID JOIN receiver r ON iv.RecvID = r.RecvID WHERE iv.InvoiceID = ?");
     $stmt->bind_param("s", $orderID);
@@ -60,12 +62,17 @@ function getAddressAndPriceOrder($orderID) {
     return $result;
 }
 
-function getReceiptStatus($invoiceID) {
+function getReceiptStatus($invoiceID)
+{
     global $connectDB;
     $stmt = $connectDB->prepare("SELECT Status FROM receipt WHERE InvoiceID = ?");
     $stmt->bind_param("s", $invoiceID);
     $stmt->execute();
     $result = $stmt->get_result();
     $result = $result->fetch_assoc();
-    return $result['Status'];
+    if ($result === null || !isset($result['Status']) || $result['Status'] === null) {
+        return 'Pending';
+    } else {
+        return $result['Status'];
+    }
 }

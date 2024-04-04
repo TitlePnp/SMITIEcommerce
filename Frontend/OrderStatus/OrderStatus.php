@@ -39,10 +39,7 @@ use \Firebase\JWT\JWT;
     $orderID = $_POST['invoiceID'];
     $orderListResult = getOrderListDetail($orderID);
     $Status = getReceiptStatus($orderID);
-    // $Status = $Status->fetch_assoc();
-    if ($Status == NULL) {
-        $Status['Status'] = "Pending";
-    }
+
 
     ?>
     <div class="px-28 py-8">
@@ -51,7 +48,7 @@ use \Firebase\JWT\JWT;
             <p class="font-bold text-2xl ">คำสั่งซื้อ #<?php echo "{$orderID}" ?> </p>
             <div>
                 <?php
-                if ($Status['Status'] == "Paid" || $Status['Status'] == "Delivered" || $Status['Status'] == "Complete") {
+                if ($Status == "Paid" || $Status == "Delivered" || $Status == "Complete") {
                     echo '<a class="mr-2" href=""><button class="py-2 bg-green-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-green-700">ใบเสร็จ</button></a>';
                 }
                 else {
@@ -71,8 +68,8 @@ use \Firebase\JWT\JWT;
             echo "<div class='flex flex-col rounded-lg h-full my-5 bg-white'>";
 
             echo "<div class='flex p-5'>";
-            echo "   <div class='flex justify-center w-2/12'>";
-            echo "        <img src='{$ProductInfo['ImageSource']}'class='w-32 h-40 object-cover rounded-md'>";
+            echo "   <div class='flex justify-center w-2/12 items-center'>";
+            echo "        <img src='{$ProductInfo['ImageSource']}'class='w-32 h-42 object-cover rounded-md'>";
             echo "   </div>";
             echo "   <div class='w-6/12'>";
             echo "      <p class='font-bold text-xl'>{$ProductInfo['ProName']}</p>";
@@ -143,7 +140,7 @@ use \Firebase\JWT\JWT;
                 </div>
                 <div class="flex bg-gray-300 h-4 mt-5 rounded-md">
                     <?php
-                    if ($Status['Status'] == "Pending") {
+                    if ($Status == "Pending") {
                         echo "<div class='bg-blue-600 h-4 w-2/12 rounded-md'>";
                         echo "</div>";
                         echo "</div>";
@@ -161,7 +158,7 @@ use \Firebase\JWT\JWT;
                         echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
                         echo '   </div>';
                         echo '</div>';
-                    } else if ($Status['Status'] == "Paid") {
+                    } else if ($Status == "Paid") {
                         echo "<div class='bg-blue-600 h-4 w-8/12 rounded-md'>";
                         echo "</div>";
                         echo "</div>";
@@ -179,7 +176,7 @@ use \Firebase\JWT\JWT;
                         echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
                         echo '   </div>';
                         echo '</div>';
-                    } else if ($Status['Status'] == "Delivered") {
+                    } else if ($Status == "Delivered") {
                         echo "<div class='bg-blue-600 h-4 w-full rounded-md'>";
                         echo "</div>";
                         echo "</div>";
@@ -241,8 +238,8 @@ use \Firebase\JWT\JWT;
                                 <p><?php echo "{$vatFormat} บาท" ?></p>
                             </div>
                             <div class="flex justify-between  my-2">
-                                <p>รวมทั้งสิ้น</p>
-                                <p><?php echo "{$InvoiceTotalPriceFormat} บาท" ?></p>
+                                <p class="font-bold">รวมทั้งสิ้น</p>
+                                <p class="font-bold"><?php echo "{$InvoiceTotalPriceFormat} บาท" ?></p>
                             </div>
                         </div>
                     </div>

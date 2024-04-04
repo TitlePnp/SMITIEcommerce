@@ -1,15 +1,26 @@
 <?php
+
+require_once "../vendor/autoload.php";
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../Components', 'config.env');
+$dotenv->load();
+
+use Firebase\JWT\Key;
+use \Firebase\JWT\jwt;
+
+$key = $_ENV['JWT_KEY'];
+
 // ข้อมูลที่ต้องการเข้ารหัส
-$data = "123564844646";
+$data = "TestTaxID123456";
 
 // สร้างคีย์สำหรับการเข้ารหัส (ตัวอย่างใช้ขนาด 256 บิต)
-$encryptionKey = openssl_random_pseudo_bytes(32);
+$encryptionKey = $_ENV['ENCRYPT_KEY'];
 
 // สร้าง IV (Initialization Vector)
-$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
+$iv = $_ENV['IV'];
 
 // สร้างแท็กสำหรับการตรวจสอบความถูกต้องของข้อมูล
-$tag = 'SDFhiohsfihafsjizzsdf';
+$tag = $_ENV['TAG'];
 
 // เข้ารหัสข้อมูล
 $ciphertext = openssl_encrypt($data, 'aes-256-gcm', $encryptionKey, $options = 0, $iv, $tag);
@@ -19,10 +30,15 @@ if ($ciphertext === false) {
     die('การเข้ารหัสล้มเหลว');
 }
 
+// echo "ข้อมูลที่เข้ารหัส: " . $ciphertext . "<br>";
+// echo "IV: " . bin2hex($iv) . "<br>";
+// echo "แท็ก: " . bin2hex($tag) . "<br>";
+// echo "คีย์: " . bin2hex($encryptionKey) . "<br>";
+
 echo "ข้อมูลที่เข้ารหัส: " . $ciphertext . "<br>";
-echo "IV: " . bin2hex($iv) . "<br>";
-echo "แท็ก: " . bin2hex($tag) . "<br>";
-echo "คีย์: " . bin2hex($encryptionKey) . "<br>";
+echo "IV: " . $iv . "<br>";
+echo "แท็ก: " . $tag . "<br>";
+echo "คีย์: " . $encryptionKey . "<br>";
 
 // คีย์สำหรับการถอดรหัส (ต้องตรงกับที่ใช้เข้ารหัส)
 $decryptionKey = $encryptionKey;
@@ -36,6 +52,12 @@ if ($originalData === false) {
 }
 
 echo "ข้อมูลต้นฉบับ: " . $originalData . "\n";
+
+$a = "5IlIYfhNWR/clr2kbxfl";
+$b = "5IlIYfhNWR/clr2kbxfl";
+// if () {
+
+// }
 
 // <?php
 // require_once "../../vendor/autoload.php";
