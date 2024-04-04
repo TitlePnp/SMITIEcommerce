@@ -112,7 +112,7 @@ try {
         header("Location: ../../Frontend/MainPage/Payment.php");
     } else if ($PaymentMethod == "COD") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
-        header("Location: ../../Frontend/MainPage/ThankOrder.php");
+        header("Location: ../../Frontend/OrderStatus/OrderStatus.php");
     }
 } catch (Exception $e) {
     echo $e;

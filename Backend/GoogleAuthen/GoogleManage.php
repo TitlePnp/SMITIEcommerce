@@ -40,9 +40,13 @@ if (isset($_GET['code'])) {
         $noData = getInfo($CusID);
         while ($row = $noData->fetch_assoc()) {
             if ($row['CusFName'] == null) {
+                require_once "../Log/LogManage.php";
+                insertLog("Login with Google", date("Y-m-d H:i:s"));
                 header('Location: http://localhost/SmitiShop/Frontend/Profile/Information.php');
                 exit();
             } else {
+                require_once "../Log/LogManage.php";
+                insertLog("Login with Google", date("Y-m-d H:i:s"));
                 header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
                 exit();
             }
