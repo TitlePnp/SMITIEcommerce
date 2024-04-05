@@ -12,8 +12,6 @@ $key = $_ENV['JWT_KEY'];
 use Firebase\JWT\Key;
 use \Firebase\JWT\JWT;
 
-// var_dump($_SESSION["tokenGoogle"]);
-
 if (isset($_SESSION["tokenJWT"])) {
     $jwt = $_SESSION["tokenJWT"];
     $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
@@ -25,15 +23,19 @@ if (isset($_SESSION["tokenJWT"])) {
     $CusID = $userInfo['CusID'];
 }
 
-
+$userIP = get_client_ip();
 
 function insertLog($Action, $Period)
 {
     global $connectDB;
     global $CusID;
+    $userIP = get_client_ip();
+    if ($userIP == "::1") {
+        $userIP = "127.0.0.1";
+    }
     $NumID = findNumIDLog($CusID);
-    $stmt = $connectDB->prepare("INSERT INTO access_log(CusID, NumID, Action, Period) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("iiss", $CusID, $NumID, $Action, $Period);
+    $stmt = $connectDB->prepare("INSERT INTO access_log(CusID, IPAddr, NumID, Action, Period) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("isiss", $CusID, $userIP, $NumID, $Action, $Period);
     $stmt->execute();
     $stmt->close();
 }
@@ -53,4 +55,23 @@ function findNumIDLog($CusID)
     } else {
         return 1;
     }
+}
+
+function get_client_ip() {
+    $ipaddress = '';
+    if (isset($_SERVER['HTTP_CLIENT_IP']))
+        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+    else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+        $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    else if(isset($_SERVER['HTTP_X_FORWARDED']))
+        $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+    else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+        $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+    else if(isset($_SERVER['HTTP_FORWARDED']))
+        $ipaddress = $_SERVER['HTTP_FORWARDED'];
+    else if(isset($_SERVER['REMOTE_ADDR']))
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
+    else
+        $ipaddress = 'UNKNOWN';
+    return $ipaddress;
 }

@@ -36,17 +36,34 @@ use \Firebase\JWT\JWT;
 
 <body class="">
     <?php
-    $invoiceDetail = getInvoiceInfo($_SESSION['InvoiceID']);
+    if (isset($_POST['InvoiceID'])) {
+        $inoviceID = $_POST['InvoiceID'];
+        $invoiceDetail = getInvoiceInfo($inoviceID);
+    } else {
+        $inoviceID = $_SESSION['InvoiceID'];
+        $invoiceDetail = getInvoiceInfo($_SESSION['InvoiceID']);
+    }
     ?>
+
     <section class="h-full text-gray-600 mb-10">
         <div class="mx-auto flex flex-col max-w-3xl flex-wrap justify-center rounded-lg bg-white px-16 py-10 shadow-lg">
+            <div class="my-2">
+                <?php 
+                if (isset($_SESSION["tokenJWT"]) || isset($_SESSION["tokenGoogle"])) {
+                    echo '<a href="../Profile/UserProfile.php" class="hover:text-blue-800 text-blue-500 font-md"><i class="bx bx-arrow-back mr-2"></i>ย้อนกลับ</a>';
+                }
+                else {
+                    echo '<a href="../MainPage/Home.php" class="hover:text-blue-800 text-blue-500 font-md"><i class="bx bx-arrow-back mr-2"></i>ย้อนกลับ</a>';
+                }
+                ?>
+            </div>
             <div class="flex">
                 <p class="font-bold text-2xl text-black">ชำระผ่าน Qr code</p>
             </div>
             <div class="flex justify-between items-center">
-                <p>เลขคำสั่งซื้อ: <?php echo $_SESSION['InvoiceID'] ?></p>
+                <p>เลขคำสั่งซื้อ: <?php echo $inoviceID ?></p>
                 <form action="../../Frontend/PDF/Invoice.php" method="POST">
-                    <input type="hidden" name="InvoiceID" value="<?php echo $_SESSION['InvoiceID'] ?>">
+                    <input type="hidden" name="InvoiceID" value="<?php echo $inoviceID ?>">
                     <button type="submit" class="block rounded-md border bg-red-500 px-4 py-2 text-white outline-none hover:shadow-md"><i class='bx bxs-file-pdf mr-2' style='color:#ffffff'></i>ใบแจ้งหนี้</button>
                 </form>
             </div>
@@ -120,7 +137,7 @@ use \Firebase\JWT\JWT;
                     <div class="flex justify-between w-full">
                         <form method="POST" action="../UploadPage/Upload.php">
                             <button type="submit" class="ml-5 block rounded-md border my-5 bg-blue-500 px-6 py-2 text-white outline-none hover:shadow-md">แจ้งการชำระเงิน</button>
-                            <input type="hidden" name="invoiceID" value="<?php echo "{$_SESSION['InvoiceID']}" ?>">
+                            <input type="hidden" name="invoiceID" value="<?php echo "{$inoviceID}" ?>">
                         </form>
                     </div>
                     <div class="mt-5">

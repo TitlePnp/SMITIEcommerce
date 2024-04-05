@@ -6,9 +6,6 @@ require_once "../../Backend/ProductQuery/ProductInfo.php";
 require_once "../../Backend/OrderManage/OrderQuery.php";
 require_once "../../Backend/OrderManage/GetOrderInfo.php";
 
-
-use Firebase\JWT\Key;
-use \Firebase\JWT\JWT;
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +42,12 @@ use \Firebase\JWT\JWT;
 
     $orderListResult = getOrderListDetail($orderID);
     $Status = getReceiptStatus($orderID);
+    if ($Status == "No Receipt") {
+        $getOrderDetail = getInvoiceInfo($orderID);
+        $Status = $getOrderDetail['Status'];
+    }
 
+    // $Status = "Cancel";
 
     ?>
     <div class="px-28 py-8">
@@ -54,17 +56,15 @@ use \Firebase\JWT\JWT;
             <p class="font-bold text-2xl ">คำสั่งซื้อ #<?php echo "{$orderID}" ?> </p>
             <div>
                 <?php
-                if ($Status == "Paid" || $Status == "Delivered" || $Status == "Complete") {
-                    echo '<a class="mr-2" href=""><button class="py-2 bg-green-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-green-700">ใบเสร็จ</button></a>';
-                } else {
-                    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block">';
-                    echo '<button class="py-2 bg-red-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-red-700"><i class="bx bxs-file-pdf mr-3"></i>ใบแจ้งหนี้</button>';
-                    echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
-                    echo '</form>';
-                    echo '<form method="POST" action="../UploadPage/Upload.php" class="inline-block">';
-                    echo '<button class="ml-3 py-2 bg-blue-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-blue-600">แจ้งการชำระเงิน</button>';
-                    echo '<input type="hidden" name="invoiceID" value="' . $orderID . '">';
-                    echo '</form>';
+                if ($Status == "Paid" || $Status == "Delivered" || $Status == "Completed" || $Status == "DI") {
+                    CompleteStatus($orderID);
+                } else if ($Status == "Ordered") {
+                    OrderedStatus($orderID);
+                } else if ($Status == "Pending") {
+                    PendingStatus($orderID);
+                } else if ($Status == "COD") {
+                    CODStatus($orderID);
+                } else if ($Status == "Cancel") {
                 }
                 ?>
             </div>
@@ -122,7 +122,6 @@ use \Firebase\JWT\JWT;
         ?>
         <div class="bg-white p-5 rounded-lg">
             <?php
-            $getOrderDetail = getInvoiceInfo($orderID);
             $OrderDate = date_create($getOrderDetail['StartDate']);
             $OrderDate = date_format($OrderDate, "d/m/Y");
             $OrderTime = date_create($getOrderDetail['StartDate']);
@@ -151,6 +150,7 @@ use \Firebase\JWT\JWT;
                 </div>
                 <div class="flex bg-gray-300 h-4 mt-5 rounded-md">
                     <?php
+                    // $PaymentMethod = "COD";
                     if ($PaymentMethod == "MobileBanking") {
                         if ($Status == "Pending") {
                             echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
@@ -206,9 +206,81 @@ use \Firebase\JWT\JWT;
                             echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
                             echo '   </div>';
                             echo '</div>';
+                        } else if ($Status == "Ordered") {
+                            echo "<div class='bg-blue-600 h-4 w-2/12 rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center ">';
+                            echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center ">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Completed") {
+                            echo "<div class='bg-blue-600 h-4 w-full rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end text-blue-600">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Cancel") {
+                            echo "<div class='bg-red-500 h-4 w-full rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center ">';
+                            echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end ">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
                         }
                     } else if ($PaymentMethod == "COD") {
-                        if ($Status == "Pending") {
+                        if ($Status == "COD") {
+                            echo "<div class='bg-blue-600 h-4 w-8/12 rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">กำลังจัดเตรียมสินค้า</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Ordered") {
                             echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
                             echo "</div>";
                             echo "</div>";
@@ -217,7 +289,7 @@ use \Firebase\JWT\JWT;
                             echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
                             echo '    </div>';
                             echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
-                            echo '       <p class="text-sm">กำลังจัดสินค้า</p>';
+                            echo '       <p class="text-sm">กำลังจัดเตรียมสินค้า</p>';
                             echo '    </div>';
                             echo '  <div class="my-5 w-full mx-2 text-center">';
                             echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
@@ -259,6 +331,60 @@ use \Firebase\JWT\JWT;
                             echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
                             echo '    </div>';
                             echo '   <div class="my-5 w-full text-end text-blue-600">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "DI") {
+                            echo "<div class='bg-blue-600 h-4 w-full rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">กำลังจัดสินค้า</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end text-blue-600">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Completed") {
+                            echo "<div class='bg-blue-600 h-4 w-full rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">กำลังจัดสินค้า</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end text-blue-600">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
+                        } else if ($Status == "Cancel") {
+                            echo "<div class='bg-red-500 h-4 w-full rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center ">';
+                            echo '       <p class="text-sm">ตรวจสอบการชำระเงิน</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end ">';
                             echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
                             echo '   </div>';
                             echo '</div>';
@@ -327,3 +453,47 @@ use \Firebase\JWT\JWT;
 </body>
 
 </html>
+
+<?php
+function OrderedStatus($orderID)
+{
+    echo '<form method="POST" action="../UploadPage/Upload.php" class="inline-block">';
+    echo '<button class="py-2 bg-green-500 rounded-md px-4 text-white font-semibold hover:shadow-lg hover:bg-green-700"><i class="bx bx-image-alt mr-3"></i>แจ้งการชำระเงิน</button>';
+    echo '<input type="hidden" name="invoiceID" value="' . $orderID . '">';
+    echo '</form>';
+    echo '<form method="POST" action="../MainPage/Payment.php" class="inline-block">';
+    echo '<button class="py-2 bg-blue-500 rounded-md px-5 mx-5 text-white font-semibold hover:shadow-lg hover:bg-blue-700"><i class="bx bx-money mr-3"></i>ชำระเงิน</button>';
+    echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
+    echo '</form>';
+    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block">';
+    echo '<button class="py-2 bg-red-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-red-700"><i class="bx bxs-file-pdf mr-3"></i>ใบแจ้งหนี้</button>';
+    echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
+    echo '</form>';
+}
+
+function PendingStatus($orderID)
+{
+    echo '<form method="POST" action="../UploadPage/Upload.php" class="inline-block">';
+    echo '<button class="mr-2 py-2 bg-green-500 rounded-md px-4 text-white font-semibold hover:shadow-lg hover:bg-green-700"><i class="bx bx-image-alt mr-3"></i>แจ้งการชำระเงิน</button>';
+    echo '<input type="hidden" name="invoiceID" value="' . $orderID . '">';
+    echo '</form>';
+    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block">';
+    echo '<button class="ml-2 py-2 bg-red-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-red-700"><i class="bx bxs-file-pdf mr-3"></i>ใบแจ้งหนี้</button>';
+    echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
+    echo '</form>';
+}
+
+function CompleteStatus($orderID)
+{
+    echo '<a class="mr-2" href=""><button class="py-2 bg-green-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-green-700">ใบเสร็จ</button></a>';
+}
+
+function CODStatus($orderID)
+{
+    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block">';
+    echo '<button class="ml-2 py-2 bg-red-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-red-700"><i class="bx bxs-file-pdf mr-3"></i>ใบแจ้งหนี้</button>';
+    echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
+    echo '</form>';
+}
+
+?>
