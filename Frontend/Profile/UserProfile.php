@@ -80,6 +80,9 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                     </div>
                     <div class="w-8/12 font-semibold mt-2 text-lg">
                         <?php
+                        if ($userInfo['CusFName'] == null && $userInfo['CusLName'] == null) {
+                            echo "<p>User {$userInfo['UserName']}</p>";
+                        }
                         echo "<p>{$userInfo['CusFName']}</p>";
                         echo "<p>{$userInfo['CusLName']}</p>";
                         ?>
@@ -90,16 +93,14 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                     <div class="w-full flex flex-col">
                         <div class="flex justify-between">
                             <h1 class="font-semibold text-lg mb-2">ข้อมูลผู้ใช้</h1>
-                            <button id="EditUserInfo" class="text-sm hover:text-blue-800 text-blue-500">แก้ไขข้อมูล<i class='bx bxs-edit-alt ml-2'></i></button>
-                            <button id="CancelEditUserInfo" style="display: none;" class="text-sm hover:text-blue-800 text-blue-500">ยกเลิกการแก้ไข<i class='bx bxs-edit-alt ml-2'></i></button>
+                            <a href="../Profile/ChangUserInfo.php"><button id="EditUserInfo" class="text-sm hover:text-blue-800 text-blue-500">แก้ไขข้อมูล<i class='bx bxs-edit-alt ml-2'></i></button></a>
                         </div>
                         <div class="flex flex-col">
                             <div class="flex flex-col w-full justify-center">
                                 <div class="flex flex-row items-center">
-                                    <p class="font-semibold 6/12 text-sm">ชื่อผู้ใช้:</p>
-                                    <input id="UsernameInput" type="text" class="11/12 border-gray-300 ml-2" value="<?php echo $userInfo['UserName']; ?>" disabled>
+                                    <p class="font-semibold w-2/12 text-sm">ชื่อผู้ใช้:</p>
+                                    <input id="UsernameInput" type="text" class="w-full border-gray-300 ml-2" value="<?php echo $userInfo['UserName']; ?>" disabled>
                                 </div>
-                                <span id="UsernameError" style="display: none;" class="text-red-500 text-xs">*ไม่สามารถใช้ชื่อผู้ใช้นี้ได้ กรุณาลองใหม่อีกครั้ง</span>
                             </div>
                             <div class="flex flex-row w-full items-center">
                                 <p class="font-semibold 6/12 text-sm">ชื่อ:</p>
@@ -122,27 +123,22 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                                     }
                                     ?>
                                 </div>
-                                <span id="SexError" style="display: none;" class="text-red-500 text-xs">*กรุณากรอกเพศ ชาย, หญิง, ไม่ระบุ</span>
                             </div>
                             <div class="flex flex-col w-full justify-center">
                                 <div class="flex flex-row items-center">
                                     <p class="font-semibold 6/12 text-sm">เบอร์โทรศัพท์:</p>
                                     <input id="TelInput" type="text" class="10/12 border-gray-300 ml-2" value="<?php echo $userInfo['Tel']; ?>" disabled>
                                 </div>
-                                <span id="TelError" style="display: none;" class="text-red-500 text-xs">*กรุณากรอกตัวเลขให้ครบ 10 ตัว</span>
                             </div>
                             <div class="flex flex-col w-full justify-center">
                                 <div class="flex flex-row itens-center">
                                     <p class="font-semibold 6/12 text-sm">อีเมล:</p>
                                     <input id="EmailInput" type="text" class="10/12 border-gray-300 ml-2" value="<?php echo $userInfo['Email']; ?>" disabled>
                                 </div>
-                                <span id="EmailError" style="display: none;" class="text-red-500 text-xs">*อีเมลถูกใช้งานแล้ว กรุณาลองใหม่อีกครั้ง</span>
                             </div>
                         </div>
                         <div class="flex justify-center">
                             <button id="confirmEditUserInfo" type="button" class="my-10 bg-green-500 w-3/5 h-2/5 rounded-lg font-semibold hover:shadow-md hover:bg-green-600" style="display: none;">ยืนยันการแก้ไขข้อมูล</button>
-                            <span id="EditError" style="display: none;" class="text-red-500 text-xs">*ไม่สามารถบันทึกข้อมูลได้โปรดลองอีกครั้ง</span>
-
                         </div>
                     </div>
                 </div>
@@ -351,135 +347,6 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
             </div>
         </div>
     </div>
-    <script>
-        var EditUserInfo = document.getElementById('EditUserInfo');
-        var CancelEditUserInfo = document.getElementById('CancelEditUserInfo');
-        var confirmEditUser = document.getElementById('confirmEditUserInfo');
-        var UsernameInput = document.getElementById('UsernameInput');
-        var FirstnameInput = document.getElementById('FirstnameInput');
-        var LastnameInput = document.getElementById('LastnameInput');
-        var SexInput = document.getElementById('SexInput');
-        var TelInput = document.getElementById('TelInput');
-        var EmailInput = document.getElementById('EmailInput');
-
-        var UsernameDefault = UsernameInput.value;
-        var FirstnameDefault = FirstnameInput.value;
-        var LastnameDefault = LastnameInput.value;
-        var SexDefault = SexInput.value;
-        var TelDefault = TelInput.value;
-        var EmailDefault = EmailInput.value;
-
-        var UsernameError = document.getElementById('UsernameError');
-        var SexError = document.getElementById('SexError');
-        var TelError = document.getElementById('TelError');
-        var EmailError = document.getElementById('EmailError');
-        var EditError = document.getElementById('EditError');
-
-        var isEdit = false;
-        EditUserInfo.addEventListener('click', function() {
-            EditUserInfo.style.display = 'none';
-            CancelEditUserInfo.style.display = 'block';
-            confirmEditUser.style.display = 'block';
-            UsernameInput.disabled = false;
-            FirstnameInput.disabled = false;
-            LastnameInput.disabled = false;
-            SexInput.disabled = false;
-            TelInput.disabled = false;
-            EmailInput.disabled = false;
-            
-            CancelEditUserInfo.addEventListener('click', function() {
-                EditUserInfo.style.display = 'block';
-                CancelEditUserInfo.style.display = 'none';
-                confirmEditUser.style.display = 'none';
-                UsernameInput.value = UsernameDefault;
-                FirstnameInput.value = FirstnameDefault;
-                LastnameInput.value = LastnameDefault;
-            });
-            confirmEditUser.addEventListener('click', function() {
-                // i need button animation load when user click
-
-                $.ajax({
-                    type: 'POST',
-                    url: '../../Backend/UserManage/checkUserAccount.php',
-                    data: {
-                        action: 'checkUsername',
-                        username: UsernameInput.value
-                    },
-                    success: function(response) {
-                        if (response === 'username exists') {
-                            UsernameError.style.display = 'block';
-                        } else {
-                            UsernameError.style.display = 'none';
-                            $.ajax({
-                                type: 'POST',
-                                url: '../../Backend/UserManage/checkUserAccount.php',
-                                data: {
-                                    action: 'checkEmail',
-                                    email: emailBox.value
-                                },
-                                success: function(response) {
-                                    if (response === 'email exists') {
-                                        EmailError.style.display = 'block';
-                                    } else {
-                                        EmailError.style.display = 'none';
-                                        if (TelInput.value.length != 10) {
-                                            TelError.style.display = 'block';
-                                        } else if (TelInput.value != NaN) {
-                                            TelError.style.display = 'block';
-                                            TelError.innerHTML = "*กรุณากรอกตัวเลขเท่านั้น";
-                                        } else {
-                                            TelError.style.display = 'none';
-                                            if (SexInput.value != 'ชาย' || SexInput.value != 'หญิง' || SexInput.value != 'ไม่ระบุ') {
-                                                SexError.style.display = 'block';
-                                            } else {
-                                                SexError.style.display = 'none';
-                                                $.ajax({
-                                                    type: 'POST',
-                                                    url: '../../Backend/UserManage/UpdateUserInfo.php',
-                                                    data: {
-                                                        action: 'editUserInfo',
-                                                        cusID: <?php echo $CusID; ?>,
-                                                        username: UsernameInput.value,
-                                                        firstname: FirstnameInput.value,
-                                                        lastname: LastnameInput.value,
-                                                        sex: SexInput.value,
-                                                        tel: TelInput.value,
-                                                        email: EmailInput.value
-                                                    },
-                                                    success: function(response) {
-                                                        if (response === 'success') {
-                                                            UsernameDefault = UsernameInput.value;
-                                                            FirstnameDefault = FirstnameInput.value;
-                                                            LastnameDefault = LastnameInput.value;
-                                                            SexDefault = SexInput.value;
-                                                            TelDefault = TelInput.value;
-                                                            EmailDefault = EmailInput.value;
-                                                            UsernameInput.disabled = true;
-                                                            FirstnameInput.disabled = true;
-                                                            LastnameInput.disabled = true;
-                                                            SexInput.disabled = true;
-                                                            TelInput.disabled = true;
-                                                            EmailInput.disabled = true;
-                                                            EditUserInfo.style.display = 'block';
-                                                            CancelEditUserInfo.style.display = 'none';
-                                                            confirmEditUser.style.display = 'none';
-                                                            EditError.style.display = 'none';
-                                                        } else {
-                                                            EditError.style.display = 'block';
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    }
-                                }
-                            })
-                        }
-                    }
-                })
-            });
-        });
-    </script>
 </body>
 
 </html>
