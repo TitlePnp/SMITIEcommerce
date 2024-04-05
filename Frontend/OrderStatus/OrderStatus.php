@@ -280,6 +280,24 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
                             echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
                             echo '   </div>';
                             echo '</div>';
+                        } else if ($Status == "Ordered") {
+                            echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
+                            echo "</div>";
+                            echo "</div>";
+                            echo "<div class='w-full flex'>";
+                            echo "    <div class='my-5 w-full text-blue-600'>";
+                            echo '       <p class="text-sm">ยืนยันคำสั่งซื้อ</p>';
+                            echo '    </div>';
+                            echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '       <p class="text-sm">กำลังจัดเตรียมสินค้า</p>';
+                            echo '    </div>';
+                            echo '  <div class="my-5 w-full mx-2 text-center">';
+                            echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
+                            echo '    </div>';
+                            echo '   <div class="my-5 w-full text-end">';
+                            echo '        <p class="text-sm">จัดส่งสำเร็จ</p>';
+                            echo '   </div>';
+                            echo '</div>';
                         } else if ($Status == "Paid") {
                             echo "<div class='bg-blue-600 h-4 w-8/12 rounded-md'>";
                             echo "</div>";
