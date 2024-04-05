@@ -6,7 +6,7 @@ CREATE TABLE CUSTOMER (
     CusLName	VARCHAR(20),
     Sex         VARCHAR(1),
     Tel         CHAR(10),
-    Address     VARCHAR(80),
+    Address     VARCHAR(200),
     Province    VARCHAR(255),
     Postcode    VARCHAR(5)
 );
@@ -29,7 +29,7 @@ CREATE TABLE PAYER (
     PayerLName	VARCHAR(20)     NOT NULL,
     PayerSex			VARCHAR(1),
     PayerTel			CHAR(10)        NOT NULL,
-    PayerAddress		VARCHAR(80)     NOT NULL,
+    PayerAddress		VARCHAR(200)     NOT NULL,
     PayerProvince    VARCHAR(20) NOT NULL,
     PayerPostcode    VARCHAR(5) NOT NULL,
     CusID       INT             NOT NULL,
