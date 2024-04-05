@@ -51,7 +51,7 @@ $address = trim(substr($address, 0, $indexDist));
 <body>
     <div class="px-28 pb-12 text-base">
         <div class="my-2">
-            <a href="../MainPage/Home.php" class="hover:text-blue-800 text-blue-500 font-md"><i class='bx bx-arrow-back mr-2'></i>ย้อนกลับ</a>
+            <a href="UserProfile.php" class="hover:text-blue-800 text-blue-500 font-md"><i class='bx bx-arrow-back mr-2'></i>ย้อนกลับ</a>
         </div>
 
         <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">

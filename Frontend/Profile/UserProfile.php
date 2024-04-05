@@ -142,7 +142,7 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                                     <p class="text-red-500 text-sm">ค่าเริ่มต้น</p>
                                 </div>
                                 <div class="flex flex-row items-center my-2">
-                                    <p class="text-sm"><?php echo $userInfo['Address']; ?></p>
+                                    <p class="text-sm"><?php echo "{$userInfo['Address']}  {$userInfo['Province']}  {$userInfo['Postcode']};" ?></p>
                                 </div>
                             </div>
                         </div>

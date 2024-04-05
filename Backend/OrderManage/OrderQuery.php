@@ -71,7 +71,7 @@ function getReceiptStatus($invoiceID)
     $result = $stmt->get_result();
     $result = $result->fetch_assoc();
     if ($result === null || !isset($result['Status']) || $result['Status'] === null) {
-        return 'Pending';
+        return 'No Receipt';
     } else {
         return $result['Status'];
     }
