@@ -34,25 +34,36 @@ if (isset($_GET['code'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $_SESSION['email'] = $email;
-        $_SESSION['name'] = $name;
-        $_SESSION['tokenGoogle'] = $userId;
         $row = $result->fetch_assoc();
-        $CusID = $row['CusID'];
-        $noData = getInfo($CusID);
-        while ($row = $noData->fetch_assoc()) {
-            if ($row['CusFName'] == null) {
-                require_once "../Log/LogManage.php";
-                insertLog("Login with Google", date("Y-m-d H:i:s"));
-                header('Location: http://localhost/SmitiShop/Frontend/Profile/Information.php');
-                exit();
-            } else {
-                require_once "../Log/LogManage.php";
-                insertLog("Login with Google", date("Y-m-d H:i:s"));
-                header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
-                exit();
+        if ($row['Role'] == 'SuperAdmin' || $row['Role'] == 'UserAdmin') {
+            $_SESSION['email'] = $email;
+            $_SESSION['name'] = $name;
+            $_SESSION['tokenGoogle'] = $userId;
+            require_once "../Log/LogManage.php";
+            insertLog("Login with Google" . $row['Role'] . "", date("Y-m-d H:i:s"));
+            header('Location: http://localhost/SmitiShop/Frontend/Admin/AdminPage.php');
+            exit();
+        } else if ($row['Role'] == 'User') {
+            $_SESSION['email'] = $email;
+            $_SESSION['name'] = $name;
+            $_SESSION['tokenGoogle'] = $userId;
+            $CusID = $row['CusID'];
+            $noData = getInfo($CusID);
+            while ($row = $noData->fetch_assoc()) {
+                if ($row['CusFName'] == null) {
+                    require_once "../Log/LogManage.php";
+                    insertLog("Login with Google", date("Y-m-d H:i:s"));
+                    header('Location: http://localhost/SmitiShop/Frontend/Profile/Information.php');
+                    exit();
+                } else {
+                    require_once "../Log/LogManage.php";
+                    insertLog("Login with Google", date("Y-m-d H:i:s"));
+                    header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
+                    exit();
+                }
             }
         }
+
         // header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
         // print_r($_SESSION);
     } else {
