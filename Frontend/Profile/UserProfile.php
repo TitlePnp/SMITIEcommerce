@@ -160,20 +160,37 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                             while ($allAddr = $resultAddr->fetch_assoc()) {
                                 //create radio address and when click div will select address
                                 if ($count == 1) {
-                                    echo "<div class='flex flex-row w-full items-center bg-gray-100 hover:bg-gray-200 py-5 px-2 rounded-md'>";
-                                    echo "<input type='radio' class='w-1/12 border-gray-300 mr-2' value='{$allAddr['Address']}' disabled checked>";
-                                    echo "<p class='font-semibold w-2/12 text-sm'>ที่อยู่:</p>";
-                                    echo "<p class='w-8/12 border-gray-300 ml-2'>{$allAddr['Address']}, {$allAddr['Province']} {$allAddr['Postcode']}<p>";
+                                    echo "<div class='flex flex-col p-5 bg-gray-100 hover:bg-gray-200 my-2 rounded-md'>";
+                                    echo "<div class='flex justify-between'>";
+                                    echo "<div class='flex w-full'>";
+                                    echo "<input type='radio' class='border-gray-300 mr-2' value='{$allAddr['Address']}' disabled checked>";                                    // echo "<p class='font-semibold w-2/12 text-sm'>ที่อยู่:</p>";
+                                    echo "<p class='font-semibold text-sm'>ที่อยู่:</p>";
+                                    echo "</div>";
                                     echo "<h1 class='text-sm w-3/12 text-end ml-5 text-red-500'>ค่าเริ่มต้น</p>";
                                     echo "</div>";
-                                } else {
-                                    echo "<div class='flex flex-row w-full items-center hover:bg-gray-100 py-5 px-2 rounded-md'>";
-                                    echo "<input type='radio' class='w-1/12 border-gray-300 mr-2' value='{$allAddr['Address']}' disabled>";
-                                    echo "<p class='font-semibold w-3/12 text-sm'>ที่อยู่:</p>";
-                                    // echo "<div class='flex'>";
-                                    // echo "<input type='text' class='10/12 border-gray-300 ml-2' value='{$orderList['Address']}' disabled>";
-                                    echo "<p class='8/12 border-gray-300 ml-2'>{$allAddr['Address']}, {$allAddr['Province']} {$allAddr['Postcode']}<p>";
+                                    echo "<div class'text-md'>";
+                                    echo "<p class='w-full py-2 border-gray-300 ml-2'>{$allAddr['Address']}, {$allAddr['Province']} {$allAddr['Postcode']}<p>";
+                                    echo "</div>";
+                                    echo "</div>";
+
+                                    // echo "<div class='flex flex-row w-full items-center bg-gray-100 hover:bg-gray-200 py-5 px-2 rounded-md'>";
+                                    // echo "<input type='radio' class='w-1/12 border-gray-300 mr-2' value='{$allAddr['Address']}' disabled checked>";
+                                    // echo "<p class='font-semibold w-2/12 text-sm'>ที่อยู่:</p>";
+                                    // echo "<div>";
+                                    // echo "<p class='w-8/12 border-gray-300 ml-2'>{$allAddr['Address']}, {$allAddr['Province']} {$allAddr['Postcode']}<p>";
+                                    // echo "<h1 class='text-sm w-3/12 text-end ml-5 text-red-500'>ค่าเริ่มต้น</p>";
                                     // echo "</div>";
+                                } else {
+                                    echo "<div class='flex flex-col p-5 hover:bg-gray-200 my-2 rounded-md'>";
+                                    echo "<div class='flex justify-between'>";
+                                    echo "<div class='flex w-full'>";
+                                    echo "<input type='radio' class='border-gray-300 mr-2' value='{$allAddr['Address']}' disabled>";                                    // echo "<p class='font-semibold w-2/12 text-sm'>ที่อยู่:</p>";
+                                    echo "<p class='font-semibold text-sm'>ที่อยู่:</p>";
+                                    echo "</div>";
+                                    echo "</div>";
+                                    echo "<div class'text-md'>";
+                                    echo "<p class='w-full py-2 border-gray-300 ml-2'>{$allAddr['Address']}, {$allAddr['Province']} {$allAddr['Postcode']}<p>";
+                                    echo "</div>";
                                     echo "</div>";
                                 }
 
@@ -363,6 +380,13 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
             EditUserInfo.style.display = 'none';
             CancelEditUserInfo.style.display = 'block';
             confirmEditUser.style.display = 'block';
+            UsernameInput.disabled = false;
+            FirstnameInput.disabled = false;
+            LastnameInput.disabled = false;
+            SexInput.disabled = false;
+            TelInput.disabled = false;
+            EmailInput.disabled = false;
+            
             CancelEditUserInfo.addEventListener('click', function() {
                 EditUserInfo.style.display = 'block';
                 CancelEditUserInfo.style.display = 'none';
