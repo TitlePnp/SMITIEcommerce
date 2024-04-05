@@ -99,7 +99,7 @@ $authUrl = $client->createAuthUrl();
             </div>
 
             <div>
-                <p class="text-right text-sm mt-2"><a href="#" class="text-black hover:text-blue-500">ลืมรหัสผ่าน?</a></p>
+                <p class="text-right text-sm mt-2"><a href="../ForgotPassword/ForgotPasswordForm.php" class="text-black hover:text-blue-500">ลืมรหัสผ่าน?</a></p>
             </div>
 
             <button type="button" onclick="validateForm()" class="rounded-md bg-black w-full text-white px-4 py-2 mt-5 hover:shadow-xl">ลงชื่อเข้าใช้</button>
