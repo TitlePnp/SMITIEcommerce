@@ -28,11 +28,16 @@ $authUrl = $client->createAuthUrl();
     <title>Admin Login</title>
 </head>
 
-<body class="flex flex-col justify-center items-center min-h-screen">
-    <div class="flex justify-center mt-4">
-        <a href="<?php echo $authUrl; ?>" class="flex items-center justify-center rounded-md border-2 bg-white border-gray-400 w-full text-black px-4 py-2 hover:shadow-xl">
-            <i class='bx bxl-google text-md mr-2' style='color: black'></i> ลงชื่อเข้าใช้ด้วย Google
-        </a>
+<body class="flex flex-col justify-center items-center bg-gray-200 min-h-screen">
+    <div class="p-5 bg-white rounded-lg shadow-lg flex flex-col">
+        <div class="flex justify-center">
+            <p class="text-lg font-semibold">Admin Portal</p>
+        </div>
+        <div class="flex justify-center mt-4 ">
+            <a href="<?php echo $authUrl; ?>" class="flex items-center justify-center rounded-md border-2 bg-white border-gray-400 w-full text-black px-4 py-2 hover:shadow-xl">
+                <i class='bx bxl-google text-md mr-2' style='color: black'></i> ลงชื่อเข้าใช้ด้วย Google
+            </a>
+        </div>
     </div>
 </body>
 
