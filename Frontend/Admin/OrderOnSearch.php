@@ -140,56 +140,60 @@
             </tr>
         </thead>
         <tbody>
-        <?php $receipt = searchReceipt($search);
+      <?php $receipt = searchReceipt($search);
           while ($row = $receipt->fetch_assoc()) {
             $sum = $row['TotalPrice'] + $row['Vat'];
             $cus = cusDetail($row['CusID'])->fetch_assoc();
             $payer = payerDetail($row['PayerID'])->fetch_assoc();
             $recvID = getRecvID($row['InvoiceID'])->fetch_assoc();
-        ?>
+      ?>
             <tr class="odd:bg-white even:bg-gray-50 border-b text-center">
               <th scope="row" class="px-3 py-4 font-semibold text-gray-900 whitespace-nowrap"><?php echo $row['RecID'];?></th>
               <td class="px-3 py-4"><?php echo $row['PayTime'];?></td>
-            <?php if ($row['Channel'] == "Transfer" && $row['CusID'] != 1) {
+      <?php if ($row['Channel'] == "Transfer" && $row['CusID'] != 1) {
               echo "<td class='px-3 py-4 text-left text-sm'>";
                 echo "<p><span class='font-semibold'>ลูกค้า: </span>" . $cus['CusFName'] . " " . $cus['CusLName'] . "</p>";
                 echo "<p><span class='font-semibold'>Tel. </span>" . $cus['Tel'] . "</p><br />";
                 echo "<p><span class='font-semibold'>ผู้จ่าย: </span>" . $payer['PayerFName'] . " " . $payer['PayerLName'] . "</p>";
                 echo "<p><span class='font-semibold'>Tel. </span>" . $payer['PayerTel'] . "</p>";
               echo "</td>";
-            } else if ($row['Channel'] == "Transfer" && $row['CusID'] == 1) {
+      } else if ($row['Channel'] == "Transfer" && $row['CusID'] == 1) {
               echo "<td class='px-3 py-4 text-left text-sm'>";
                 echo "<p><span class='font-semibold'>ผู้จ่าย: </span>" . $payer['PayerFName'] . " " . $payer['PayerLName'] . "</p>";
                 echo "<p><span class='font-semibold'>Tel. </span>" . $payer['PayerTel'] . "</p>";
               echo "</td>";
-            } else if ($row['Channel'] == "COD" && $row['CusID'] != 1) {
+      } else if ($row['Channel'] == "COD" && $row['CusID'] != 1) {
               echo "<td class='px-3 py-4 text-left text-sm'>";
                 echo "<p><span class='font-semibold'>ลูกค้า: </span>" . $cus['CusFName'] . " " . $cus['CusLName'] . "</p>";
                 echo "<p><span class='font-semibold'>Tel. </span>" . $cus['Tel'] . "</p>";
               echo "</td>";
-            } else if ($row['Channel'] == "COD" && $row['CusID'] == 1) {
+      } else if ($row['Channel'] == "COD" && $row['CusID'] == 1) {
               echo "<td class='px-3 py-4 text-left text-sm'>";
                 echo "<p><span class='font-semibold'>ผู้สั่ง: </span>" . $payer['PayerFName'] . " " . $payer['PayerLName'] . "</p>";
                 echo "<p><span class='font-semibold'>Tel. </span>" . $payer['PayerTel'] . "</p>";
               echo "</td>";
-            }?>
+      }?>
 
               <td class="px-3 py-4"><?php echo $sum;?></td>
-            <?php if ($row['Channel'] == "Transfer") { ?>
+
+      <?php if ($row['Channel'] == "Transfer") { ?>
               <td class="px-3 py-4">
                 <div class="flex flex-col justify-center items-center">
                   <img class="h-6 w-auto my-2" src="../../Pictures/Admin/transfer.png" alt="transfer">
-                  <a href="#" class="text-xs font-medium text-blue-500 hover:underline">ตรวจสอบการโอนเงิน</a>
+                  <form method="post" action="SlipTransfer.php" id="check-transfer-form">
+                    <input type="hidden" name="recID" value="<?php echo $row['RecID'];?>">
+                    <button type="submit" class="check-transfer text-xs font-medium text-blue-500 hover:underline">ตรวจสอบการโอนเงิน</button>
+                  </form>
                 </div>
               </td>
-            <?php } else if ($row['Channel'] == "COD") { ?>
+      <?php } else if ($row['Channel'] == "COD") { ?>
               <td class="px-3 py-4">
                 <div class="flex flex-col justify-center items-center">
                   <img class="h-6 w-auto my-2" src="../../Pictures/Admin/truck.png" alt="COD">
                   <p class="text-xs font-medium text-blue-500">เก็บเงินปลายทาง</p>
                 </div>
               </td>
-            <?php } $count = 0;
+      <?php } $count = 0;
               $status = $row['Status'];
             foreach ($statusE as $i) {
               if ($i == $status) { 
@@ -199,29 +203,42 @@
                     <p class="max-w-20 text-xs font-medium text-white rounded-lg bg-blue-500 px-2 py-2"><?php echo $statusT[$count];?></p>
                   </div>
                 </td>
+
                 <?php if ("Returned" == $status or "Cancel" == $status) { ?>
-                      <td class="px-3 py-4"></td>
+                <td class="px-3 py-4"></td>
+                <?php } else if ("Paid" == $status) {?>
+                <td class="px-3 py-4">
+                  <button type="button" data-status="<?php $deli = 3; echo $statusE[$deli];?>" data-recID="<?php echo $row['RecID'];?>" class="update-status text-xs font-medium text-black rounded-lg bg-gray-100 border border-gray-300 hover:bg-gray-400 px-2 py-2">
+                    <?php echo $statusT[$deli];?>
+                  </button>
+                </td>
                 <?php } else { ?>
                 <td class="px-3 py-4">
-                  <button type="button" class="text-xs font-medium text-black rounded-lg bg-gray-100 border border-gray-300 hover:bg-gray-400 px-2 py-2"><?php echo $statusT[++$count];?></button>
+                  <button type="button" data-status="<?php echo $statusE[++$count];?>" data-recID="<?php echo $row['RecID'];?>" class="update-status text-xs font-medium text-black rounded-lg bg-gray-100 border border-gray-300 hover:bg-gray-400 px-2 py-2">
+                    <?php echo $statusT[$count];?>
+                  </button>
                 </td>
-            <?php } } else if ("DI" == $status) { 
-              $_SESSION['status'] = "Delivered"; 
-              $_SESSION['status2'] = "DI"; ?>
-              <td class="px-3 py-4">
-                <div classs=" flex justify-center">
-                  <p class="text-xs font-medium text-white rounded-lg bg-blue-500 px-2 py-2"><?php $index = 4; echo $statusT[$index];?></p>
-                </div>
-              </td>
-              <td class="px-3 py-4">
-                <button type="button" class="text-xs font-medium text-black rounded-lg bg-gray-100 border border-gray-300 hover:bg-gray-400 px-2 py-2"><?php echo $statusT[++$index];?></button>
-              </td>
-            <?php  
-            } $count++; } ?>
-              <td>
-                <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/search-normal.png" alt="search"></button>
-                <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/printer.png" alt="print"></button>
-              </td>
+      <?php } } else if ("DI" == $status) { 
+                $_SESSION['status'] = "Delivered"; 
+                $_SESSION['status2'] = "DI"; ?>
+                <td class="px-3 py-4">
+                  <div classs=" flex justify-center">
+                    <p class="text-xs font-medium text-white rounded-lg bg-blue-500 px-2 py-2"><?php $index = 4; echo $statusT[$index];?></p>
+                  </div>
+                </td>
+                <td class="px-3 py-4">
+                  <button type="button" data-status="<?php echo $statusE[++$index];?>" data-recID="<?php echo $row['RecID'];?>" class="text-xs font-medium text-black rounded-lg bg-gray-100 border border-gray-300 hover:bg-gray-400 px-2 py-2">
+                    <?php echo $statusT[$index];?>
+                  </button>
+                </td>
+      <?php  } $count++; } /* end foreach */?>
+                <td>
+                  <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/search-normal.png" alt="search"></button>
+                  <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/printer.png" alt="print"></button>
+      <?php if ("Returned" == $status or "Cancel" == $status) { ?>
+                  <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/pen.png" alt="edit"></button>
+      <?php } ?>
+                </td>
               <td class='px-3 py-4'>
                 <div class='flex items-center'>
                   <input id='checkbox-product' type='checkbox' class='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded'>
@@ -229,7 +246,7 @@
                 </div>
               </td>
             </tr>
-          <?php } ?>
+          <?php } /* end whileloop */?>
         </tbody>
       </table>
     </div>
@@ -284,6 +301,27 @@
       var endDate = ev.detail.endDate.format('YYYY-MM-DD');
       document.getElementById('start_date').value = startDate;
       document.getElementById('end_date').value = endDate;
+    });
+
+    $(document).ready(function(){
+      $(".update-status").click(function(){
+        console.log($(this)); 
+        var status = $(this).data('status');
+        var recID = $(this).data('recid');
+        console.log(status);
+        console.log(recID);
+        $.ajax({
+          url: '../../Backend/Admin/Order/UpdateStatus.php',
+          type: 'post',
+          data: {
+            status: status,
+            recID: recID
+          },
+          success: function(response) {
+            window.location = 'Order.php';
+          }
+        });
+      });
     });
   </script>
 </body>

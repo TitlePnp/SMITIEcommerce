@@ -118,7 +118,7 @@
     global $connectDB;
     $stmt = $connectDB->prepare("SELECT r.RecID, r.PayTime, r.CusID, r.PayerID, r.InvoiceID, r.TotalPrice, r.Vat, r.Payment, r.Channel 
                                 FROM RECEIPT r 
-                                WHERE r.Status = ? OR r.Status = ? AND r.PayTime BETWEEN ? AND ?");
+                                WHERE (r.Status = ? OR r.Status = ?) AND (r.PayTime BETWEEN ? AND ?)");
     $stmt->bind_param("ssss", $status, $status2, $startDate, $endDate);
     $stmt->execute();
     $result = $stmt->get_result();

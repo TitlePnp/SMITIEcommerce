@@ -46,4 +46,15 @@
     $stmt->close();
     return $result;
   }
+
+  function getPayment($recID) {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT r.PayerID, r.TotalPrice, r.Vat, r.Payment
+                                FROM RECEIPT r WHERE r.RecID = ?");
+    $stmt->bind_param("s", $recID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+  }
 ?>
