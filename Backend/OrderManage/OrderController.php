@@ -5,6 +5,7 @@ require_once "../UserManage/UserInfo.php";
 require_once "../../vendor/autoload.php";
 require_once "../../Backend/CartQuery/CartDetail.php";
 require_once "../../Backend/CartQuery/ClearCart.php";
+require_once "../../Backend/OrderManage/ReceiptCOD.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
 $dotenv->load();
@@ -106,6 +107,9 @@ try {
     $endDate = date("Y-m-d H:i:s", strtotime("+1 day"));
     insertInvoice($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat,  $PaymentMethod, $startDate, $endDate);
     insertInvoiceList($CusID, $newInvoiceID, $ProIds);
+    if ($PaymentMethod == "COD") {
+        insertReceipt($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat);
+    }
     updateOnHand($ProIds);
     echo "Success";
 
