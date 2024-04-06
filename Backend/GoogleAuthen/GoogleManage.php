@@ -1,7 +1,8 @@
 <?php
 require_once "../UserManage/SessionManage.php";
 clearSession();
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 require '../../Components/ConnectDB.php';
 require 'Google_OAuth.php';
@@ -18,11 +19,15 @@ if (isset($_GET['code'])) {
     }
 
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+    $_SESSION['tokenGoogle'] = $token['access_token'];
+    //echo $token['access_token'];
     $client->setAccessToken($token['access_token']);
+    //var_dump($client->getAccessToken());
 
     $google_oauth = new Google_Service_Oauth2($client);
 
     $google_oauth_account_info = $google_oauth->userinfo->get();
+    var_dump($google_oauth_account_info);
     $email = $google_oauth_account_info->email;
     $name = $google_oauth_account_info->name;
     $userId = $google_oauth_account_info->id;
@@ -34,16 +39,18 @@ if (isset($_GET['code'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
+        var_dump($result);
         $row = $result->fetch_assoc();
-        if ($row['Role'] == 'SuperAdmin' || $row['Role'] == 'UserAdmin') {
+        if ($row['Role'] == 'SuperAdmin' || $row['Role'] == 'Admin') {
             $_SESSION['email'] = $email;
             $_SESSION['name'] = $name;
             $_SESSION['tokenGoogle'] = $userId;
             require_once "../Log/LogManage.php";
             insertLog("Login with Google" . $row['Role'] . "", date("Y-m-d H:i:s"));
-            header('Location: http://localhost/SmitiShop/Frontend/Admin/AdminPage.php');
+            header('Location: http://localhost/SmitiShop/Frontend/Admin/DashBoard.php');
             exit();
         } else if ($row['Role'] == 'User') {
+            echo "User";
             $_SESSION['email'] = $email;
             $_SESSION['name'] = $name;
             $_SESSION['tokenGoogle'] = $userId;
@@ -67,8 +74,9 @@ if (isset($_GET['code'])) {
         // header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
         // print_r($_SESSION);
     } else {
-        $stmt = $connectDB->prepare("INSERT INTO customer(CusID, CusFName, CusLName, Sex, Tel, Address) VALUES 
-    ('',?,'','','','')");
+        echo "No data";
+        $stmt = $connectDB->prepare("INSERT INTO customer(CusFName, CusLName, Sex, Tel, Address) VALUES 
+        (?,'','','','')");
         $stmt->bind_param("s", $name);
         $stmt->execute();
 

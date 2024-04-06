@@ -1,17 +1,11 @@
 <?php
-  session_start();
   require '../../Backend/Authorized/AdminAuthorized.php';
   require '../../Backend/Authorized/ManageHeader.php';
   require '../../Backend/Admin/Order/ReceiptList.php';
   require '../../Backend/Admin/Order/Search.php';
-//   -- Pending = ชำระเงินแล้วรอการตรวจสอบ
-//   -- Paid = ชำระเงินแล้ว รอการจัดส่ง
-//   -- COD = Cash on Delivery = เก็บเงินปลายทางรอการจัดส่ง
-//   -- Delivered = จัดส่งแล้ว
-//   -- DI = Deferred Income = จัดส่งแล้วรอเงินเข้าจากการเก็บเงินปลายทาง
-//   -- Completed = กระบวนการทั้งหมดเสร็จสิ้น
-//   -- Returned = สินค้าถูกส่งคืน
-//   -- Cancel = ยกเลิก
+//   -- Active = ขายอยู่
+//   -- Inactive = เลิกขาย
+//   -- OutStock = Out Of Stock = ของหมด = stock ต้องเป็น 0
   if (isset($_SESSION['status'])) {
     $status = $_SESSION['status'];
     $status2 = $_SESSION['status2'];

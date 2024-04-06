@@ -8,10 +8,10 @@
       header('Location: ../../Frontend/MainPage/Home.php');
       exit();
     } elseif ($role == "Admin") {
-      header('Location: ../../Frontend/admin/Test.php');
+      header('Location: ../../Frontend/Admin/DashBoard.php');
       exit();
     }
   } else {
-    header('Location: ../../Frontend/MainPage/Home.php');
+    header('Location: ../../Frontend/SuperAdmin/DashBoard.php');
   }
 ?>

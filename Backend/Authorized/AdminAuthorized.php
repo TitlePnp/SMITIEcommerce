@@ -8,7 +8,7 @@
       header('Location: ../../Frontend/MainPage/Home.php');
       exit();
     } elseif ($role == "SuperAdmin") {
-      header('Location: ../../Frontend/admin/Test.php');
+      header('Location: ../../Frontend/SuperAdmin/DashBoard.php');
       exit();
     }
   } else {

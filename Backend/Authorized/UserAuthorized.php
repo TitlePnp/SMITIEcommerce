@@ -15,19 +15,19 @@ if (isset($_SESSION['tokenJWT'])) {
   $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
   $role = $decoded->role;
   if ($role == "Admin") {
-    header('Location: ../../Frontend/admin/admin.php');
+    header('Location: ../../Frontend/Admin/DashBoard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/admin/Test.php');
+    header('Location: ../../Frontend/SuperAdmin/DashBoard.php');
     exit();
   }
 } elseif (isset($_SESSION['tokenGoogle'])) {
   $role = getRole($_SESSION['tokenGoogle']);
   if ($role == "Admin") {
-    header('Location: ../../Frontend/admin/Test.php');
+    header('Location: ../../Frontend/Admin/DashBoard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/admin/Test.php');
+    header('Location: ../../Frontend/SuperAdmin/DashBoard.php');
     exit();
   }
 }

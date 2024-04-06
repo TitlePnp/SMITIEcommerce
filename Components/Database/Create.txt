@@ -2,7 +2,7 @@ CREATE DATABASE myStore;
 -- ตารางเก็บข้อมูลลูกค้า (ผู้ส่ง/ผู้สั่ง) --
 CREATE TABLE CUSTOMER (
     CusID       INT         AUTO_INCREMENT  PRIMARY KEY,
-    CusFName	VARCHAR(20),
+    CusFName	VARCHAR(100),
     CusLName	VARCHAR(20),
     Sex         VARCHAR(1),
     Tel         CHAR(10),
@@ -12,7 +12,7 @@ CREATE TABLE CUSTOMER (
 );
 -- ตารางบัญชี --
 CREATE TABLE CUSTOMER_ACCOUNT (
-    UserName	VARCHAR(20)     PRIMARY KEY,
+    UserName	VARCHAR(100)     PRIMARY KEY,
     Email       VARCHAR(255)    NOT NULL,
     Password 	VARCHAR(255)    NOT NULL,
     GoogleId    VARCHAR(255),
@@ -91,7 +91,8 @@ CREATE TABLE PRODUCT (
     StockQty        INT             NOT NULL,
     ImageSource     VARCHAR(255)	NOT NULL,
     Status          VARCHAR(10)     NOT NULL    DEFAULT 'Active',
-    Update_Day      DATETIME        NOT NULL,
+    First_Day       DATETIME         NOT NULL,
+    Update_Day      DATETIME ,
     TypeID          INT             NOT NULL,
     FOREIGN KEY (TypeID) REFERENCES PRODUCT_TYPE(TypeID)
 );
