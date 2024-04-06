@@ -46,13 +46,13 @@
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         <!-- logo -->
         <div class="flex flex-shrink-0 items-center">
-          <a href="#"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
+          <a href="../../Frontend/Admin/Dashboard.php"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
         </div>
         <!-- menu -->
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-10">
-            <a href="test1.php" class="nav-style" aria-current="false">Dashboard</a>
-            <a href="../folder/test.php" class="nav-style" aria-current="false">คำสั่งซื้อ</a>
+            <a href="../../Frontend/Admin/Dashboard.php" class="nav-style" aria-current="false">Dashboard</a>
+            <a href="../../Frontend/Admin/Order.php" class="nav-style" aria-current="false">คำสั่งซื้อ</a>
             <!-- dropdown สินค้า -->
             <div class="relative inline-block text-left">
               <div>
@@ -64,9 +64,9 @@
               <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-1 shadow-lg
                     ring-1 ring-black ring-opacity-5 focus:outline-none text-sm hidden" role="menu"
                     aria-orientation="vertical" aria-labelledby="product-button" tabindex="-1" id="product-menu">
-                <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="product-item-1">สินค้าทั้งหมด</a>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="product-item-0">หมวดหมู่สินค้า</a>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="product-item-1">เพิ่มสินค้าใหม่</a>
+                <a href="../../Frontend/Admin/D.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="product-item-1">สินค้าทั้งหมด</a>
+                <a href="../../Frontend/Admin/D.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="product-item-0">หมวดหมู่สินค้า</a>
+                <a href="../../Frontend/Admin/D.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="product-item-1">เพิ่มสินค้าใหม่</a>
               </div>
             </div>
           </div>
@@ -96,8 +96,8 @@
           <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-1 shadow-lg
                     ring-1 ring-black ring-opacity-5 focus:outline-none text-sm hidden" role="menu"
                     aria-orientation="vertical" aria-labelledby="user-button" tabindex="-1" id="user-menu">
-            <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-0">บัญชีผู้ใช้งาน</a>
-            <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-1">ออกจากระบบ</a>
+            <a href="../../Frontend/Admin/A.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-0">บัญชีผู้ใช้งาน</a>
+            <a href="../../Frontend/Admin/A.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-1">ออกจากระบบ</a>
           </div>
         </div>
       </div>
@@ -105,11 +105,11 @@
       <div class="text-sm font-semibold text-white sm:hidden tracking-wider hidden" aria-labelledby="hide-button" id="hide-menu"
           style="position: fixed; top: 4rem; left: 0; right: 0;">
         <div class="space-y-1 px-2 pb-3 pt-2 bg-[#062639]">
-          <a href="test1.php" class="nav-style block" aria-current="false">Dashboard</a>
-          <a href="#" class="nav-style block" aria-current="false">คำสั่งซื้อ</a>
-          <a href="#" class="nav-style block" aria-current="false">สินค้าทั้งหมด</a>
-          <a href="#" class="nav-style block" aria-current="false">หมวดหมู่สินค้า</a>
-          <a href="#" class="nav-style block" aria-current="false">เพิ่มสินค้าใหม่</a>
+          <a href="../../Frontend/Admin/Dashboard.php" class="nav-style block" aria-current="false">Dashboard</a>
+          <a href="../../Frontend/Admin/Order.php" class="nav-style block" aria-current="false">คำสั่งซื้อ</a>
+          <a href="../../Frontend/Admin/B.php" class="nav-style block" aria-current="false">สินค้าทั้งหมด</a>
+          <a href="../../Frontend/Admin/C.php" class="nav-style block" aria-current="false">หมวดหมู่สินค้า</a>
+          <a href="../../Frontend/Admin/D.php" class="nav-style block" aria-current="false">เพิ่มสินค้าใหม่</a>
         </div>
       </div>
     </div>
@@ -122,14 +122,14 @@
       const currentPage = window.location.pathname;
       /* ดึงลิงค์ทั้งหมดที่มี class 'nav-style' */
       const links = document.getElementsByClassName('nav-style');
-      // console.log(currentPage);
+      //console.log(currentPage);
       /* วนลูปทุกลิงค์ */
       for (let i = 0; i < links.length; i++) {
         const link = links[i];
         let linkPath = link.getAttribute('href');
-        linkPath = '/Regis-Login/' + linkPath;
+        //linkPath = linkPath.replace('../..', '/SmitiShop');
         /* ถ้า URL ของลิงค์มี folder ตรงกับ URL folder เดียวกันปัจจุบัน */
-        // console.log(linkPath);
+        //console.log(linkPath);
         if (linkPath === currentPage) {
           /* ตั้งค่า aria-current เป็น 'page' */
           link.setAttribute('aria-current', 'page');
