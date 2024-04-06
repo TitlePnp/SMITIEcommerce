@@ -31,18 +31,6 @@ try {
     $stmt->bind_param("issss", $CusID, $Email, $OTP, $StartTime, $EndTime);
     $stmt->execute();
 
-    $mail->SMTPDebug = 2;
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'tle.rock54@gmail.com';
-    $mail->Password = 'tle135rock24';
-    $mail->SMTPSecure = 'tls';
-    $mail->Port = 587;
-
-    $mail->setFrom('SMITI@SHOP.com', 'Mailer');
-    $mail->addAddress($Email, 'User');
-
     $mail->isHTML(true);
     $mail->Subject = 'Recover Password OTP';
     $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
