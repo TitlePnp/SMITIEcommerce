@@ -50,7 +50,7 @@ if (isset($_GET['code'])) {
             $CusID = $row['CusID'];
             $noData = getInfo($CusID);
             while ($row = $noData->fetch_assoc()) {
-                if ($row['CusFName'] == null) {
+                if ($row['CusFName'] == null || $row['CusLName'] == null) {
                     require_once "../Log/LogManage.php";
                     insertLog("Login with Google", date("Y-m-d H:i:s"));
                     header('Location: http://localhost/SmitiShop/Frontend/Profile/Information.php');

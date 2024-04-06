@@ -91,7 +91,8 @@ $authUrl = $client->createAuthUrl();
                 <div class="flex justify-between mt-2">
                     <span id="RecoverMailError" class="text-sm text-red-500 mb-2"></span>
                     <div class="flex justify-end">
-                        <button type="button" class="text-sm text-blue-500 hover:text-blue-700">ส่งรหัสอีกครั้ง</button>
+                        <button id="SendOTPButton" type="button" class="text-sm text-blue-500 hover:text-blue-700">ส่งรหัส OTP</button>
+                        <button id="ResendOTPButton" type="button" style="display: none;" class="text-sm text-blue-500 hover:text-blue-700">ส่งรหัสอีกครั้ง</button>
                     </div>
                 </div>
                 <div id="OTPInput" class="input-group mt-5" style="display: none;">
@@ -99,74 +100,78 @@ $authUrl = $client->createAuthUrl();
                     <label for="">OTP</label>
                 </div>
 
-                <button type="button" onclick="validateForm()" class="rounded-md bg-black w-full text-white px-4 py-2 mt-5 hover:shadow-xl">ยืนยันรหัส</button>
+                <button type="button" onclick="validateForm()" class="rounded-md w-full bg-gray-300 text-white px-4 py-2 mt-5 hover:shadow-xl" disabled>ยืนยันรหัส</button>
         </div>
     </div>
 
     <script>
-        var RecoverMail = document.getElementById('Email');
-        var RecoverMailError = document.getElementById('RecoverMailError');
+        var SendOTPButton = document.getElementById('SendOTPButton');
 
-        const validateForm = () => {
-            let email = document.getElementById('Email').value;
-            if (email == "") {
-                RecoverMailError.style.display = 'block';
-                RecoverMailError.innerHTML = '*กรุณากรอกอีเมล';
-                RecoverMail.style.border = '1px solid red';
-            } //check pattern email from regex
-            else if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
-                RecoverMailError.style.display = 'block';
-                RecoverMailError.innerHTML = '*รูปแบบอีเมลไม่ถูกต้อง';
-                RecoverMail.style.border = '1px solid red';
+        SendOTPButton.addEventListener('click', function() {
+            var Email = document.getElementById('Email').value;
+            // Check value email and check pattern email from regex
+            if (Email == "") {
+                document.getElementById('RecoverMailError').style.display = 'block';
+                document.getElementById('RecoverMailError').innerHTML = '*กรุณากรอกอีเมล';
+                document.getElementById('Email').style.border = '1px solid red';
+            } else if (!Email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
+                document.getElementById('RecoverMailError').style.display = 'block';
+                document.getElementById('RecoverMailError').innerHTML = '*รูปแบบอีเมลไม่ถูกต้อง';
+                document.getElementById('Email').style.border = '1px solid red';
             } else {
-                RecoverMailError.style.display = 'none';
-                RecoverMail.style.border = '1px solid black';
-
+                document.getElementById('RecoverMailError').innerHTML = '';
+                document.getElementById('Email').style.border = '1px solid black';
+                this.style.display = 'none';
+                document.getElementById('ResendOTPButton').style.display = 'block';
+                document.getElementById('OTPInput').style.display = 'block';
+                startTimer();
                 $.ajax({
                     type: "POST",
-                    url: "../../Backend/UserManage/checUserAccount.php",
+                    url: "../../Backend/UserManage/checkUserAccount.php",
                     data: {
-                        email: email,
-                        action: 'checkEmails'
+                        email: Email,
+                        action: 'checkEmail'
                     },
                     success: function(response) {
                         if (response == "email exists") {
-                            alert("ส่งรหัสผ่านสำเร็จ");
-                            window.location.href = "../SignIn_Page/SignIn.php";
+                            $.ajax({
+                                type: "POST",
+                                url: "../../Backend/OTPControl/OTPInsert.php",
+                                data: {
+                                    email: Email
+                                },
+                                success: function(response) {
+                                    if (response == "SendOTPSuccess") {
+                                        alert("ส่งรหัส OTP สำเร็จ");
+                                    } else {
+                                        alert("ส่งรหัส OTP ไม่สำเร็จ");
+                                    }
+
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    document.getElementById('RecoverMailError').innerHTML = '*ไม่สามารถส่งรหัส OTP';
+                                } 
+                            });
                         }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        document.getElementById('RecoverMailError').innerHTML = '*เกิดข้อผิดพลาดในการส่งรหัส OTP';
                     }
                 });
             }
-        }
+        });
 
-        var countDownDate = new Date().getTime() + 15 * 60000; // 15 minutes from now
-
-        var x = setInterval(function() {
-            var now = new Date().getTime();
-            var distance = countDownDate - now;
-
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
-
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("timer").innerHTML = "EXPIRED";
-            }
-        }, 1000);
-
-        var resendButton = document.querySelector('button');
+        var resendButton = document.getElementById('ResendOTPButton');
         var countDownTime = 60; // 60 seconds
 
         function startTimer() {
             var timer = setInterval(function() {
                 countDownTime--;
-                resendButton.textContent = `ส่งอีกครั้ง(${countDownTime})`;
+                resendButton.textContent = `ส่งรหัสอีกครั้ง(${countDownTime})`;
 
                 if (countDownTime <= 0) {
                     clearInterval(timer);
-                    resendButton.textContent = 'ส่งอีกครั้ง';
+                    resendButton.textContent = 'ส่งรหัสอีกครั้ง';
                     resendButton.disabled = false;
                     countDownTime = 60;
                 }
@@ -174,9 +179,65 @@ $authUrl = $client->createAuthUrl();
         }
 
         resendButton.addEventListener('click', function() {
+            OTPInput.style.display = 'block';
             this.disabled = true;
             startTimer();
         });
+
+
+        // var RecoverMail = document.getElementById('Email');
+        // var RecoverMailError = document.getElementById('RecoverMailError');
+
+        // const validateForm = () => {
+        //     let email = document.getElementById('Email').value;
+        //     if (email == "") {
+        //         RecoverMailError.style.display = 'block';
+        //         RecoverMailError.innerHTML = '*กรุณากรอกอีเมล';
+        //         RecoverMail.style.border = '1px solid red';
+        //     } //check pattern email from regex
+        //     else if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
+        //         RecoverMailError.style.display = 'block';
+        //         RecoverMailError.innerHTML = '*รูปแบบอีเมลไม่ถูกต้อง';
+        //         RecoverMail.style.border = '1px solid red';
+        //     } else {
+        //         RecoverMailError.style.display = 'none';
+        //         RecoverMail.style.border = '1px solid black';
+
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "../../Backend/UserManage/checUserAccount.php",
+        //             data: {
+        //                 email: email,
+        //                 action: 'checkEmails'
+        //             },
+        //             success: function(response) {
+        //                 if (response == "email exists") {
+        //                     alert("ส่งรหัสผ่านสำเร็จ");
+        //                     window.location.href = "../SignIn_Page/SignIn.php";
+        //                 }
+        //             }
+        //         });
+        //     }
+        // }
+
+        // var countDownDate = new Date().getTime() + 15 * 60000; // 15 minutes from now
+
+        // var x = setInterval(function() {
+        //     var now = new Date().getTime();
+        //     var distance = countDownDate - now;
+
+        //     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        //     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        //     document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
+
+        //     if (distance < 0) {
+        //         clearInterval(x);
+        //         document.getElementById("timer").innerHTML = "EXPIRED";
+        //     }
+        // }, 1000);
+
+        // var OTPInput = document.getElementById('OTPInput');
     </script>
 </body>
 
