@@ -16,22 +16,19 @@
     $_SESSION['proStatus'] = $status;
   }
 
-  $type = '';
-  $proPerPage = 10;
-  $countPro = countProduct($type, $status);
-  $pages = ceil($countPro / $proPerPage);
-  if (!isset($_GET['page'])) {
-    $page = 1;
-  } else {
-    $page = $_GET['page'];
+  $search = '';
+  if (isset($_POST['search']) && trim($_POST['search']) !== '') {
+    $search = $_POST['search'];
+    $_POST['search'] = '';
   }
-  $startPro = ($page - 1) * $proPerPage;
-  $product = showProductSplitPage($type, $startPro, $proPerPage, $status);
+
+  $product = searchProduct($search, $status);
   $pType = showProductType();
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,7 +66,7 @@
     <div class="flex flex-col sm:flex-row my-6">
       <div class="flex flex-col mr-10">
         <p class="font-medium my-2">ค้นหา</p>
-        <form style="width: 100%" action="ProductOnSearch.php" method="post">
+        <form style="width: 100%" method="post">
           <div class="relative">
             <input type="text" class="text-sm w-full placeholder:italic bg-white border rounded-md py-2 px-16 ps-3"
               placeholder="ชื่อสินค้า, ชื่อผู้แต่ง" name="search" required/>
@@ -82,7 +79,7 @@
         
       <div class="flex flex-col">
         <p class="font-medium my-1">หมวดหมู่</p>
-        <form style="width: 100%" action="ProductOnType.php" method="post">
+        <form style="width: 100%" action="ProductOnType" method="post">
           <div class="relative inline-flex">
             <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" viewBox="0 0 412 232">
               <path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c9.763 9.763 25.592 9.763 35.355 0l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/>
@@ -101,7 +98,15 @@
       </div>
     </div>
 
-    <p class="text-sm text-right">หน้าที่ <?php echo $page; ?> จาก <?php echo $pages; ?></p>
+    <div class="flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-100" role="alert">
+    <img src="../../Pictures/info-green.png" class="w-4 h-4" alt="info" />
+    <div>
+      <span class="font-medium pl-3"> 
+        <?php echo "ค้นหา: {$search}" ?>
+      </span>
+    </div>
+    </div>
+
     <div class="relative overflow-x-auto shadow-md sm:rounded-md">
       <table class="w-full text-sm text-black mt-2">
         <thead class="text-sm bg-gray-100">
@@ -160,17 +165,6 @@
         </tbody>
       </table>
     </div>
-
-    <div class="mt-6 flex justify-center">
-      <div class="flex">
-        <?php for ($i=1; $i<=$pages; $i++) { 
-                if ($i == $page) {     ?>
-                  <a href="?page=<?php echo $i; ?>" class="mx-1 px-3 py-1 bg-[#062639] rounded-md text-white"><?php echo $i; ?></a>
-                <?php } else { ?>
-                <a href="?page=<?php echo $i; ?>" class="mx-1 px-3 py-1 bg-gray-200 rounded-md"><?php echo $i; ?></a>
-        <?php }} ?>
-      </div>
-    </div>
   </div>
   <script>
     var status = "<?php echo $status; ?>";
@@ -190,7 +184,7 @@
             status: status
           },
           success: function(data) {
-            $('body').html(data);
+            window.location = 'Product.php';
           }
         });
       });

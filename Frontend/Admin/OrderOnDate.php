@@ -78,7 +78,6 @@
           <div class="relative">
             <input type="text" class="text-sm w-full placeholder:italic bg-white border rounded-md py-2 px-16 ps-3"
               placeholder="เลขที่ใบเสร็จ, ชื่อลูกค้า" name="search" required/>
-            <input type="hidden" name="status" value="ok">
             <button type="submit" class="absolute right-0 top-0 bottom-0 bg-gray-400 text-white hover:bg-gray-500 rounded-r-md text-sm px-5 py-2">
               <img class="h-5 w-auto" src="../../Pictures/search.png" alt="search">
             </button>
@@ -138,13 +137,7 @@
             <th scope="col" style="letter-spacing: 0.1em;">สถานะ</th>
             <th scope="col" style="letter-spacing: 0.1em;">อัพเดทสถานะ</th>
             <th scope="col"></th>
-            <th scope="col" class="p-4 border-r">
-              <div class="flex items-center">
-                <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-blue-600">
-                <label for="checkbox-all" class="sr-only">checkbox</label>
-              </div>
-            </th>
-            </tr>
+          </tr>
         </thead>
         <tbody>
       <?php $receipt = searchByDate($start_date, $end_date, $status, $status2);
@@ -238,18 +231,12 @@
                   </button>
                 </td>
         <?php  } $count++; } /* end foreach */?>
-              <td>
+              <td class="pr-3">
                 <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/search-normal.png" alt="search"></button>
                 <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/printer.png" alt="print"></button>
         <?php if ("Returned" == $status or "Cancel" == $status) { ?>
                 <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/pen.png" alt="edit"></button>
         <?php } ?>
-              </td>
-              <td class='px-3 py-4'>
-                <div class='flex items-center'>
-                  <input id='checkbox-product' type='checkbox' class='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded'>
-                  <label for='checkbox-product' class='sr-only'>checkbox</label>
-                </div>
               </td>
             </tr>
           <?php } /* end whileloop */?>

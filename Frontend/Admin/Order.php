@@ -59,27 +59,27 @@
 <body>
   <div class="px-20 pb-12">
     <div class="flex flex-wrap justify-center items-center mb-5">
-      <button type="button" value="Pending" class="head m-3 w-full sm:w-auto bg-white hover:bg-gray-400 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5">
+      <button type="button" value="Pending" class="head m-3 w-full sm:w-auto bg-white hover:bg-blue-100 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5 border-2 border-blue-700">
         <img src="../../Pictures/Admin/salary.png" class="w-9 h-9 my-2" alt="">
         <p class="text-center text-sm font-medium">ชำระเงินแล้ว รอการตรวจสอบ</p>
       </button>
 
-      <button type="button" value="Paid" class="head m-3 w-full sm:w-auto bg-white hover:bg-gray-400 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5">
+      <button type="button" value="Paid" class="head m-3 w-full sm:w-auto bg-white hover:bg-blue-100 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5 border-2 border-blue-700">
         <img src="../../Pictures/Admin/pending-box.png" class="w-9 h-9 my-2" alt="">
         <p class="text-center text-sm font-medium">รอการจัดส่ง</p>
       </button>
 
-      <button type="button" value="COD" class="head m-3 w-full sm:w-auto bg-white hover:bg-gray-400 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5">
+      <button type="button" value="COD" class="head m-3 w-full sm:w-auto bg-white hover:bg-blue-100 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5 border-2 border-blue-700">
         <img src="../../Pictures/Admin/express-delivery.png" class="w-9 h-9 my-2" alt="">
         <p class="text-center text-sm font-medium">เก็บเงินปลายทาง รอการจัดส่ง</p>
       </button>
 
-      <button type="button" value="Delivered" class="head m-3 w-full sm:w-auto bg-white hover:bg-gray-400 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5">
+      <button type="button" value="Delivered" class="head m-3 w-full sm:w-auto bg-white hover:bg-blue-100 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5 border-2 border-blue-700">
         <img src="../../Pictures/Admin/truck.png" class="w-9 h-9 my-2" alt="">
         <p class="text-center text-sm font-medium">จัดส่งแล้ว</p>
         </button>
 
-      <button type="button" value="Returned" class="head m-3 w-full sm:w-auto bg-white hover:bg-gray-400 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5">
+      <button type="button" value="Returned" class="head m-3 w-full sm:w-auto bg-white hover:bg-blue-100 shadow-lg text-black rounded-lg flex flex-col items-center justify-center px-4 py-2.5 border-2 border-blue-700">
         <img src="../../Pictures/Admin/cancelled.png" class="w-9 h-9 my-2" alt="">
         <p class="text-center text-sm font-medium">สินค้าถูกส่งคืน / ยกเลิก</p>
       </button>
@@ -92,8 +92,7 @@
           <div class="relative">
             <input type="text" class="text-sm w-full placeholder:italic bg-white border rounded-md py-2 px-16 ps-3"
               placeholder="เลขที่ใบเสร็จ, ชื่อลูกค้า" name="search" required/>
-            <input type="hidden" name="status" value="ok">
-            <button type="submit" class="absolute right-0 top-0 bottom-0 bg-gray-400 text-white hover:bg-gray-500 rounded-r-md text-sm px-5 py-2">
+            <button type="submit" class="absolute right-0 top-0 bottom-0 bg-green-300 hover:bg-green-500 rounded-r-md px-5 py-2">
               <img class="h-5 w-auto" src="../../Pictures/search.png" alt="search">
             </button>
           </div>
@@ -114,7 +113,7 @@
               <input type="hidden" id="start_date" name="start_date">
               <input type="hidden" id="end_date" name="end_date">
             </div>
-            <button type="submit" class="text-black bg-gray-400 hover:bg-gray-500 font-medium rounded-lg text-sm px-5 py-2 ml-3">
+            <button type="submit" class="bg-green-300 hover:bg-green-500 rounded-lg text-sm px-5 py-2 ml-3">
               <img class="h-5 w-auto" src="../../Pictures/search.png" alt="search">
             </button>
           </div>
@@ -134,13 +133,7 @@
             <th scope="col" style="letter-spacing: 0.1em;">สถานะ</th>
             <th scope="col" style="letter-spacing: 0.1em;">อัพเดทสถานะ</th>
             <th scope="col"></th>
-            <th scope="col" class="p-4 border-r">
-              <div class="flex items-center">
-                <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-blue-600">
-                <label for="checkbox-all" class="sr-only">checkbox</label>
-              </div>
-            </th>
-            </tr>
+          </tr>
         </thead>
         <tbody>
       <?php $receipt = receiptDetail($status, $status2);
@@ -232,7 +225,7 @@
                 </button>
               </td>
       <?php  } $count++; } /* end foreach */?> 
-              <td>
+              <td class="pr-3">
                 <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/search-normal.png" alt="search"></button>
                 <!-- <form action="../PDF/Parcel.php" method="post"> -->
                   <!-- <input type="hidden" name="cusID" value="<?php // echo $row['CusID'];?>">
@@ -242,12 +235,6 @@
       <?php if ("Returned" == $status or "Cancel" == $status) { ?>
                 <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/pen.png" alt="edit"></button>
       <?php } ?>
-              </td>
-              <td class='px-3 py-4'>
-                <div class='flex items-center'>
-                  <input id='checkbox-product' type='checkbox' class='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded'>
-                  <label for='checkbox-product' class='sr-only'>checkbox</label>
-                </div>
               </td>
             </tr>
           <?php } /* end whileloop */?>
@@ -262,8 +249,8 @@
     $(document).ready(function() {
       $('.head').each(function() {
         if ($(this).val() === status) {
-          $(this).removeClass('bg-white');
-          $(this).addClass('bg-gray-400');
+          $(this).removeClass('bg-white border-2');
+          $(this).addClass('bg-blue-300');
         }
       });
       $('.head').click(function() {
