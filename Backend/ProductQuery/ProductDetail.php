@@ -46,3 +46,22 @@ function sumProductOnOrder($proID)
   $stmt->close();
   return $result['SUM(Qty)'];
 }
+
+function getQtyWarningProduct() {
+  //get Qty of each product orderby less qty
+  global $connectDB;
+  $stmt = $connectDB->prepare("SELECT ProID, ProName, StockQty FROM product WHERE StockQty < 5  ORDER BY StockQty ASC LIMIT 10");
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $stmt->close();
+  return $result;
+}
+
+function getQtyPaidStatusCompareStockQty(){
+  global $connectDB;
+  $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.StockQty, r.InvoiceID, SUM(il.Qty) as Qty FROM product p JOIN invoice_list il ON p.ProID = il.ProID JOIN receipt r ON r.InvoiceID = il.InvoiceID WHERE r.Status = 'COD' OR r.Status = 'Paid' GROUP BY p.ProID ORDER BY r.InvoiceID;");
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $stmt->close();
+  return $result;
+}

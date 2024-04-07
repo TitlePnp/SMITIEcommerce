@@ -40,11 +40,16 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
         unset($_SESSION['InvoiceID']);
     }
 
+    $haveReceipt = false;
     $orderListResult = getOrderListDetail($orderID);
     $Status = getReceiptStatus($orderID);
     if ($Status == "No Receipt") {
         $getOrderDetail = getInvoiceInfo($orderID);
         $Status = $getOrderDetail['Status'];
+        $haveReceipt = false;
+    } else {
+        $getOrderDetail = getReceiptDetail($orderID);
+        $haveReceipt = true;
     }
 
     // $Status = "Cancel";
@@ -82,7 +87,7 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
             echo "   <div class='flex justify-center w-2/12 items-center'>";
             echo "        <img src='{$ProductInfo['ImageSource']}'class='w-32 h-42 object-cover rounded-md'>";
             echo "   </div>";
-            echo "   <div class='w-6/12'>";
+            echo "   <div class='w-full'>";
             echo "      <p class='font-bold text-xl'>{$ProductInfo['ProName']}</p>";
             echo "       <p class='text-gray-500 text-md'>{$ProductInfo['Description']}</p>";
             echo "       <div class='flex'>";
@@ -104,28 +109,23 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
             echo "    </div>";
             $orderDetail = getAddressAndPriceOrder($orderID);
             $orderDetail = $orderDetail->fetch_assoc();
-            echo "    <div class='flex w-4/12'>";
-            echo "       <div class='flex flex-col ml-10 mr-5 w-full'>";
-            echo "           <p class='text-md font-semibold'>ที่อยู่จัดส่ง</p>";
-            echo "            <p> '{$orderDetail['RecvAddress']}, {$orderDetail['RecvProvince']} {$orderDetail['RecvPostcode']}</p>";
-            echo "       </div>";
-            echo "       <div class='flex flex-col w-full'>";
-            echo "           <p class='text-md font-semibold'>ที่อยู่ผู้จ่าย</p>";
-            echo "           <p>{$orderDetail['PayerAddress']}, {$orderDetail['PayerProvince']} {$orderDetail['PayerPostcode']} </p>";
-            echo "        </div>";
-            echo "    </div>";
             echo "</div>";
-
-
             echo "</div>";
         };
         ?>
         <div class="bg-white p-5 rounded-lg">
             <?php
-            $OrderDate = date_create($getOrderDetail['StartDate']);
-            $OrderDate = date_format($OrderDate, "d/m/Y");
-            $OrderTime = date_create($getOrderDetail['StartDate']);
-            $OrderTime = date_format($OrderTime, "H:i:s");
+            if ($haveReceipt) {
+                $OrderDate = date_create($getOrderDetail['PayTime']);
+                $OrderDate = date_format($OrderDate, "d/m/Y");
+                $OrderTime = date_create($getOrderDetail['PayTime']);
+                $OrderTime = date_format($OrderTime, "H:i:s");
+            } else {
+                $OrderDate = date_create($getOrderDetail['StartDate']);
+                $OrderDate = date_format($OrderDate, "d/m/Y");
+                $OrderTime = date_create($getOrderDetail['StartDate']);
+                $OrderTime = date_format($OrderTime, "H:i:s");
+            }
 
             $vat = $getOrderDetail['Vat'];
             $OrderTotalPrice = $getOrderDetail['TotalPrice'];
@@ -263,7 +263,7 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
                         }
                     } else if ($PaymentMethod == "COD") {
                         if ($Status == "COD") {
-                            echo "<div class='bg-blue-600 h-4 w-8/12 rounded-md'>";
+                            echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
                             echo "</div>";
                             echo "</div>";
                             echo "<div class='w-full flex'>";
@@ -273,7 +273,7 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
                             echo '    <div class="my-5 w-full mx-2 text-center text-blue-600">';
                             echo '       <p class="text-sm">กำลังจัดเตรียมสินค้า</p>';
                             echo '    </div>';
-                            echo '  <div class="my-5 w-full mx-2 text-center text-blue-600">';
+                            echo '  <div class="my-5 w-full mx-2 text-center">';
                             echo '      <p class="text-sm">กำลังจัดส่งสินค้า</p>';
                             echo '    </div>';
                             echo '   <div class="my-5 w-full text-end">';
@@ -413,7 +413,7 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
 
 
                     <div class="my-5 rounded-lg p-2 bg-gray-100 flex">
-                        <div class="w-full p-2 flex flex-col">
+                        <div class="w-2/12 p-2 flex flex-col">
                             <div>
                                 <p class="font-semibold">ช่องทางการชำระเงิน</p>
                             </div>
@@ -428,10 +428,21 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
                                                     ?></p>
                             </div>
                         </div>
-                        <div class="w-full">
-
+                        <div class="w-6/12 p-2">
+                            <?php
+                            echo "    <div class='flex w-full'>";
+                            echo "       <div class='flex flex-col w-full'>";
+                            echo "           <p class='text-md font-semibold'>ที่อยู่ผู้จ่าย</p>";
+                            echo "           <p>{$orderDetail['PayerAddress']}, {$orderDetail['PayerProvince']} {$orderDetail['PayerPostcode']} </p>";
+                            echo "        </div>";
+                            echo "       <div class='flex flex-col ml-10 mr-5 w-full'>";
+                            echo "           <p class='text-md font-semibold'>ที่อยู่จัดส่ง</p>";
+                            echo "            <p> '{$orderDetail['RecvAddress']}, {$orderDetail['RecvProvince']} {$orderDetail['RecvPostcode']}</p>";
+                            echo "       </div>";
+                            echo "    </div>";
+                            ?>
                         </div>
-                        <div class="w-full mx-5">
+                        <div class="w-4/12 mx-5">
                             <div class="flex justify-between border-b py-2 border-gray-300">
                                 <p>ราคาสินค้า</p>
                                 <p><?php echo "{$SubtotalPriceFormat} บาท" ?></p>

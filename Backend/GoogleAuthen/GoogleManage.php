@@ -74,9 +74,8 @@ if (isset($_GET['code'])) {
         // header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
         // print_r($_SESSION);
     } else {
-        echo "No data";
         $stmt = $connectDB->prepare("INSERT INTO customer(CusFName, CusLName, Sex, Tel, Address) VALUES 
-        (?,'','','','')");
+    (?,'','','','')");
         $stmt->bind_param("s", $name);
         $stmt->execute();
 

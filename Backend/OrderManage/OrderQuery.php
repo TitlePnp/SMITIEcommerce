@@ -76,3 +76,23 @@ function getReceiptStatus($invoiceID)
         return $result['Status'];
     }
 }
+
+function getReceiptDetail($invoiceID) {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT * FROM receipt WHERE InvoiceID = ? ");
+    $stmt->bind_param("s", $invoiceID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+    return $row;
+}
+
+
+function getOverallStatus() {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT Status, COUNT(InvoiceID) as count FROM invoice_order GROUP BY Status");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+}

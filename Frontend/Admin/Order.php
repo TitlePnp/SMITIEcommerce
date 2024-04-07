@@ -236,7 +236,7 @@
                 <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/search-normal.png" alt="search"></button>
                 <!-- <form action="../PDF/Parcel.php" method="post"> -->
                   <!-- <input type="hidden" name="cusID" value="<?php // echo $row['CusID'];?>">
-                  <input type="hidden" name="payerID" value="<?php// echo $row['PayerID']?>"> -->
+                  <input type="hidden" name="payerID" value="<?php // echo $row['PayerID']?>"> -->
                   <button type="submit"><img class="h-6 w-auto" src="../../Pictures/Admin/printer.png" alt="print"></button>
                 <!-- </form> -->
       <?php if ("Returned" == $status or "Cancel" == $status) { ?>
