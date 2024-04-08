@@ -63,7 +63,7 @@ require '../../Backend/SuperAdmin/UserManage.php';
                             <td class="p-6"><?php echo $row['Email'] ?></td>
                             <td class="p-6"><?php echo $row['UserName'] ?></td>
                             <td class="p-6"><?php echo $row['Role'] ?></td>
-                            <td class="p-6"><button id="delRole" type="button" class="p-3 bg-red-500 rounded-lg hover:bg-red-600 w-16 font-semibold text-white hover:shadow-lg" onclick="deleteUser()"><i class='bx bx-trash'></i></button></td>
+                            <td class="p-6"><button id="delRole" type="button" class="p-3 bg-red-500 rounded-lg hover:bg-red-600 w-16 font-semibold text-white hover:shadow-lg" onclick="deleteUser('<?php echo $row['CusID']; ?>', '<?php echo $row['Email']; ?>', '<?php echo $row['UserName']; ?>')"><i class='bx bx-trash'></i></button></td>
                         </tr>
                     <?php
                     }
@@ -126,12 +126,9 @@ require '../../Backend/SuperAdmin/UserManage.php';
             }
         });
 
-        function deleteUser(userID, EmailVal, UserNameVal) {
-            var Email = EmailVal;
-            var UserName = UserNameVal;
-            var Role = "User"
+        function deleteUser(CusID, Email, UserName, Role) {
             $.post('../../Backend/SuperAdmin/AdminManage.php', {
-                CusID: userID,
+                CusID: CusID,
                 Email: Email,
                 UserName: UserName,
                 Role: Role,
