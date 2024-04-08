@@ -18,16 +18,16 @@ if (isset($_SESSION['tokenJWT'])) {
     header('Location: ../../Frontend/Admin/DashBoard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/SuperAdmin/DashBoard.php');
+    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashBoard.php');
     exit();
   }
-} elseif (isset($_SESSION['tokenGoogle'])) {
+} elseif (isset($_SESSION['tokenGoogle'])) {  
   $role = getRole($_SESSION['tokenGoogle']);
   if ($role == "Admin") {
     header('Location: ../../Frontend/Admin/DashBoard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/SuperAdmin/DashBoard.php');
+    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashBoard.php');
     exit();
   }
 }

@@ -25,10 +25,10 @@ if (isset($_SESSION['tokenJWT'])) {
 } elseif (isset($_SESSION['tokenGoogle'])) {
   $role = getRole($_SESSION['tokenGoogle']);
   if ($role == "Admin") {
-    header('Location: ../../Frontend/admin/Test.php');
+    header('Location: ../../Frontend/Admin/Dashboard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/admin/Test.php');
+    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashBoard.php');
     exit();
   }
 } else {

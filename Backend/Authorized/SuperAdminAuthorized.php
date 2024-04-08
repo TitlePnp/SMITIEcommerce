@@ -12,6 +12,6 @@
       exit();
     }
   } else {
-    header('Location: ../../Frontend/SuperAdmin/DashBoard.php');
+    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashBoard.php');
   }
 ?>
