@@ -99,4 +99,17 @@
     $stmt->close();
     return $result;
   }
+
+  function productInfo($proID) {
+    global $connectDB;
+    $stmt = $connectDB->prepare(
+      "SELECT * 
+      FROM PRODUCT p 
+      JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
+      WHERE p.ProID = ?");
+    $stmt->bind_param("i", $proID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+  }
 ?>

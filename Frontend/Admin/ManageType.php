@@ -84,8 +84,6 @@
       <?php } ?>
     </a>
   </div>
-  <?php 
-  ?>
   <script>
     function validateForm() {
       const thaiType = document.getElementById('thaiType');

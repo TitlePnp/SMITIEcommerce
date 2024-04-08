@@ -148,7 +148,7 @@
                 <span class="font-semibold">ผู้แต่ง: </span><?php echo $row['Author'];?>
               </p>
               <p class="ps-3 text-sm/[17px] leading-loose">
-                <span class="font-semibold">คำอธิบาย: </span><?php echo $des;?>
+                <span class="font-semibold">รายละเอียด: </span><?php echo $des;?>
               </p>
             </td>
 
@@ -168,7 +168,10 @@
             </td>
 
             <td class="pr-3">
-              <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/pen.png" alt="search"></button>
+              <form action="ProductInfo.php" method="post">
+                <input type="hidden" name="proID" value="<?php echo $row['ProID'];?>">
+                <button type="submit"><img class="h-6 w-auto" src="../../Pictures/Admin/pen.png" alt="search"></button>
+              </form>
               <button type="button"><img class="h-6 w-auto" src="../../Pictures/Admin/observation.png" alt="search"></button>
             </td>
           </tr>
