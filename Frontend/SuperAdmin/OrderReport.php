@@ -78,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <!-- <input id="datetimerange-input1" type="text" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 py-2" placeholder="วันที่เริ่มต้น" required> -->
                                 <input id="datetimerange-input1" type="text" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 py-2" placeholder="วันที่เริ่มต้น" value="<?php echo isset($start_date) ? $start_date : '' ?>" required>
-                                <input type="hidden" id="start_date" name="start_date" value="<?php echo isset($start_date) ? $start_date : '' ?>">
-                                <input type="hidden" id="end_date" name="end_date" value="<?php echo isset($end_date) ? $end_date : '' ?>">
+                                <input type="hidden" id="start_date" name="start_date" value="<?php echo isset($start_date) ? $start_date : date('Y-m-d') ?>">
+                                <input type="hidden" id="end_date" name="end_date" value="<?php echo isset($end_date) ? $end_date : date('Y-m-d') ?>">
                             </div>
                             <button type="button" onclick="Search()" class="bg-green-300 hover:bg-green-500 rounded-lg text-sm px-5 py-2 ml-3">
                                 <img class="h-5 w-auto" src="../../Pictures/search.png" alt="search">
