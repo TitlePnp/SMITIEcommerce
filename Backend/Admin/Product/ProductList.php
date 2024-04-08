@@ -2,83 +2,114 @@
   error_reporting(E_ALL);
   ini_set('display_errors', 1);
   require '../../Components/ConnectDB.php';
-  function productList() {
+  function showProductType() {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Author, p.Description, p.PricePerUnit, 
-                                FROM PRODUCT p");
+    $stmt = $connectDB->prepare("SELECT * FROM PRODUCT_TYPE");
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
     return $result;
   }
 
-  function countProduct($type) {
+  function showProductSplitPage($type, $offset, $limit, $status) {
     global $connectDB;
-    $status = "Active";
+    if ($type == '') {
+      $stmt = $connectDB->prepare(
+        "SELECT *
+        FROM PRODUCT p 
+        JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
+        WHERE p.Status = ? 
+        ORDER BY p.ProID 
+        LIMIT ?, ?");
+      $stmt->bind_param("sii", $status, $offset, $limit);
+    } else {
+      $stmt = $connectDB->prepare(
+        "SELECT *
+        FROM PRODUCT p 
+        JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
+        WHERE pt.TypeName = ? AND p.Status = ? 
+        ORDER BY p.ProID 
+        LIMIT ?, ?");
+      $stmt->bind_param("ssii", $type, $status, $offset, $limit);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+  }
+
+  function countProduct($type, $status) {
+    global $connectDB;
+    if ($type == "") {
+      $stmt = $connectDB->prepare(
+        "SELECT COUNT(p.ProID) AS total
+        FROM PRODUCT p WHERE p.Status = ?");
+      $stmt->bind_param("s", $status);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $result = $result->fetch_assoc()['total'];
+      $stmt->close();
+      return $result;
+    } else {
+      $stmt = $connectDB->prepare(
+        "SELECT COUNT(p.ProID) AS total
+        FROM PRODUCT p JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
+        WHERE pt.TypeName = ? AND p.Status = ?");
+      $stmt->bind_param("ss", $type, $status);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $result = $result->fetch_assoc()['total'];
+      $stmt->close();
+      return $result;
+    }
+  }
+
+  function searchProduct($search, $status) {
+    global $connectDB;
     $stmt = $connectDB->prepare(
-      "SELECT COUNT(p.ProID) AS total
-      FROM PRODUCT p JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE pt.TypeName = ? AND p.Status = ?");
-    $stmt->bind_param("ss", $type, $status);
+      "SELECT * 
+      FROM PRODUCT p 
+      JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
+      WHERE p.ProName LIKE ? AND p.Status = ? 
+      ORDER BY p.ProID");
+    $search = "%$search%";
+    $stmt->bind_param("ss", $search, $status);
     $stmt->execute();
     $result = $stmt->get_result();
-    $result = $result->fetch_assoc()['total'];
+    $count = $result->num_rows;
+    if ($count == 0) {
+      $result = searchByAuthor($search, $status);
+    }
     $stmt->close();
     return $result;
   }
-  
-  function receiptDetail($status, $status2) {
+
+  function searchByAuthor($search, $status) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT r.RecID, r.PayTime, r.CusID, r.PayerID, r.InvoiceID, r.TotalPrice, r.Vat, r.Payment, r.Channel 
-                                FROM RECEIPT r WHERE r.Status = ? OR r.Status = ?
-                                ORDER BY r.PayTime");
-    $stmt->bind_param("ss", $status, $status2);
+    $stmt = $connectDB->prepare(
+      "SELECT * 
+      FROM PRODUCT p 
+      JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
+      WHERE p.Author LIKE ? AND p.Status = ? 
+      ORDER BY p.ProID");
+    $search = "%$search%";
+    $stmt->bind_param("ss", $search, $status);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
     return $result;
   }
 
-  function cusDetail($cusID) {
+  function productInfo($proID) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT c.CusFName, CusLName, c.Tel
-                                FROM CUSTOMER c WHERE c.CusID = ?");
-    $stmt->bind_param("i", $cusID);
+    $stmt = $connectDB->prepare(
+      "SELECT * 
+      FROM PRODUCT p 
+      JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
+      WHERE p.ProID = ?");
+    $stmt->bind_param("i", $proID);
     $stmt->execute();
     $result = $stmt->get_result();
-    $stmt->close();
-    return $result;
-  }
-
-  function payerDetail($payerID) {
-    global $connectDB;
-    $stmt = $connectDB->prepare("SELECT p.PayerFName, p.PayerLName, p.PayerTel
-                                FROM PAYER p WHERE p.PayerID = ?");
-    $stmt->bind_param("i", $payerID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
-    return $result;
-  }
-
-  function getRecvID($invoiceID) {
-    global $connectDB;
-    $stmt = $connectDB->prepare("SELECT i.RecvID FROM INVOICE_ORDER i WHERE i.InvoiceID = ?");
-    $stmt->bind_param("s", $invoiceID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
-    return $result;
-  }
-
-  function getPayment($recID) {
-    global $connectDB;
-    $stmt = $connectDB->prepare("SELECT r.PayerID, r.TotalPrice, r.Vat, r.Payment
-                                FROM RECEIPT r WHERE r.RecID = ?");
-    $stmt->bind_param("s", $recID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
     return $result;
   }
 ?>

@@ -85,7 +85,7 @@ CREATE TABLE PRODUCT (
     ProID           INT             AUTO_INCREMENT	PRIMARY KEY,
     ProName         VARCHAR(255)    NOT NULL,
     Author          VARCHAR(100)	NOT NULL,
-    Description     VARCHAR(10000)   NOT NULL,
+    Description     VARCHAR(10000),
     PricePerUnit	DOUBLE(8,2)     NOT NULL,
     CostPerUnit	    DOUBLE(8,2)     NOT NULL,
     StockQty        INT             NOT NULL,

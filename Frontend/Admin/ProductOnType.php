@@ -17,6 +17,10 @@
   }
 
   $type = '';
+  if (isset($_POST['type'])) {
+    $type = $_POST['type'];
+  }
+
   $proPerPage = 10;
   $countPro = countProduct($type, $status);
   $pages = ceil($countPro / $proPerPage);
@@ -32,6 +36,7 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,13 +87,13 @@
         
       <div class="flex flex-col">
         <p class="font-medium my-1">หมวดหมู่</p>
-        <form style="width: 100%" action="ProductOnType.php" method="post">
+        <form style="width: 100%" method="post">
           <div class="relative inline-flex">
             <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" viewBox="0 0 412 232">
               <path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c9.763 9.763 25.592 9.763 35.355 0l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/>
             </svg>
             <select name="type" class="text-sm text-gray-600 bg-white border border-gray-200 hover:border-gray-400 rounded-lg  h-9 pl-5 pr-10  appearance-none">
-              <option>ทั้งหมด</option>
+              <option value="">ทั้งหมด</option>
             <?php while ($row = $pType->fetch_assoc()) { ?>
               <option value="<?php echo $row['TypeName'];?>"><?php echo $row['ThaiType'];?></option>
             <?php } ?>
@@ -99,6 +104,15 @@
           </button>
         </form>
       </div>
+    </div>
+
+    <div class="flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-100" role="alert">
+    <img src="../../Pictures/info-green.png" class="w-4 h-4" alt="info" />
+    <div>
+        <span class="font-medium pl-3"> 
+        <?php echo "หมวดหมู่: {$type}" ?>
+        </span>
+    </div>
     </div>
 
     <div class="flex justify-between items-center">
@@ -204,7 +218,7 @@
             status: status
           },
           success: function(data) {
-            $('body').html(data);
+            window.location = 'Product.php';
           }
         });
       });
