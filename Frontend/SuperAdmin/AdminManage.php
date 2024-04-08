@@ -63,7 +63,7 @@ require '../../Backend/SuperAdmin/UserManage.php';
                             <td class="p-6"><?php echo $row['Email'] ?></td>
                             <td class="p-6"><?php echo $row['UserName'] ?></td>
                             <td class="p-6"><?php echo $row['Role'] ?></td>
-                            <td class="p-6"><button type="button" class="p-3 bg-red-500 rounded-lg hover:bg-red-600 w-16 font-semibold text-white hover:shadow-lg"><i class='bx bx-trash'></i></button></td>
+                            <td class="p-6"><button id="delRole" type="button" class="p-3 bg-red-500 rounded-lg hover:bg-red-600 w-16 font-semibold text-white hover:shadow-lg" onclick="deleteUser()"><i class='bx bx-trash'></i></button></td>
                         </tr>
                     <?php
                     }
@@ -74,8 +74,8 @@ require '../../Backend/SuperAdmin/UserManage.php';
             <div id="Input" class="flex flex-col" style="display: none;">
                 <div class="flex">
                     <input id="EmailInput" type="text" class="border p-2 mr-2 rounded-lg" placeholder="กรุณากรอกอีเมล"></input>
-                    <input id="UserNameInput"  type="text" class="border p-2 mx-2 rounded-lg" placeholder="กรุณากรอกชื่อผู้ใช้"></input>
-                    <input id="RoleInput"  type="text" class="border p-2 ml-2 rounded-lg" placeholder="กรุณากรอกตำแหน่ง"></input>
+                    <input id="UserNameInput" type="text" class="border p-2 mx-2 rounded-lg" placeholder="กรุณากรอกชื่อผู้ใช้"></input>
+                    <input id="RoleInput" type="text" class="border p-2 ml-2 rounded-lg" placeholder="กรุณากรอกตำแหน่ง"></input>
                     <button id="OKbtn" class="ml-10 px-5 bg-green-500 rounded-lg text-white">ตกลง</button>
                 </div>
                 <span id="AddAdminError" class="my-3 text-sm text-red-500"></span>
@@ -97,7 +97,7 @@ require '../../Backend/SuperAdmin/UserManage.php';
         var EmailInput = document.getElementById('EmailInput');
         var UserNameInput = document.getElementById('UserNameInput');
         var RoleInput = document.getElementById('RoleInput');
-        
+
         AddAdmin.addEventListener('click', function() {
             Input.style.display = 'flex';
         });
@@ -114,7 +114,8 @@ require '../../Backend/SuperAdmin/UserManage.php';
                 $.post('../../Backend/SuperAdmin/AdminManage.php', {
                     Email: Email,
                     UserName: UserName,
-                    Role: Role
+                    Role: Role,
+                    action: 'Add'
                 }, function(data) {
                     if (data == 'Success') {
                         location.reload();
@@ -124,6 +125,25 @@ require '../../Backend/SuperAdmin/UserManage.php';
                 });
             }
         });
+
+        function deleteUser(userID, EmailVal, UserNameVal) {
+            var Email = EmailVal;
+            var UserName = UserNameVal;
+            var Role = "User"
+            $.post('../../Backend/SuperAdmin/AdminManage.php', {
+                CusID: userID,
+                Email: Email,
+                UserName: UserName,
+                Role: Role,
+                action: 'Delete'
+            }, function(data) {
+                if (data == 'Success') {
+                    location.reload();
+                } else {
+                    alert(data);
+                }
+            });
+        }
     </script>
 </body>
 
