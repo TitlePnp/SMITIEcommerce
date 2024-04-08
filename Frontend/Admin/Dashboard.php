@@ -1,6 +1,5 @@
 <?php
-//   require '../../Backend/Authorized/AdminAuthorized.php';
-$role = "Admin";
+  require '../../Backend/Authorized/AdminAuthorized.php';
 require '../../Backend/Authorized/ManageHeader.php';
 require '../../Backend/OrderManage/GetOrderInfo.php';
 require '../../Backend/ProductQuery/ProductDetail.php';

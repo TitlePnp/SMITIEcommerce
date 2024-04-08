@@ -356,7 +356,7 @@ $authUrl = $client->createAuthUrl();
                 if (!lengthPass) {
                     passwordError.innerHTML = '*รหัสผ่านต้องมากกว่า 8 ตัวอักษร';
                     passwordBox.style.borderColor = 'rgb(244 63 94)';
-                } else if ($userEntropyPass === false) {
+                } else if (userEntropyPass === false) {
                     passwordError.innerHTML = '*รหัสผ่านไม่ปลอดภัย กรุณาทำตามคำแนะนำ';
                     passwordBox.style.borderColor = 'rgb(244 63 94)';
                 } else {

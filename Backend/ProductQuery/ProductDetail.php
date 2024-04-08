@@ -59,7 +59,14 @@ function getQtyWarningProduct() {
 
 function getQtyPaidStatusCompareStockQty(){
   global $connectDB;
-  $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.StockQty, r.InvoiceID, SUM(il.Qty) as Qty FROM product p JOIN invoice_list il ON p.ProID = il.ProID JOIN receipt r ON r.InvoiceID = il.InvoiceID WHERE r.Status = 'COD' OR r.Status = 'Paid' GROUP BY p.ProID ORDER BY r.InvoiceID;");
+  $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.StockQty, r.InvoiceID, SUM(il.Qty) as Qty 
+  FROM product p 
+  JOIN invoice_list il ON p.ProID = il.ProID 
+  JOIN receipt r ON r.InvoiceID = il.InvoiceID 
+  WHERE r.Status = 'COD' OR r.Status = 'Paid' 
+  GROUP BY p.ProID, p.ProName, p.StockQty, r.InvoiceID -- เพิ่ม r.InvoiceID เข้าไปใน GROUP BY
+  ORDER BY r.InvoiceID
+  ");
   $stmt->execute();
   $result = $stmt->get_result();
   $stmt->close();

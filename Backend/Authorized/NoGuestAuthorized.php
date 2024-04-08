@@ -1,9 +1,9 @@
 <?php
-session_start();
+sessionstart();
 require 'GoogleIdRole.php';
-require_once '../../Backend/UserManage/UserInfo.php';
+requireonce '../../Backend/UserManage/UserInfo.php';
 require '../../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR . '/../../Components', 'config.env');
 $dotenv->load();
 
 use Firebase\JWT\Key;
@@ -25,10 +25,10 @@ if (isset($_SESSION['tokenJWT'])) {
 } elseif (isset($_SESSION['tokenGoogle'])) {
   $role = getRole($_SESSION['tokenGoogle']);
   if ($role == "Admin") {
-    header('Location: ../../Frontend/admin/Test.php');
+    header('Location: ../../Frontend/Admin/Dashboard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/admin/Test.php');
+    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashBoard.php');
     exit();
   }
 } else {

@@ -1,6 +1,5 @@
 <?php
-//   require '../../Backend/Authorized/AdminAuthorized.php';
-$role = "SuperAdmin";
+require '../../Backend/Authorized/SuperAdminAuthorized.php';
 require '../../Backend/Authorized/ManageHeader.php';
 require '../../Backend/SuperAdmin/GetDataSuperAdmin.php';
 require '../../Backend/SuperAdmin/ReportQuey.php';
