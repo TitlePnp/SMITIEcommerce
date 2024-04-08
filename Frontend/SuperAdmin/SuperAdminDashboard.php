@@ -3,6 +3,7 @@
 $role = "SuperAdmin";
 require '../../Backend/Authorized/ManageHeader.php';
 require '../../Backend/SuperAdmin/GetDataSuperAdmin.php';
+require '../../Backend/SuperAdmin/ReportQuey.php';
 require '../../Components/ConnectDB.php';
 
 //set timezone
@@ -200,8 +201,11 @@ date_default_timezone_set('Asia/Bangkok');
       <div class="ml-5 h-full w-4/12 ">
         <div class="bg-white p-5 rounded-lg shadow-lg mb-5 flex flex-col">
           <?php
-          $TotalProductResult = getAllProduct();
-          $TotalProduct = $TotalProductResult['AllProduct'];
+          $TotalProductResult = getCountAllProduct();
+          $row = $TotalProductResult->fetch_assoc();
+          $TotalProduct = $row['ProductQTY'];
+          // $TotalProductResult = $TotalProductResult->fetch_assoc();
+          // $TotalProduct = $TotalProductResult['AllProduct'];
           ?>
           <div class="flex justify-between">
             <p class="text-xl mb-5 font-semibold">จำนวนสินค้าทั้งหมด <?php echo $TotalProduct ?> รายการ</p>

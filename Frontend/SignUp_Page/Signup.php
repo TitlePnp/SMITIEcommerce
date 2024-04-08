@@ -206,6 +206,8 @@ $authUrl = $client->createAuthUrl();
         const numberPassCheck = document.getElementById('numberPassCheck');
         const numberPassX = document.getElementById('numberPassX');
 
+        var userEntropyPass = false;
+
         //Password policy
         passwordBox.addEventListener('input', () => {
             const password = passwordBox.value;
@@ -260,18 +262,22 @@ $authUrl = $client->createAuthUrl();
                 lowIndicator.style.backgroundColor = 'rgb(107 114 128)';
                 mediumIndicator.style.backgroundColor = 'rgb(107 114 128)';
                 highIndicator.style.backgroundColor = 'rgb(107 114 128)';
+                userEntropyPass = false;
             } else if (entropy < 48) {
                 lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
                 mediumIndicator.style.backgroundColor = 'rgb(107 114 128)';
                 highIndicator.style.backgroundColor = 'rgb(107 114 128)';
+                userEntropyPass = false;
             } else if (entropy < 79) {
                 lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
                 mediumIndicator.style.backgroundColor = 'rgb(249 115 22)';
                 highIndicator.style.backgroundColor = 'rgb(107 114 128)';
+                userEntropyPass = false;
             } else {
                 lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
                 mediumIndicator.style.backgroundColor = 'rgb(249 115 22)';
                 highIndicator.style.backgroundColor = 'rgb(34 197 94)';
+                userEntropyPass = true;
             }
         });
 
@@ -350,11 +356,15 @@ $authUrl = $client->createAuthUrl();
                 if (!lengthPass) {
                     passwordError.innerHTML = '*รหัสผ่านต้องมากกว่า 8 ตัวอักษร';
                     passwordBox.style.borderColor = 'rgb(244 63 94)';
+                } else if ($userEntropyPass === false) {
+                    passwordError.innerHTML = '*รหัสผ่านไม่ปลอดภัย กรุณาทำตามคำแนะนำ';
+                    passwordBox.style.borderColor = 'rgb(244 63 94)';
                 } else {
                     passwordError.innerHTML = '';
                     passwordBox.style.borderColor = 'black';
                     passwordStatus = true;
                 }
+
             }
 
             if (confirmPassBox.value === '') {
@@ -372,7 +382,7 @@ $authUrl = $client->createAuthUrl();
                 }
             }
 
-            if (userNameStatus && emailStatus && passwordStatus && confirmPasswordStatus) {
+            if (userNameStatus && emailStatus && passwordStatus && confirmPasswordStatus && userEntropyPass) {
                 $.ajax({
                     type: 'POST',
                     url: '../../Backend/UserManage/checkUserAccount.php',

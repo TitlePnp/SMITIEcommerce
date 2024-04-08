@@ -68,7 +68,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </form>
 
                     <div class="flex w-full items-end justify-end mt-5">
-                        <button class="bg-red-500 p-2 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
+                        <form method="POST" action="../PDF/SuperAdminSellReport.php">
+                            <button class="bg-red-500 p-2 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
+                            <input type="hidden" name="start_date" value="<?php echo $start_date ?>">
+                            <input type="hidden" name="end_date" value="<?php echo $end_date ?>">
+                            <?php
+                            if (isset($start_date) && isset($end_date)) {
+                                echo '<input type="hidden" name="start_date" value="' . $start_date . '">';
+                                echo '<input type="hidden" name="end_date" value="' . $end_date . '">';
+                            } else {
+                                echo '<input type="hidden" name="start_date" value="NONE">';
+                                echo '<input type="hidden" name="end_date" value="NONE">';
+                            }
+                            ?>
+                        </form>
                     </div>
 
                     <div class="flex flex-col">

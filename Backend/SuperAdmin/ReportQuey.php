@@ -59,6 +59,16 @@ function getReportAllTime()
     return $result;
 }
 
+function getCountAllProduct() {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT COUNT(ProID) AS ProductQTY FROM product");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+
+}
+
 function getAllProdcutReport()
 {
     global $connectDB;
