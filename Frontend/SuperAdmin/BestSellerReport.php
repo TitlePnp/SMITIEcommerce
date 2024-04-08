@@ -8,9 +8,9 @@ require '../../Components/ConnectDB.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
-    $result = getSellReportByTime($start_date, $end_date);
+    $result = BestSellerByTime($start_date, $end_date);
 } else {
-    $result = getSellReport();
+    $result = BestSeller();
 }
 ?>
 
@@ -44,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="px-28">
         <div class="flex flex-col">
             <div>
-                <p class="font-semibold text-xl">รายงานยอดการขาย</p>
+                <p class="font-semibold text-xl">รายงานสินค้าที่ขายดีที่สุด </p>
             </div>
             <div>
                 <div class="flex flex-col">
-                    <form style="width: 100%" action="SellReport.php" method="post">
+                    <form style="width: 100%" action="BestSellerReport.php" method="post">
                         <p class="font-medium my-2">ช่วงวันที่</p>
                         <div date-rangepicker class="flex items-center">
                             <div class="relative" style="width: 90%">
@@ -61,15 +61,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <input type="hidden" id="start_date" name="start_date" value="<?php echo isset($start_date) ? $start_date : '' ?>">
                                 <input type="hidden" id="end_date" name="end_date" value="<?php echo isset($end_date) ? $end_date : '' ?>">
                             </div>
-                            <button type="button" onclick="checkVal()" class="bg-green-300 hover:bg-green-500 rounded-lg text-sm px-5 py-2 ml-3">
+                            <button type="submit" class="bg-green-300 hover:bg-green-500 rounded-lg text-sm px-5 py-2 ml-3">
                                 <img class="h-5 w-auto" src="../../Pictures/search.png" alt="search">
                             </button>
                         </div>
                     </form>
 
                     <div class="flex w-full items-end justify-end mt-5">
-                        <form method="POST" action="../PDF/SuperAdminSellReport.php">
-                            <button class="bg-red-500 p-2 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
+                        <form method="POST" action="../PDF/SuperAdminBestellerReport.php">
+                            <button type="submit" class="bg-red-500 p-2 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
                             <?php
                             if (isset($start_date) && isset($end_date)) {
                                 echo '<input type="hidden" name="start_date" value="' . $start_date . '">';
@@ -86,55 +86,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <table class="table-auto w-full my-5">
                             <thead>
                                 <tr class="bg-gray-400 shadow-lg">
-                                    <th class="border border-gray-300">รหัสใบเสร็จ</th>
-                                    <th class="border border-gray-300">เวลา</th>
+                                    <th class="border border-gray-300">รหัสสินค้า</th>
+                                    <th class="border border-gray-300">ชื่อสินค้า</th>
                                     <th class="border border-gray-300">จำนวนสินค้า</th>
-                                    <th class="border border-gray-300">กำไร</th>
+                                    <!-- <th class="border border-gray-300">กำไร</th>
                                     <th class="border border-gray-300">ภาษี</th>
                                     <th class="border border-gray-300">ต้นทุน</th>
-                                    <th class="border border-gray-300">ราคารวม</th>
+                                    <th class="border border-gray-300">ราคารวม</th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $TotalQty = 0;
-                                $TotalProfit = 0;
-                                $FinalTotalPrice = 0;
-                                $TotalCost = 0;
-                                $TotalVat = 0;
                                 while ($row = $result->fetch_assoc()) {
+                                    $TotalQty += $row['Qty'];
                                 ?>
                                     <tr class="hover:bg-gray-200">
-                                        <?php
-                                        $Profit = $row['Profit'];
-                                        $TotalPrice = $row['TotalPrice'] + $row['Vat'];
-                                        $Cost = $row['Cost'];
-                                        $Vat = $row['Vat'];
-                                        ?>
-                                        <td class="border border-gray-300 text-center px-3 py-4"><?php echo $row['RecID']; ?></td>
-                                        <td class="border border-gray-300 text-center px-3 py-4"><?php echo $row['PayTime']; ?></td>
+                                        <td class="border border-gray-300 text-center px-3 py-4"><?php echo $row['ProID']; ?></td>
+                                        <td class="border border-gray-300 text-center px-3 py-4"><?php echo $row['ProName']; ?></td>
                                         <td class="border border-gray-300 text-center px-3 py-4"><?php echo $row['Qty']; ?></td>
-                                        <td class="border border-gray-300 text-center px-3 py-4"><?php echo number_format($Profit, 2) ?> ฿</td>
-                                        <td class="border border-gray-300 text-center px-3 py-4"><?php echo number_format($Vat, 2) ?> ฿</td>
-                                        <td class="border border-gray-300 text-center px-3 py-4"><?php echo number_format($Cost, 2) ?> ฿</td>
-                                        <td class="border border-gray-300 text-center px-3 py-4"><?php echo number_format($TotalPrice, 2) ?> ฿</td>
                                     </tr>
 
                                 <?php
-                                    $TotalQty += $row['Qty'];
-                                    $TotalProfit += $row['Profit'];
-                                    $FinalTotalPrice += $row['TotalPrice'] + $row['Vat'];
-                                    $TotalCost += $row['Cost'];
-                                    $TotalVat += $row['Vat'];
                                 }
                                 ?>
                                 <tr class="hover:bg-gray-200">
                                     <td colspan="2" class="border border-gray-300 text-center px-3 py-4">รวม</td>
                                     <td class="border border-gray-300 text-center px-3 py-4"><?php echo $TotalQty ?></td>
-                                    <td class="border border-gray-300 text-center px-3 py-4"><?php echo number_format($TotalProfit, 2) ?> ฿</td>
-                                    <td class="border border-gray-300 text-center px-3 py-4"><?php echo number_format($TotalVat, 2) ?> ฿</td>
-                                    <td class="border border-gray-300 text-center px-3 py-4"><?php echo number_format($TotalCost, 2) ?> ฿</td>
-                                    <td class="border border-gray-300 text-center px-3 py-4"><?php echo number_format($FinalTotalPrice, 2) ?> ฿</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -145,10 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
-        function checkVal() {
-            document.querySelector('form').submit();
-        }
-
         window.addEventListener("load", function(event) {
             var tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);

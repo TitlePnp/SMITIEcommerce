@@ -52,8 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="px-28">
-        <form id="SearchForm" style="width: 100%" action="StockReport.php" method="post">
-
+        <form id="SearchForm" style="width: 100%" method="post">
             <div class="flex flex-col">
                 <div>
                     <p class="font-semibold text-xl">รายงานคลังสินค้า</p>
@@ -91,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <div class="flex items-end my-3 justify-between">
                     <button type="button" onclick="Search()" class="bg-green-500 p-2 px-5 text-sm rounded-lg text-white hover:bg-green-600 hover:shadow-lg">ค้นหา</button>
-                    <button class="bg-red-500 p-2 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
+                    <button type="button" onclick="ExportPDF()" class="bg-red-500 p-2 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
                 </div>
 
                 <div>
@@ -138,8 +137,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
+        var SearchForm = document.getElementById("SearchForm");
+        function ExportPDF() {
+            SearchForm.action = "../PDF/SuperAdminStockReport.php";
+            SearchForm.submit();
+        }
+
         function Search() {
-            document.getElementById("SearchForm").submit();
+            SearchForm.action = "../../Frontend/SuperAdmin/StockReport.php";
+            SearchForm.submit();
         }
     </script>
 

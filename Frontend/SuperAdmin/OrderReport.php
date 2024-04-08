@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div>
                 <div class="flex flex-col">
-                    <form style="width: 100%" action="OrderReport.php" method="post">
+                    <form id="SearchForm" style="width: 100%" method="post">
                         <p class="font-medium my-2">ช่วงวันที่</p>
                         <div date-rangepicker class="flex items-center">
                             <div class="relative" style="width: 90%">
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <input type="hidden" id="start_date" name="start_date" value="<?php echo isset($start_date) ? $start_date : '' ?>">
                                 <input type="hidden" id="end_date" name="end_date" value="<?php echo isset($end_date) ? $end_date : '' ?>">
                             </div>
-                            <button type="button" onclick="checkVal()" class="bg-green-300 hover:bg-green-500 rounded-lg text-sm px-5 py-2 ml-3">
+                            <button type="button" onclick="Search()" class="bg-green-300 hover:bg-green-500 rounded-lg text-sm px-5 py-2 ml-3">
                                 <img class="h-5 w-auto" src="../../Pictures/search.png" alt="search">
                             </button>
                         </div>
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
 
                                 <div class="flex w-2/12 items-end justify-end">
-                                    <button class="bg-red-500 p-2 w-8/12 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
+                                    <button onclick="ExportPDF()" class="bg-red-500 p-2 w-8/12 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
                                 </div>
 
                             </div>
@@ -184,13 +184,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     </div>
 
-    <?php
-    if (isset($start_date) && isset($end_date)) {
-        echo "<script>var startDate = '$start_date';</script>";
-        echo "<script>var endDate = '$end_date';</script>";
-    }
-    ?>
-
     <script>
         var QrChannel = document.getElementById('payment_channel_qr');
         var CODChannel = document.getElementById('payment_channel_COD');
@@ -217,8 +210,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         });
 
-        function checkVal() {
-            document.querySelector('form').submit();
+        var SearchForm = document.getElementById('SearchForm');
+
+        function Search() {
+            SearchForm.action = "OrderReport.php";
+            SearchForm.submit();
+        }
+
+        function ExportPDF() {
+            SearchForm.action = "../PDF/SuperAdminOrderReport.php";
+            SearchForm.submit();
         }
 
         window.addEventListener("load", function(event) {
