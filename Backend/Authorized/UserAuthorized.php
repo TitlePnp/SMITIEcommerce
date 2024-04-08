@@ -18,7 +18,7 @@ if (isset($_SESSION['tokenJWT'])) {
     header('Location: ../../Frontend/Admin/DashBoard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashBoard.php');
+    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashboard.php');
     exit();
   }
 } elseif (isset($_SESSION['tokenGoogle'])) {  
@@ -27,7 +27,7 @@ if (isset($_SESSION['tokenJWT'])) {
     header('Location: ../../Frontend/Admin/DashBoard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashBoard.php');
+    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashboard.php');
     exit();
   }
 }

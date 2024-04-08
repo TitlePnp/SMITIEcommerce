@@ -1,6 +1,5 @@
 <?php
-  session_start();
-    require '../../Backend/Authorized/AdminAuthorized.php';
+  require '../../Backend/Authorized/AdminAuthorized.php';
   require '../../Backend/Authorized/ManageHeader.php';
   require '../../Backend/Admin/Order/ReceiptList.php';
 ?>

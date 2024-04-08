@@ -28,7 +28,7 @@ if (isset($_SESSION['tokenJWT'])) {
     header('Location: ../../Frontend/Admin/Dashboard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
-    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashBoard.php');
+    header('Location: ../../Frontend/SuperAdmin/SuperAdminDashboard.php');
     exit();
   }
 } else {
