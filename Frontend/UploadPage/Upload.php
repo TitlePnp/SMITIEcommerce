@@ -50,7 +50,7 @@
       <div>
         <form action="../../Backend/UploadPage/Upload.php" method="POST" enctype="multipart/form-data">
           <p class="font-medium p-2">หมายเลขคำสั่งซื้อ</p>
-          <input type="text" name="invoiceID" id="invoiceID" class="w-full h-12 px-3 py-2 text-sm placeholder-gray-400 border rounded-lg" placeholder="<?php echo htmlspecialchars($invoiceID)?>" value="<?php echo htmlspecialchars($invoiceID)?>" />
+          <input type="text" name="invoiceID" id="invoiceID" class="w-full h-12 px-3 py-2 text-sm placeholder-gray-400 border rounded-lg" placeholder="<?php echo $invoiceID?>" value="<?php if (isset($_POST['invoiceID'])) { echo $invoiceID; }?>" />
           <p id="invoiceError" class="text-xs font-normal text-red-600 mt-2"></p>
           <p class="font-medium pl-2 mt-8 mb-3">อัปโหลดรูปภาพการชำระเงิน<span id="fileError" class="text-xs font-normal text-red-600 ml-3"></span></p>
           <div class="flex items-center justify-center w-full">

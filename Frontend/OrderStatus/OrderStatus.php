@@ -62,7 +62,8 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
             <div>
                 <?php
                 if ($Status == "Paid" || $Status == "Delivered" || $Status == "Completed" || $Status == "DI") {
-                    CompleteStatus($orderID);
+                    $RecID = $getOrderDetail['RecID'];
+                    CompleteStatus($RecID);
                 } else if ($Status == "Ordered") {
                     OrderedStatus($orderID);
                 } else if ($Status == "Pending") {
@@ -150,7 +151,7 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
                 </div>
                 <div class="flex bg-gray-300 h-4 mt-5 rounded-md">
                     <?php
-                    // $PaymentMethod = "Transfer";
+                    // $PaymentMethod = "COD";
                     if ($PaymentMethod == "Transfer") {
                         if ($Status == "Pending") {
                             echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
@@ -494,9 +495,12 @@ function PendingStatus($orderID)
     echo '</form>';
 }
 
-function CompleteStatus($orderID)
+function CompleteStatus($RecID)
 {
+    echo '<form method="POST" action="../PDF/Receipt.php" class="inline-block">';
     echo '<a class="mr-2" href=""><button class="py-2 bg-green-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-green-700">ใบเสร็จ</button></a>';
+    echo '<input type="hidden" name="ReceiptID" value="' . $RecID . '">';
+    echo '</form>';
 }
 
 function CODStatus($orderID)

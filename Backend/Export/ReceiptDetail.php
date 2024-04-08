@@ -13,7 +13,7 @@
     $payerID = getPayerID($receiptID);
     global $connectDB;
     $stmt = $connectDB->prepare(
-      "SELECT p.PayerTaxID, p.PayerFName, p.PayerLName, p.PayerTel, p.PayerAddress, p.PayerProvince, p.PayerPostcode
+      "SELECT p.PayerTaxID, p.PayerFName, p.PayerLName, p.PayerTel, p.PayerAddress, p.PayerProvince, p.PayerPostcode, p.TAG
       FROM PAYER p
       WHERE p.PayerID = ?");
     $stmt->bind_param("i", $payerID);
