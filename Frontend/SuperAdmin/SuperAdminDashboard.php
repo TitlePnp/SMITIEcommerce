@@ -3,6 +3,7 @@
 $role = "SuperAdmin";
 require '../../Backend/Authorized/ManageHeader.php';
 require '../../Backend/SuperAdmin/GetDataSuperAdmin.php';
+require '../../Backend/SuperAdmin/ReportQuey.php';
 require '../../Components/ConnectDB.php';
 
 //set timezone
@@ -34,6 +35,7 @@ date_default_timezone_set('Asia/Bangkok');
       text-align: center;
     }
   </style>
+</head>
 
 <body class="bg-gray-200">
   <div class="flex flex-col px-10 py-3">
@@ -140,15 +142,21 @@ date_default_timezone_set('Asia/Bangkok');
 
         <div class="bg-white p-5 rounded-lg shadow-lg">
           <div class="mb-5 flex justify-between ">
-            <div>
-              <p class="font-semibold text-xl py-2">รายการสินค้าที่ต้องจัดส่ง</p>
-            </div>
             <div class="flex items-center">
+              <div class="flex items-center">
+                <i class='bx bxs-diamond mr-2 text-pink-400'></i>
+              </div>
+              <div class="flex items-center">
+                <p class="font-semibold text-xl py-2">รายการสินค้าขายดี</p>
+              </div>
+
+            </div>
+            <!-- <div class="flex items-center">
               <button class="text-blue-400 hover:text-blue-500">ทั้งหมด</i></button>
               <i class='bx bx-chevron-right text-blue-400 hover:text-blue-500'></i>
-            </div>
+            </div> -->
           </div>
-          <hr class="border-t-4 border-purple-500">
+          <hr class="border-t-4 border-pink-500">
           <div class="w-full flex flex-col">
             <div class="flex flex w-full p-5">
               <div class="w-full flex justify-center">
@@ -158,18 +166,11 @@ date_default_timezone_set('Asia/Bangkok');
                 <p class="font-semibold">ชื่อสินค้า</p>
               </div>
               <div class="w-full flex justify-center">
-                <p class="font-semibold">จำนวนสินค้าในคลัง</p>
-              </div>
-              <div class="w-full flex justify-center">
                 <p class="font-semibold">จำนวนสินค้าที่ถูกสั่งซื้อ</p>
-              </div>
-              <div class="w-full flex justify-center">
-                <p class="font-semibold">รหัสคำสั่งซื้อ</p>
               </div>
             </div>
             <?php
-            $result = getQtyPaidStatusCompareStockQty();
-            $testResult = $result->fetch_assoc();
+            $result = getBestSellProduct();
             while ($row = $result->fetch_assoc()) {
               echo '<div class="flex w-full p-5 rounded-lg hover:bg-purple-200">';
               echo '<div class="w-full flex justify-center">';
@@ -183,14 +184,14 @@ date_default_timezone_set('Asia/Bangkok');
               echo '<p>' . $proName . '</p>';
               echo '</div>';
               echo '<div class="w-full flex justify-center">';
-              echo '<p>' . $row['StockQty'] . '</p>';
-              echo '</div>';
-              echo '<div class="w-full flex justify-center">';
               echo '<p>' . $row['Qty'] . '</p>';
               echo '</div>';
-              echo '<div class="w-full flex justify-center">';
-              echo '<p>' . $row['InvoiceID'] . '</p>';
-              echo '</div>';
+              // echo '<div class="w-full flex justify-center">';
+              // echo '<p>' . $row['Qty'] . '</p>';
+              // echo '</div>';
+              // echo '<div class="w-full flex justify-center">';
+              // echo '<p>' . $row['InvoiceID'] . '</p>';
+              // echo '</div>';
               echo '</div>';
             }
             ?>
@@ -200,8 +201,11 @@ date_default_timezone_set('Asia/Bangkok');
       <div class="ml-5 h-full w-4/12 ">
         <div class="bg-white p-5 rounded-lg shadow-lg mb-5 flex flex-col">
           <?php
-          $TotalProductResult = getAllProduct();
-          $TotalProduct = $TotalProductResult['AllProduct'];
+          $TotalProductResult = getCountAllProduct();
+          $row = $TotalProductResult->fetch_assoc();
+          $TotalProduct = $row['ProductQTY'];
+          // $TotalProductResult = $TotalProductResult->fetch_assoc();
+          // $TotalProduct = $TotalProductResult['AllProduct'];
           ?>
           <div class="flex justify-between">
             <p class="text-xl mb-5 font-semibold">จำนวนสินค้าทั้งหมด <?php echo $TotalProduct ?> รายการ</p>
@@ -217,47 +221,32 @@ date_default_timezone_set('Asia/Bangkok');
 
         <div class="bg-white p-5 rounded-lg shadow-lg mt-2">
           <div class="flex mb-5 items-center">
-            <i class='bx bxs-error text-2xl text-red-500 mr-2'></i>
-            <p class="font-semibold text-xl">สินค้า</p>
+            <i class='bx bxs-user mr-2 text-black'></i>
+            <p class="font-semibold text-xl">จำนวนผู้ใช้งาน</p>
             <!-- <div class="flex items-center justify-center items-center">
           </div> -->
           </div>
-          <hr class="border-t-4 border-red-500">
+          <hr class="border-t-4 border-blue-500">
 
-          <div class="w-full flex flex-col">
+          <div class="w-full flex flex-col my-5">
             <div>
               <div class="flex w-full p-5">
                 <div class="w-full flex justify-center">
-                  <p class="font-semibold">รหัสสินค้า</p>
-                </div>
-                <div class="w-full flex justify-center">
-                  <p class="font-semibold">ชื่อสินค้า</p>
+                  <p class="font-semibold">ตำแหน่ง</p>
                 </div>
                 <div class="w-full flex justify-center">
                   <p class="font-semibold">จำนวน</p>
                 </div>
               </div>
               <?php
-              $result = getQtyWarningProduct();
+              $result = getAllUser();
               while ($row = $result->fetch_assoc()) {
                 echo '<div class="flex w-full p-2 rounded-lg hover:bg-gray-200 hover:text-blue-500 hover:cursor-pointer">';
                 echo '<div class="w-full flex justify-center">';
-                echo '<p>' . $row['ProID'] . '</p>';
-                echo '</div>';
-                echo '<div class="w-full flex">';
-                $proName = $row['ProName'];
-                if (mb_strlen($proName) > 20) {
-                  $proName = mb_substr($proName, 0, 20) . '...';
-                }
-                echo '<p>' . $proName . '</p>';
+                echo '<p>' . $row['Role'] . '</p>';
                 echo '</div>';
                 echo '<div class="w-full flex justify-center">';
-                if ($row['StockQty'] < 5) {
-                  echo '<p class="text-red-500">' . $row['StockQty'] . '</p>';
-                } else {
-                  echo '<p>' . $row['StockQty'] . '</p>';
-                }
-                // echo '<p>' . $row['StockQty'] . '</p>';
+                echo '<p>' . $row['Count'] . '</p>';
                 echo '</div>';
                 echo '</div>';
               }

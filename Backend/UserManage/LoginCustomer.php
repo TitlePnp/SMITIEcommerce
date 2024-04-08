@@ -42,7 +42,7 @@ if ($result->num_rows > 0) {
         $_SESSION['tokenJWT'] = $jwt;
         $noData = getInfo($CusID);
         while ($row = $noData->fetch_assoc()) {
-            if ($row['CusFName'] == null) {
+            if ($row['CusFName'] == null || $row['CusLName'] == null) {
                 insertLog("Login with JWT", date("Y-m-d H:i:s"));;
                 header('Location: ../../Frontend/Profile/Information.php');
                 exit();

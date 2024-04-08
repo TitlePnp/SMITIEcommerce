@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,9 @@
   <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet"> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet">
 
   <style>
     .nav-style {
@@ -22,14 +24,17 @@
       padding-bottom: 0.5rem;
     }
 
-    .nav-style:hover, [aria-current="page"] {
+    .nav-style:hover,
+    [aria-current="page"] {
       background-color: white;
       color: black;
     }
   </style>
 </head>
+
 <body>
-  <nav class="bg-[#062639] text-sm font-semibold tracking-wider mb-10" style="font-family: 'Kodchasan', semibold,serif;">
+  <nav class="bg-[#062639] text-sm font-semibold tracking-wider mb-10"
+    style="font-family: 'Kodchasan', semibold,serif;">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 relative flex h-16 items-center justify-between">
       <!-- sm:hidden = ซ่อนส่วนของ Element เมื่อมีขนาดเล็ก -->
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -37,7 +42,8 @@
                                     hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-inset
                                     focus:ring-white" id="hide-button" aria-expanded="false" aria-haspopup="true">
           <!-- icon hamburger -->
-          <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+          <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
         </button>
@@ -52,10 +58,28 @@
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-10">
             <a href="SuperAdminDashboard.php" class="nav-style" aria-current="false">Dashboard</a>
+
+            <div class="relative inline-block text-left">
+              <div>
+                <button type="button" class="nav-style" id="product-button" aria-expanded="false" aria-haspopup="true">
+                  จัดการผู้ใช้งาน<span class="ml-1">▾</span>
+                </button>
+              </div>
+              <!-- list dropdown สินค้า -->
+              <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-1 shadow-lg
+                    ring-1 ring-black ring-opacity-5 focus:outline-none text-sm hidden" role="menu"
+                aria-orientation="vertical" aria-labelledby="product-button" tabindex="-1" id="product-menu">
+                <a href="../../Frontend/Admin/Product.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem"
+                  tabindex="-1" id="product-item-1">จัดการผู้ดูแล</a>
+                <a href="../../Frontend/Admin/D.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem"
+                  tabindex="-1" id="product-item-0">จัดการผู้ใช้</a>
+              </div>
+            </div>
+
             <a href="OrderReport.php" class="nav-style" aria-current="false">รายงานคำสั่งซื้อ</a>
-            <a href="../folder/test.php" class="nav-style" aria-current="false">รายงานคลังสินค้า</a>
-            <a href="../folder/test.php" class="nav-style" aria-current="false">รายงานจำนวนผู้ใช้งาน</a>
-            <a href="../folder/test.php" class="nav-style" aria-current="false">รายงานยอดขาย</a>
+            <a href="StockReport.php" class="nav-style" aria-current="false">รายงานคลังสินค้า</a>
+            <a href="SellReport.php" class="nav-style" aria-current="false">รายงานยอดขาย</a>
+            <a href="BestSellerReport.php" class="nav-style" aria-current="false">รายงานสินค้าขายดี</a>
           </div>
         </div>
       </div>
@@ -64,7 +88,8 @@
       <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
         <!-- notification -->
         <button type="button" class="relative rounded-full p-1 text-white hover:text-red-600 hover:bg-white">
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967
                                                                     0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312
                                                                     6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255
@@ -76,21 +101,23 @@
           <div>
             <button type="button" class="relative flex" id="user-button" aria-expanded="false" aria-haspopup="true">
               <img class="h-8 w-8 rounded-full border border-transparent hover:border-red-600 hover:scale-110"
-                    src="../../Pictures/user.png" alt="user-account">
+                src="../../Pictures/user.png" alt="user-account">
             </button>
           </div>
           <!-- list dropdown user -->
           <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-1 shadow-lg
                     ring-1 ring-black ring-opacity-5 focus:outline-none text-sm hidden" role="menu"
-                    aria-orientation="vertical" aria-labelledby="user-button" tabindex="-1" id="user-menu">
-            <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-0">บัญชีผู้ใช้งาน</a>
-            <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-item-1">ออกจากระบบ</a>
+            aria-orientation="vertical" aria-labelledby="user-button" tabindex="-1" id="user-menu">
+            <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1"
+              id="user-item-0">บัญชีผู้ใช้งาน</a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1"
+              id="user-item-1">ออกจากระบบ</a>
           </div>
         </div>
       </div>
 
-      <div class="text-sm font-semibold text-white sm:hidden tracking-wider hidden" aria-labelledby="hide-button" id="hide-menu"
-          style="position: fixed; top: 4rem; left: 0; right: 0;">
+      <div class="text-sm font-semibold text-white sm:hidden tracking-wider hidden" aria-labelledby="hide-button"
+        id="hide-menu" style="position: fixed; top: 4rem; left: 0; right: 0;">
         <div class="space-y-1 px-2 pb-3 pt-2 bg-[#062639]">
           <a href="SuperAdminDashboard.php" class="nav-style block" aria-current="false">Dashboard</a>
           <a href="#" class="nav-style block" aria-current="false">รายงานคำสั่งซื้อ</a>
@@ -104,7 +131,7 @@
 
   <script>
     /* จะถูกทำทุกครั้งที่โหลดหน้่าใหม่ */
-    window.onload = function() {
+    window.onload = function () {
       /* ตรวจสอบ URL ปัจจุบัน */
       const currentPage = window.location.pathname;
       /* ดึงลิงค์ทั้งหมดที่มี class 'nav-style' */
@@ -128,7 +155,7 @@
     };
 
     /* จัดการ menu dropdown */
-    document.getElementById('hide-button').addEventListener('click', function() {
+    document.getElementById('hide-button').addEventListener('click', function () {
       var menu = document.getElementById('hide-menu');
       /* ดึงค่าสถานะปัจจุบัน */
       var isExpanded = this.getAttribute('aria-expanded') === 'true';
@@ -139,7 +166,7 @@
     });
 
     /* จัดการ menu product dropdown */
-    document.getElementById('product-button').addEventListener('click', function() {
+    document.getElementById('product-button').addEventListener('click', function () {
       var menu = document.getElementById('product-menu');
       /* ดึงค่าสถานะปัจจุบัน */
       var isExpanded = this.getAttribute('aria-expanded') === 'true';
@@ -150,7 +177,7 @@
     });
 
     /* จัดการ menu user */
-    document.getElementById('user-button').addEventListener('click', function() {
+    document.getElementById('user-button').addEventListener('click', function () {
       var menu = document.getElementById('user-menu');
       /* ดึงค่าสถานะปัจจุบัน */
       var isExpanded = this.getAttribute('aria-expanded') === 'true';
@@ -161,4 +188,5 @@
     });
   </script>
 </body>
+
 </html>

@@ -109,7 +109,8 @@ function getOverallStatus()
     return $result;
 }
 
-function getSumAllProductSell() {
+function getSumAllProductSell()
+{
     global $connectDB;
     $stmt = $connectDB->prepare("SELECT SUM(TotalPrice + Vat) AS Income FROM receipt WHERE Status = 'Completed'");
     $stmt->execute();
@@ -117,7 +118,8 @@ function getSumAllProductSell() {
     return $result->fetch_assoc();
 }
 
-function getSumQtyAllProductSell() {
+function getSumQtyAllProductSell()
+{
     global $connectDB;
     $stmt = $connectDB->prepare("SELECT SUM(Qty) AS Qty FROM receipt_list JOIN receipt ON receipt_list.RecID = receipt.RecID WHERE receipt.Status = 'Completed'");
     $stmt->execute();
@@ -125,17 +127,79 @@ function getSumQtyAllProductSell() {
     return $result->fetch_assoc();
 }
 
-function getAllProduct() {
-    global $connectDB;
-    $stmt = $connectDB->prepare("SELECT COUNT(ProID) AS AllProduct FROM product");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_assoc();
-}
-
-function getAllProductType() {
+function getAllProductType()
+{
     global $connectDB;
     $stmt = $connectDB->prepare("SELECT TypeID, COUNT(*) as count FROM Product GROUP BY TypeID");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+}
+
+function getAllProductThaiType()
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT TypeID, TypeName, ThaiType FROM Product_Type");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+}
+
+function getReportByDay($startDate, $endDate)
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT InvoiceID, StartDate, Channel, TotalPrice, Vat, Status FROM invoice_order WHERE StartDate >= ? AND EndDate <= ? ORDER BY StartDate DESC");
+    $stmt->bind_param("ss", $startDate, $endDate);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+}
+
+
+function getAllUserReport()
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT c.CusID, ca.UserName, ca.Email, c.CusFName, c.CusLName, c.Sex, c.Tel From customer c JOIN customer_account ca ON c.CusID = ca.CusID WHERE ca.Role = 'User'");
+    $result = $stmt->get_result();
+    return $result;
+}
+
+function getSellReportFilterByDate($StartDate, $EndDate)
+{
+    global $connectDB;
+    if ($StartDate == $EndDate) {
+        $stmt = $connectDB->prepare("SELECT r.RecID, r.PayTime, SUM(rl.Qty) as Qty, r.TotalPrice, Sum(p.PricePerUnit - p.CostPerUnit) as Profit, r.Vat, Sum(p.CostPerUnit * rl.Qty) as Cost 
+        FROM receipt r 
+        JOIN receipt_list rl ON r.RecID = rl.RecID 
+        JOIN product p ON rl.ProID = p.ProID 
+        WHERE DATE(r.PayTime) = ? 
+        GROUP BY r.RecID");
+        $stmt->bind_param("s", $StartDate);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result;
+    } else {
+        $stmt = $connectDB->prepare("SELECT r.RecID, r.PayTime, SUM(rl.Qty) as Qty, r.TotalPrice, Sum(p.PricePerUnit - p.CostPerUnit) as Profit, r.Vat, Sum(p.CostPerUnit * rl.Qty) as Cost FROM receipt r JOIN receipt_list rl ON r.RecID = rl.RecID JOIN product p ON rl.ProID = p.ProID WHERE r.PayTime >= ? AND r.PayTime <= ? GROUP BY r.RecID");
+        $stmt->bind_param("ss", $StartDate, $EndDate);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result;
+    }
+}
+
+function getBestSellProduct()
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, SUM(rl.Qty) as Qty FROM receipt_list rl JOIN product p ON rl.ProID = p.ProID GROUP BY rl.ProID ORDER BY Qty DESC LIMIT 5");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+}
+
+function getAllUser()
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT Role, COUNT(CusID) as Count FROM customer_account WHERE Role IN ('Admin', 'User') GROUP BY Role");
     $stmt->execute();
     $result = $stmt->get_result();
     return $result;
