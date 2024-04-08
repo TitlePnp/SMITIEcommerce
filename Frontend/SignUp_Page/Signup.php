@@ -166,7 +166,7 @@ $authUrl = $client->createAuthUrl();
             </div>
 
             <div class="flex justify-center mt-4">
-                <a href="<?php echo $authUrl; ?>" class="flex items-center justify-center rounded-md border-2 bg-white border-gray-400 w-full text-black px-4 py-2 hover:shadow-xl">
+                <a href="<?php echo htmlspecialchars($authUrl); ?>" class="flex items-center justify-center rounded-md border-2 bg-white border-gray-400 w-full text-black px-4 py-2 hover:shadow-xl">
                     <i class='bx bxl-google text-md mr-2' style='color: black'></i> ลงชื่อเข้าใช้ด้วย Google
                 </a>
             </div>

@@ -69,7 +69,7 @@ $proIds = array_filter($proIds);
     <form id="PaymentForm" method="POST">
         <?php
         $proIdsString = implode(',', $proIds);
-        echo "<input type='hidden' name='ProIds' value='{$proIdsString}'>";
+        echo "<input type='hidden' name='ProIds' value='" .htmlspecialchars($proIdsString) . "'>";
         ?>
         <div class="px-28 py-5">
             <div class="flex flex-row border-2 rounded-lg py-5 bg-gray-50">
@@ -90,7 +90,7 @@ $proIds = array_filter($proIds);
                                 <?php
                                 if ($isMember) {
                                     if ($userInfo["CusFName"] != "") {
-                                        echo "<input id='PayerFNameBox' name='PayerFName' value='{$userInfo["CusFName"]}' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                        echo "<input id='PayerFNameBox' name='PayerFName' value='" . htmlspecialchars($userInfo["CusFName"]) . "' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                     } else {
                                         echo "<input id='PayerFNameBox' name='PayerFName' placeholder='กรุณากรอกชื่อจริง' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                     }
@@ -105,7 +105,7 @@ $proIds = array_filter($proIds);
                                 <?php
                                 if ($isMember) {
                                     if ($userInfo["CusLName"] != "") {
-                                        echo "<input id='PayerLNameBox' name='PayerLName' value='{$userInfo["CusLName"]}' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                        echo "<input id='PayerLNameBox' name='PayerLName' value='" . htmlspecialchars($userInfo["CusLName"]) . "' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                     } else {
                                         echo "<input id='PayerLNameBox' name='PayerLName' placeholder='กรุณากรอกนามสกุล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                     }
@@ -124,7 +124,7 @@ $proIds = array_filter($proIds);
                                 <?php
                                 if ($isMember) {
                                     if ($userInfo["Tel"] != "") {
-                                        echo "<input id='PayerTelBox' name='PayerTel' value='{$userInfo["Tel"]}' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                        echo "<input id='PayerTelBox' name='PayerTel' value='" . htmlspecialchars($userInfo["Tel"]) . "' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                     } else {
                                         echo "<input id='PayerTelBox' name='PayerTel' placeholder='กรุณากรอกเบอร์โทรศัพท์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                     }
@@ -170,7 +170,7 @@ $proIds = array_filter($proIds);
                                 <?php
                                 if ($isMember) {
                                     if ($userInfo["Email"] != "") {
-                                        echo "<input id='PayerEmailBox' name='PayerEmail' value='{$userInfo["Email"]}' type='text' placeholder='กรุณากรอกอีเมล' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                        echo "<input id='PayerEmailBox' name='PayerEmail' value='" . htmlspecialchars($userInfo["Email"]) . "' type='text' placeholder='กรุณากรอกอีเมล' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                     } else {
                                         echo "<input id='PayerEmailBox' name='PayerEmail' placeholder='กรุณากรอกอีเมล' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                     }
@@ -189,7 +189,7 @@ $proIds = array_filter($proIds);
                                 <?php
                                 if ($isMember) {
                                     if ($userInfo['Address'] != "") {
-                                        echo '<textarea id="PayerAddrInput" name="PayerAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required>' . $userInfo['Address'] . '</textarea>';
+                                        echo '<textarea id="PayerAddrInput" name="PayerAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required>' . htmlspecialchars($userInfo['Address']) . '</textarea>';
                                     } else {
                                         echo '<textarea id="PayerAddrInput" name="PayerAddr" class="mt-1 w-full p-2 border rounded-md h-20 shadow-sm resize-none" placeholder="กรุณากรอกที่อยู่ผู้รับ" required></textarea>';
                                     }
@@ -208,7 +208,7 @@ $proIds = array_filter($proIds);
                                 <?php
                                 if ($isMember) {
                                     if ($userInfo["Province"] != "") {
-                                        echo "<input id='PayerProvinceBox' name='PayerProvince' value='{$userInfo["Province"]}' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                        echo "<input id='PayerProvinceBox' name='PayerProvince' value='" . htmlspecialchars($userInfo["Province"]) . "' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                     } else {
                                         echo "<input id='PayerProvinceBox' name='PayerProvince' placeholder='กรุณากรอกจังหวัด' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                     }
@@ -223,7 +223,7 @@ $proIds = array_filter($proIds);
                                 <?php
                                 if ($isMember) {
                                     if ($userInfo["Postcode"] != "") {
-                                        echo "<input id='PayerPostcodeBox' name='PayerPostcode' value='{$userInfo["Postcode"]}' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
+                                        echo "<input id='PayerPostcodeBox' name='PayerPostcode' value='" . htmlspecialchars($userInfo["Postcode"]) . "' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2'>";
                                     } else {
                                         echo "<input id='PayerPostcodeBox' name='PayerPostcode' placeholder='กรุณากรอกรหัสไปรษณีย์' type='text' class='border rounded-md h-10 w-full shadow-sm p-2 text-md'>";
                                     }
@@ -432,10 +432,10 @@ $proIds = array_filter($proIds);
                                 echo "<img src='{$row['ImageSource']}' class='w-24 h-32 objec-fill'>";
                                 echo "</div>";
                                 echo "<div class='ml-3 w-3/4 flex flex-col'>";
-                                echo "<p class='font-semibold text-xl'>{$row['ProName']}</p>";
-                                echo "<p class=' text-sm'>จำนวน {$qty['Qty']} เล่ม</p>";
+                                echo "<p class='font-semibold text-xl'>" . htmlspecialchars($row['ProName']) . "</p>";
+                                echo "<p class=' text-sm'>จำนวน " . htmlspecialchars($qty['Qty']) . " เล่ม</p>";
                                 echo "<div class='flex flex-col justify-end h-full'>";
-                                echo "<p class='text-sm font-semibold'>ราคา {$row['PricePerUnit']} บาท</p>";
+                                echo "<p class='text-sm font-semibold'>ราคา " . htmlspecialchars($row['PricePerUnit']) . " บาท</p>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
@@ -468,8 +468,8 @@ $proIds = array_filter($proIds);
                                 $totalPriceFormat = number_format($totalPrice, 2);
                                 ?>
                                 <p class="font-semibold text-md">ราคารวม: </p>
-                                <p class="font-md text-md"><?php echo $totalPriceFormat; ?> บาท</p>
-                                <input type="hidden" name="TotalPrice" value="<?php echo $totalPrice ?>">
+                                <p class="font-md text-md"><?php echo htmlspecialchars($totalPriceFormat); ?> บาท</p>
+                                <input type="hidden" name="TotalPrice" value="<?php echo htmlspecialchars($totalPrice) ?>">
                             </div>
                             <div class="flex justify-between">
                                 <?php
@@ -477,7 +477,7 @@ $proIds = array_filter($proIds);
                                 $vatFormat = number_format($vat, 2);
                                 ?>
                                 <p class="font-semibold text-md">Vat 7%: </p>
-                                <p class="font-md text-md"><?php echo $vatFormat; ?> บาท</p>
+                                <p class="font-md text-md"><?php echo htmlspecialchars($vatFormat); ?> บาท</p>
                             </div>
                         </div>
 
@@ -489,7 +489,7 @@ $proIds = array_filter($proIds);
                             $totalPriceFormat = number_format($totalPrice, 2);
                             ?>
                             <p class="font-semibold text-xl">ราคาสุทธิ: </p>
-                            <p class="font-md text-md"><?php echo $totalPriceFormat; ?> บาท</p>
+                            <p class="font-md text-md"><?php echo htmlspecialchars($totalPriceFormat); ?> บาท</p>
                         </div>
 
                         <hr class='border border-gray-300 my-6 rounded-md w-full' style='border-width: 0.1px;'>
