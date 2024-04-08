@@ -150,8 +150,8 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
                 </div>
                 <div class="flex bg-gray-300 h-4 mt-5 rounded-md">
                     <?php
-                    // $PaymentMethod = "COD";
-                    if ($PaymentMethod == "MobileBanking") {
+                    // $PaymentMethod = "Transfer";
+                    if ($PaymentMethod == "Transfer") {
                         if ($Status == "Pending") {
                             echo "<div class='bg-blue-600 h-4 w-5/12 rounded-md'>";
                             echo "</div>";
@@ -421,7 +421,7 @@ require_once "../../Backend/OrderManage/GetOrderInfo.php";
                                 <p class="text-md "><?php
                                                     if ($PaymentMethod == "COD") {
                                                         $PaymentMethod = "เก็บเงินปลายทาง";
-                                                    } else if ($PaymentMethod == "MobileBanking") {
+                                                    } else if ($PaymentMethod == "Transfer") {
                                                         $PaymentMethod = "โอนผ่านบัญชีธนาคาร";
                                                     }
                                                     echo "{$PaymentMethod}"

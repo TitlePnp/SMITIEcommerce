@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 while ($row = $result->fetch_assoc()) {
                     if ($row['Channel'] == 'COD') {
                         $Channel = 'เก็บเงินปลายทาง';
-                    } else if ($row['Channel'] == "MobileBanking") {
+                    } else if ($row['Channel'] == "Transfer") {
                         $Channel = 'ชำระผ่าน QR code';
                     }
                 ?>

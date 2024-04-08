@@ -837,7 +837,7 @@ $proIds = array_filter($proIds);
             if (PaymentMethodCheckValue == "") {
                 PaymentMethodError.style.display = "block";
                 PaymentMethodStatus = false;
-            } else if (PaymentMethodCheckValue == "MobileBanking") {
+            } else if (PaymentMethodCheckValue == "Transfer") {
                 PaymentMethodError.style.display = "none";
                 PaymentMethodStatus = true;
             } else if (PaymentMethodCheckValue == "COD") {
@@ -1010,7 +1010,7 @@ $proIds = array_filter($proIds);
             qrCheckIcon.style.display = "block";
             codBox.style.borderColor = "rgb(229 231 235)";
             codCheckIcon.style.display = "none";
-            PaymentMethodCheckValue = "MobileBanking";
+            PaymentMethodCheckValue = "Transfer";
             document.querySelector('input[name="PaymentMethod"]').value = PaymentMethodCheckValue; // กำหนดค่าให้กับ input แบบ hidden
         });
 

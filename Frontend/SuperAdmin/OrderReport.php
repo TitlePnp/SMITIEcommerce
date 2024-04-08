@@ -93,20 +93,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <p class="font-medium my-2">ตัวกรองการชำระเงิน</p>
                                         <div class="flex items-center">
                                             <?php
-                                            if ($payment_channel == "MobileBanking") { ?>
-                                                <input type="checkbox" id="payment_channel_qr" name="payment_channel[]" value="MobileBanking" class="mx-2" checked>
+                                            if ($payment_channel == "Transfer") { ?>
+                                                <input type="checkbox" id="payment_channel_qr" name="payment_channel[]" value="Transfer" class="mx-2" checked>
                                                 <label for="payment_channel_qr" class="mx-2">ชำระผ่าน QR Code</label>
                                                 <input type="checkbox" id="payment_channel_COD" name="payment_channel[]" value="COD" class="mx-2">
                                                 <label for="payment_channel_COD" class="mx-2">ชำระเงินปลายทาง</label>
                                             <?php } else if ($payment_channel == "COD") { ?>
-                                                <input type="checkbox" id="payment_channel_qr" name="payment_channel[]" value="MobileBanking" class="mx-2">
+                                                <input type="checkbox" id="payment_channel_qr" name="payment_channel[]" value="Transfer" class="mx-2">
                                                 <label for="payment_channel_qr" class="mx-2">ชำระผ่าน QR Code</label>
                                                 <input type="checkbox" id="payment_channel_COD" name="payment_channel[]" value="COD" class="mx-2" checked>
                                                 <label for="payment_channel_COD" class="mx-2">ชำระเงินปลายทาง</label>
                                             <?php
                                             } else {
                                             ?>
-                                                <input type="checkbox" id="payment_channel_qr" name="payment_channel[]" value="MobileBanking" class="mx-2">
+                                                <input type="checkbox" id="payment_channel_qr" name="payment_channel[]" value="Transfer" class="mx-2">
                                                 <label for="payment_channel_qr" class="mx-2">ชำระผ่าน QR Code</label>
                                                 <input type="checkbox" id="payment_channel_COD" name="payment_channel[]" value="COD" class="mx-2">
                                                 <label for="payment_channel_COD" class="mx-2">ชำระเงินปลายทาง</label>
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 while ($row = $result->fetch_assoc()) {
                                     if ($row['Channel'] == 'COD') {
                                         $Channel = 'เก็บเงินปลายทาง';
-                                    } else if ($row['Channel'] == "MobileBanking") {
+                                    } else if ($row['Channel'] == "Transfer") {
                                         $Channel = 'ชำระผ่าน QR code';
                                     }
                                 ?>

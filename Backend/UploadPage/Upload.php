@@ -43,7 +43,7 @@
   function findInvoice($invoiceID, $id) {
     global $connectDB;
     $status = 'Ordered';
-    $channel = 'MobileBanking';
+    $channel = 'Transfer';
     $stmt = $connectDB->prepare("SELECT COUNT(ir.InvoiceID) AS HaveInvoice FROM INVOICE_ORDER ir 
             WHERE ir.InvoiceID = ? AND ir.Status = ? AND ir. Channel = ? AND ir.CusID = ?");
     $stmt->bind_param("sssi", $invoiceID, $status, $channel, $id);

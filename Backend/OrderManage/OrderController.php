@@ -113,7 +113,7 @@ try {
     updateOnHand($ProIds);
     echo "Success";
 
-    if ($PaymentMethod == "MobileBanking") {
+    if ($PaymentMethod == "Transfer") {
         $_SESSION['InvoiceID'] = $newInvoiceID;
         header("Location: ../../Frontend/MainPage/Payment.php");
     } else if ($PaymentMethod == "COD") {
