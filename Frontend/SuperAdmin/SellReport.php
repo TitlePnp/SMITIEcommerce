@@ -4,6 +4,14 @@ require '../../Backend/Authorized/ManageHeader.php';
 require '../../Backend/SuperAdmin/GetDataSuperAdmin.php';
 require '../../Backend/SuperAdmin/ReportQuey.php';
 require '../../Components/ConnectDB.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $start_date = $_POST['start_date'];
+    $end_date = $_POST['end_date'];
+    $result = getSellReportByTime($start_date, $end_date);
+} else {
+    $result = getSellReport();
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +48,7 @@ require '../../Components/ConnectDB.php';
             </div>
             <div>
                 <div class="flex flex-col">
-                    <form style="width: 100%" action="SellReportFilter.php" method="post">
+                    <form style="width: 100%" action="SellReport.php" method="post">
                         <p class="font-medium my-2">ช่วงวันที่</p>
                         <div date-rangepicker class="flex items-center">
                             <div class="relative" style="width: 90%">
@@ -49,16 +57,19 @@ require '../../Components/ConnectDB.php';
                                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                     </svg>
                                 </div>
-                                <input id="datetimerange-input1" type="text" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 py-2" placeholder="วันที่เริ่มต้น" required>
-                                <input type="hidden" id="start_date" name="start_date">
-                                <input type="hidden" id="end_date" name="end_date">
+                                <input id="datetimerange-input1" type="text" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 py-2" placeholder="วันที่เริ่มต้น" value="<?php echo isset($start_date) ? $start_date : '' ?>" required>
+                                <input type="hidden" id="start_date" name="start_date" value="<?php echo isset($start_date) ? $start_date : '' ?>">
+                                <input type="hidden" id="end_date" name="end_date" value="<?php echo isset($end_date) ? $end_date : '' ?>">
                             </div>
                             <button type="button" onclick="checkVal()" class="bg-green-300 hover:bg-green-500 rounded-lg text-sm px-5 py-2 ml-3">
                                 <img class="h-5 w-auto" src="../../Pictures/search.png" alt="search">
                             </button>
                         </div>
                     </form>
-                    <span id="ValError" class="text-sm text-red-500" style="display: none;">test</span>
+
+                    <div class="flex w-full items-end justify-end mt-5">
+                        <button class="bg-red-500 p-2 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
+                    </div>
 
                     <div class="flex flex-col">
                         <table class="table-auto w-full my-5">
@@ -80,7 +91,6 @@ require '../../Components/ConnectDB.php';
                                 $FinalTotalPrice = 0;
                                 $TotalCost = 0;
                                 $TotalVat = 0;
-                                $result = getSellReport();
                                 while ($row = $result->fetch_assoc()) {
                                 ?>
                                     <tr class="hover:bg-gray-200">
@@ -118,7 +128,6 @@ require '../../Components/ConnectDB.php';
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -126,29 +135,21 @@ require '../../Components/ConnectDB.php';
 
     <script>
         function checkVal() {
-            var startDate = document.getElementById('start_date').value;
-            var endDate = document.getElementById('end_date').value;
-            if (startDate == "" && endDate == "") {
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
-                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                var yyyy = today.getFullYear();
-                today = yyyy + '-' + mm + '-' + dd;
-                document.getElementById('start_date').value = today;
-                document.getElementById('end_date').value = today;
-                document.querySelector('form').submit();
-            } else {
-                document.querySelector('form').submit();
-            }
+            document.querySelector('form').submit();
         }
 
         window.addEventListener("load", function(event) {
             var tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             var minDate = new Date('2023-07-01');
+            var todayDate = new Date();
+            var startDate = document.getElementById('start_date').value ? new Date(document.getElementById('start_date').value) : todayDate;
+            var endDate = document.getElementById('end_date').value ? new Date(document.getElementById('end_date').value) : todayDate;
             new DateRangePicker('datetimerange-input1', {
                 minDate: minDate,
                 maxDate: tomorrow,
+                startDate: startDate,
+                endDate: endDate
             });
         });
 

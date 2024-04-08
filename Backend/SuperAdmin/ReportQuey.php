@@ -105,3 +105,31 @@ function getProductReportFilter($ProductType, $Status)
         return $result;
     }
 }
+
+function getSellReport()
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT r.RecID, r.PayTime, SUM(rl.Qty) as Qty, r.TotalPrice, Sum((p.PricePerUnit - p.CostPerUnit) * rl.Qty) as Profit, r.Vat, Sum(p.CostPerUnit * rl.Qty) as Cost FROM receipt r JOIN receipt_list rl ON r.RecID = rl.RecID JOIN product p ON rl.ProID = p.ProID GROUP BY r.RecID");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+}
+
+function getSellReportByTime($StartDate, $EndDate)
+{
+    global $connectDB;
+    if ($StartDate == $EndDate) {
+        if ($StartDate == $EndDate) {
+            $StartDate = $StartDate . ' 00:00:00';
+            $EndDate = $EndDate . ' 23:59:59';
+        } else {
+            $StartDate = $StartDate . ' 00:00:00';
+            $EndDate = $EndDate . ' 23:59:59';
+        }
+    }   
+    $stmt = $connectDB->prepare("SELECT r.RecID, r.PayTime, SUM(rl.Qty) as Qty, r.TotalPrice, Sum((p.PricePerUnit - p.CostPerUnit) * rl.Qty) as Profit, r.Vat, Sum(p.CostPerUnit * rl.Qty) as Cost FROM receipt r JOIN receipt_list rl ON r.RecID = rl.RecID JOIN product p ON rl.ProID = p.ProID WHERE r.PayTime >= ? AND r.PayTime <= ? GROUP BY r.RecID");
+    $stmt->bind_param("ss", $StartDate, $EndDate);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result;
+}

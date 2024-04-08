@@ -164,15 +164,6 @@ function getAllUserReport()
     return $result;
 }
 
-function getSellReport()
-{
-    global $connectDB;
-    $stmt = $connectDB->prepare("SELECT r.RecID, r.PayTime, SUM(rl.Qty) as Qty, r.TotalPrice, Sum((p.PricePerUnit - p.CostPerUnit) * rl.Qty) as Profit, r.Vat, Sum(p.CostPerUnit * rl.Qty) as Cost FROM receipt r JOIN receipt_list rl ON r.RecID = rl.RecID JOIN product p ON rl.ProID = p.ProID GROUP BY r.RecID");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result;
-}
-
 function getSellReportFilterByDate($StartDate, $EndDate)
 {
     global $connectDB;
