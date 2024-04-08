@@ -52,7 +52,8 @@
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         <!-- logo -->
         <div class="flex flex-shrink-0 items-center">
-          <a href="../../Frontend/SuperAdmin/SuperAdminDashboard.php"><img class="h-10 w-auto" src="../../Pictures/logo.png" alt="logo"></a>
+          <a href="../../Frontend/SuperAdmin/SuperAdminDashboard.php"><img class="h-10 w-auto"
+              src="../../Pictures/logo.png" alt="logo"></a>
         </div>
         <!-- menu -->
         <div class="hidden sm:ml-6 sm:block">
@@ -62,17 +63,19 @@
             <div class="relative inline-block text-left">
               <div>
                 <button type="button" class="nav-style" id="product-button" aria-expanded="false" aria-haspopup="true">
-                  จัดการผู้ใช้งาน<span class="ml-1">▾</span>
+                  การจัดการ<span class="ml-1">▾</span>
                 </button>
               </div>
               <!-- list dropdown สินค้า -->
               <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-1 shadow-lg
                     ring-1 ring-black ring-opacity-5 focus:outline-none text-sm hidden" role="menu"
                 aria-orientation="vertical" aria-labelledby="product-button" tabindex="-1" id="product-menu">
-                <a href="../../Frontend/Admin/Product.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem"
+                <a href="../../Frontend/SuperAdmin/AdminManage.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem"
                   tabindex="-1" id="product-item-1">จัดการผู้ดูแล</a>
-                <a href="../../Frontend/Admin/D.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem"
+                <a href="../../Frontend/SuperAdmin/UserManage.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem"
                   tabindex="-1" id="product-item-0">จัดการผู้ใช้</a>
+                <a href="../../Frontend/SuperAdmin/LogManage.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem"
+                  tabindex="-1" id="product-item-0">จัดการ Log</a>
               </div>
             </div>
 
@@ -108,8 +111,8 @@
           <div class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-1 shadow-lg
                     ring-1 ring-black ring-opacity-5 focus:outline-none text-sm hidden" role="menu"
             aria-orientation="vertical" aria-labelledby="user-button" tabindex="-1" id="user-menu">
-            <a href="../../Backend/UserManage/Signout.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem" tabindex="-1"
-              id="user-item-1">ออกจากระบบ</a>
+            <a href="../../Backend/UserManage/Signout.php" class="block px-4 py-2 hover:bg-gray-200" role="menuitem"
+              tabindex="-1" id="user-item-1">ออกจากระบบ</a>
           </div>
         </div>
       </div>

@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </form>
 
                     <div class="flex w-full items-end justify-end mt-5">
-                        <form method="POST" action="../PDF/SuperAdminBestellerReport.php">
+                        <form method="POST" action="../PDF/SuperAdminBestellerReport.php" target="_blank">
                             <button type="submit" class="bg-red-500 p-2 rounded-lg text-white hover:bg-red-600 hover:shadow-lg">ส่งออกเป็น PDF</button>
                             <?php
                             if (isset($start_date) && isset($end_date)) {

@@ -477,7 +477,7 @@ function OrderedStatus($orderID)
     echo '<button class="py-2 bg-blue-500 rounded-md px-5 mx-5 text-white font-semibold hover:shadow-lg hover:bg-blue-700"><i class="bx bx-money mr-3"></i>ชำระเงิน</button>';
     echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
     echo '</form>';
-    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block">';
+    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block" target="_blank">';
     echo '<button class="py-2 bg-red-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-red-700"><i class="bx bxs-file-pdf mr-3"></i>ใบแจ้งหนี้</button>';
     echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
     echo '</form>';
@@ -489,7 +489,7 @@ function PendingStatus($orderID)
     echo '<button class="mr-2 py-2 bg-green-500 rounded-md px-4 text-white font-semibold hover:shadow-lg hover:bg-green-700"><i class="bx bx-image-alt mr-3"></i>แจ้งการชำระเงิน</button>';
     echo '<input type="hidden" name="invoiceID" value="' . $orderID . '">';
     echo '</form>';
-    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block">';
+    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block" target="_blank">';
     echo '<button class="ml-2 py-2 bg-red-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-red-700"><i class="bx bxs-file-pdf mr-3"></i>ใบแจ้งหนี้</button>';
     echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
     echo '</form>';
@@ -497,7 +497,7 @@ function PendingStatus($orderID)
 
 function CompleteStatus($RecID)
 {
-    echo '<form method="POST" action="../PDF/Receipt.php" class="inline-block">';
+    echo '<form method="POST" action="../PDF/Receipt.php" class="inline-block" target="_blank">';
     echo '<a class="mr-2" href=""><button class="py-2 bg-green-500 rounded-md px-8 text-white font-semibold hover:shadow-lg hover:bg-green-700">ใบเสร็จ</button></a>';
     echo '<input type="hidden" name="ReceiptID" value="' . $RecID . '">';
     echo '</form>';
@@ -505,7 +505,7 @@ function CompleteStatus($RecID)
 
 function CODStatus($orderID)
 {
-    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block">';
+    echo '<form method="POST" action="../PDF/Invoice.php" class="inline-block" target="_blank">';
     echo '<button class="ml-2 py-2 bg-red-500 rounded-md px-5 text-white font-semibold hover:shadow-lg hover:bg-red-700"><i class="bx bxs-file-pdf mr-3"></i>ใบแจ้งหนี้</button>';
     echo '<input type="hidden" name="InvoiceID" value="' . $orderID . '">';
     echo '</form>';

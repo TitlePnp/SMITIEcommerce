@@ -219,6 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         function ExportPDF() {
             SearchForm.action = "../PDF/SuperAdminOrderReport.php";
+            SearchForm.target = "_blank";
             SearchForm.submit();
         }
 

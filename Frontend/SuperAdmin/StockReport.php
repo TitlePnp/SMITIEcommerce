@@ -140,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         var SearchForm = document.getElementById("SearchForm");
         function ExportPDF() {
             SearchForm.action = "../PDF/SuperAdminStockReport.php";
+            SearchForm.target = "_blank";
             SearchForm.submit();
         }
 
