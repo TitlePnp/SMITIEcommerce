@@ -54,14 +54,14 @@ $address = trim(substr($address, 0, $indexDist));
             <a href="UserProfile.php" class="hover:text-blue-800 text-blue-500 font-md"><i class='bx bx-arrow-back mr-2'></i>ย้อนกลับ</a>
         </div>
 
-        <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
+        <input type="hidden" name="id" id="id" value="<?php echo htmlspecialchars($id); ?>">
         <h1 class="leading-7 mb-1 font-semibold text-lg">แก้ไขข้อมูลผู้ใช้</h1>
-        <!-- <p class="text-sm/[17px] leading-6 text-gray-600 pl-5 p    b-2">ยินดีต้อนรับคุณ <strong class="text-base"><?php echo getUserName(); ?></strong>! โปรดระบุข้อมูลของคุณ <span style="color:red; text-decoration: underline;">คุณสามารถยกเลิก หรือ กรอกข้อมูลภายหลังได้</span></p> -->
+        <!-- <p class="text-sm/[17px] leading-6 text-gray-600 pl-5 p    b-2">ยินดีต้อนรับคุณ <strong class="text-base"><?php echo htmlspecialchars(getUserName()); ?></strong>! โปรดระบุข้อมูลของคุณ <span style="color:red; text-decoration: underline;">คุณสามารถยกเลิก หรือ กรอกข้อมูลภายหลังได้</span></p> -->
         <hr class="h-1 bg-gray-200 border-0 rounded mb-5">
         <div class="flex w-full">
             <div class="sm:col-span-3 my-2 mb-5 w-full">
                 <p class="font-medium">ชื่อผู้ใช้</p>
-                <input type="text" id="userName" name="Username" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกชื่อผู้ใช้" value="<?php echo getUserName(); ?>" required>
+                <input type="text" id="userName" name="Username" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกชื่อผู้ใช้" value="<?php echo htmlspecialchars(getUserName()); ?>" required>
                 <!-- <p id="UsernameError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p> -->
             </div>
             <div class="w-full flex items-center mt-4 mx-3">
@@ -79,12 +79,12 @@ $address = trim(substr($address, 0, $indexDist));
         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div class="sm:col-span-3">
                 <p class="font-medium">ชื่อ</p>
-                <input type="text" id="fName" name="firstName" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกชื่อของคุณ" value="<?php echo $fName; ?>" required>
+                <input type="text" id="fName" name="firstName" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกชื่อของคุณ" value="<?php echo htmlspecialchars($fName); ?>" required>
                 <p id="fNameError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p>
             </div>
             <div class="sm:col-span-3">
                 <p class="font-medium">นามสกุล</p>
-                <input type="text" id="lName" name="lastName" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกนามสกุลของคุณ" value="<?php echo $lName; ?>" required>
+                <input type="text" id="lName" name="lastName" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกนามสกุลของคุณ" value="<?php echo htmlspecialchars($lName); ?>" required>
                 <p id="lNameError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p>
             </div>
 
@@ -108,37 +108,37 @@ $address = trim(substr($address, 0, $indexDist));
             </div>
             <div class="sm:col-span-3">
                 <p class="font-medium">เบอร์โทรศัพท์</p>
-                <input type="text" id="phone" name="phone" pattern="0[0-9]{9}" title="เบอร์โทรศัพท์ของคุณไม่ถูกต้อง" class="w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกเบอร์โทรศัพท์ของคุณ" value="<?php echo $phone; ?>" required>
+                <input type="text" id="phone" name="phone" pattern="0[0-9]{9}" title="เบอร์โทรศัพท์ของคุณไม่ถูกต้อง" class="w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกเบอร์โทรศัพท์ของคุณ" value="<?php echo htmlspecialchars($phone); ?>" required>
                 <p id="phoneError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p>
             </div>
         </div>
 
         <p class="font-medium mt-5 mb">ที่อยู่</p>
         <div class="mt-2">
-            <input type="text" id="address" name="address" class="mb-5 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกที่อยู่ของคุณ" value="<?php echo $address; ?>" required>
+            <input type="text" id="address" name="address" class="mb-5 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกที่อยู่ของคุณ" value="<?php echo htmlspecialchars($address); ?>" required>
             <p id="addressError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p>
         </div>
 
         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div class="sm:col-span-3">
                 <p class="font-medium">ตำบล / แขวง</p>
-                <input type="text" id="district" name="district" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกตำบล / แขวง" value="<?php echo $district; ?>" required>
+                <input type="text" id="district" name="district" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกตำบล / แขวง" value="<?php echo htmlspecialchars($district); ?>" required>
                 <p id="distError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p>
             </div>
             <div class="sm:col-span-3">
                 <p class="font-medium">อำเภอ / เขต</p>
-                <input type="text" id="subdistrict" name="subdistrict" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกอำเภอ / เขต" value="<?php echo $subdistrict; ?>" required>
+                <input type="text" id="subdistrict" name="subdistrict" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกอำเภอ / เขต" value="<?php echo htmlspecialchars($subdistrict); ?>" required>
                 <p id="subdisError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p>
             </div>
 
             <div class="sm:col-span-3">
                 <p class="font-medium">จังหวัด</p>
-                <input type="text" id="province" name="province" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกจังหวัด" value="<?php echo $province; ?>" required>
+                <input type="text" id="province" name="province" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกจังหวัด" value="<?php echo htmlspecialchars($province); ?>" required>
                 <p id="provinceError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p>
             </div>
             <div class="sm:col-span-3">
                 <p class="font-medium">รหัสไปรษณีย์</p>
-                <input type="text" id="postcode" name="postcode" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกรหัสไปรษณีย์" value="<?php echo $postcode; ?>" required>
+                <input type="text" id="postcode" name="postcode" class="mt-2 w-full h-9 px-3 py-2 text-sm placeholder-gray-400 border border-gray-300 shadow-sm rounded-lg" placeholder="กรุณากรอกรหัสไปรษณีย์" value="<?php echo htmlspecialchars($postcode); ?>" required>
                 <p id="postError" class="text-sm/[17px] font-normal text-red-600 mt-1"></p>
             </div>
         </div>
@@ -194,7 +194,7 @@ $address = trim(substr($address, 0, $indexDist));
 
         const usernameBox = document.getElementById('userName');
         const userNameCheck = document.getElementById('UsernameCheck');
-        var oldUsername = '<?php echo $userInfo['UserName']; ?>';
+        var oldUsername = '<?php echo htmlspecialchars($userInfo['UserName']); ?>';
         var userNameStatus = false;
 
         function validateForm() {

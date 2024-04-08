@@ -49,7 +49,7 @@
   <div class="px-28 pb-12 text-base">
       <input type="hidden" name="id" id="id" value="<?php echo $id;?>">
       <h1 class="leading-7 mb-1 font-semibold">ข้อมูลส่วนตัวของฉัน</h1>
-      <p class="text-sm/[17px] leading-6 text-gray-600 pl-5 pb-2">ยินดีต้อนรับคุณ <strong class="text-base"><?php echo getUserName(); ?></strong>! โปรดระบุข้อมูลของคุณ <span style="color:red; text-decoration: underline;">คุณสามารถยกเลิก หรือ กรอกข้อมูลภายหลังได้</span></p>
+      <p class="text-sm/[17px] leading-6 text-gray-600 pl-5 pb-2">ยินดีต้อนรับคุณ <strong class="text-base"><?php echo htmlspecialchars(getUserName()); ?></strong>! โปรดระบุข้อมูลของคุณ <span style="color:red; text-decoration: underline;">คุณสามารถยกเลิก หรือ กรอกข้อมูลภายหลังได้</span></p>
       <hr class="h-1 bg-gray-200 border-0 rounded mb-5">
       <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
         <div class="sm:col-span-3">
