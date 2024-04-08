@@ -101,7 +101,18 @@
       </div>
     </div>
 
-    <p class="text-sm text-right">หน้าที่ <?php echo $page; ?> จาก <?php echo $pages; ?></p>
+    <div class="flex justify-between items-center">
+      <div class="flex space-x-4">
+        <a href="ManageType.php">
+          <button class="delete bg-amber-400 hover:bg-amber-500 text-black text-sm font-normal py-2 px-4 rounded mb-3 ml-3">+ เพิ่มหมวดหมู่ใหม่</button>
+        </a>
+        <a href="ProductInfo.php">
+          <button class="delete bg-red-500 hover:bg-red-600 text-white text-sm font-normal py-2 px-4 rounded mb-3 ml-3">+ เพิ่มสินค้าใหม่</button>
+        </a>
+      </div>
+      <p class="text-sm text-right">หน้าที่ <?php echo $page; ?> จาก <?php echo $pages; ?></p>
+    </div>
+    
     <div class="relative overflow-x-auto shadow-md sm:rounded-md">
       <table class="w-full text-sm text-black mt-2">
         <thead class="text-sm bg-gray-100">

@@ -79,7 +79,7 @@
         
       <div class="flex flex-col">
         <p class="font-medium my-1">หมวดหมู่</p>
-        <form style="width: 100%" action="ProductOnType" method="post">
+        <form style="width: 100%" action="ProductOnType.php" method="post">
           <div class="relative inline-flex">
             <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" viewBox="0 0 412 232">
               <path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c9.763 9.763 25.592 9.763 35.355 0l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/>
@@ -105,6 +105,17 @@
         <?php echo "ค้นหา: {$search}" ?>
       </span>
     </div>
+    </div>
+
+    <div class="flex justify-between items-center">
+      <div class="flex space-x-4">
+        <a href="ManageType.php">
+          <button class="delete bg-amber-400 hover:bg-amber-500 text-black text-sm font-normal py-2 px-4 rounded mb-3 ml-3">+ เพิ่มหมวดหมู่ใหม่</button>
+        </a>
+        <a href="ProductInfo.php">
+          <button class="delete bg-red-500 hover:bg-red-600 text-white text-sm font-normal py-2 px-4 rounded mb-3 ml-3">+ เพิ่มสินค้าใหม่</button>
+        </a>
+      </div>
     </div>
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-md">
