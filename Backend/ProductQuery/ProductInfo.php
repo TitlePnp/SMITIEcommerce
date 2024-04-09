@@ -1,10 +1,14 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
   require_once "../../Components/ConnectDB.php";
 
   function selectProduct($name) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT * FROM product, product_type WHERE Proname = ?");
-    $stmt->bind_param("s", $name);
+    $status = "Active";
+    $qty = 0;
+    $stmt = $connectDB->prepare("SELECT * FROM product p, product_type pt WHERE p.Proname = ? AND p.Status = ? AND p.StockQty != ?");
+    $stmt->bind_param("ssi", $name, $status, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -13,7 +17,7 @@
 
   function selectProductByID($id) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT * FROM product, product_type WHERE ProID = ?");
+    $stmt = $connectDB->prepare("SELECT * FROM product p, product_type pt WHERE p.ProID = ?");
     $stmt->bind_param("s", $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -23,8 +27,10 @@
 
   function selectShowProduct($limit) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID ORDER BY RAND() LIMIT ?");
-    $stmt->bind_param("i", $limit);
+    $status = "Active";
+    $qty = 0;
+    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID WHERE p.Status = ? AND p.StockQty != ? ORDER BY p.ProID LIMIT ?");
+    $stmt->bind_param("sii", $status, $qty, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -34,11 +40,12 @@
   function countProduct($type) {
     global $connectDB;
     $status = "Active";
+    $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT COUNT(p.ProID) AS total
       FROM PRODUCT p JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE pt.TypeName = ? AND p.Status = ?");
-    $stmt->bind_param("ss", $type, $status);
+      WHERE pt.TypeName = ? AND p.Status = ? AND p.StockQty != ?");
+    $stmt->bind_param("ssi", $type, $status, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $result = $result->fetch_assoc()['total'];
@@ -49,14 +56,15 @@
   function showProductSplitPage($type, $offset, $limit) {
     global $connectDB;
     $status = "Active";
+    $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT p.ProID, p.ProName, p.Author, p.PricePerUnit, p.ImageSource 
       FROM PRODUCT p 
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE pt.TypeName = ? AND p.Status = ? 
+      WHERE pt.TypeName = ? AND p.Status = ? AND p.StockQty != ?
       ORDER BY p.ProID 
       LIMIT ?, ?");
-    $stmt->bind_param("ssii", $type, $status, $offset, $limit);
+    $stmt->bind_param("ssiii", $type, $status, $qty, $offset, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -66,14 +74,15 @@
   function searchProduct($search) {
     global $connectDB;
     $status = "Active";
+    $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT p.ProID, p.ProName, p.Author, p.PricePerUnit, p.ImageSource 
       FROM PRODUCT p 
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE p.ProName LIKE ? AND p.Status = ? 
+      WHERE p.ProName LIKE ? AND p.Status = ? AND p.StockQty != ?
       ORDER BY p.ProID");
     $search = "%$search%";
-    $stmt->bind_param("ss", $search, $status);
+    $stmt->bind_param("ssi", $search, $status, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $count = $result->num_rows;
@@ -87,14 +96,15 @@
   function searchByAuthor($search) {
     global $connectDB;
     $status = "Active";
+    $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT p.ProID, p.ProName, p.Author, p.PricePerUnit, p.ImageSource 
       FROM PRODUCT p 
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE p.Author LIKE ? AND p.Status = ? 
+      WHERE p.Author LIKE ? AND p.Status = ? AND p.StockQty != ?
       ORDER BY p.ProID");
     $search = "%$search%";
-    $stmt->bind_param("ss", $search, $status);
+    $stmt->bind_param("ssi", $search, $status, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $count = $result->num_rows;
