@@ -110,6 +110,7 @@ try {
     if ($PaymentMethod == "COD") {
         insertReceipt($newInvoiceID, $CusID, $receiverID, $payerID, $TotalPrice, $vat);
         cutStock($ProIds, $CusID);
+        updateInvoice($newInvoiceID);
     }
     updateOnHand($ProIds);
     echo "Success";
