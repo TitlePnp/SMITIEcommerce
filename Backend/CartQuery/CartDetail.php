@@ -10,7 +10,7 @@
       "SELECT p.ProName, p.Author, p.Description, p.PricePerUnit, p.StockQty, p.ImageSource, pt.TypeName  
       FROM PRODUCT p
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID
-      WHERE p.ProID = ? AND p.StockQty != 0");
+      WHERE p.ProID = ? AND p.StockQty != ?");
     $stmt->bind_param("ii", $proID, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
