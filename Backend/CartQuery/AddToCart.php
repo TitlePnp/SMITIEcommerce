@@ -19,44 +19,50 @@
 
   function addUpToCart($id, $proID, $quantity) {
     global $connectDB;
-    $leastNum = leatestNum($id) == NULL ? 1 : (leatestNum($id)+1);
-    if (alreadyInCart($id, $proID) == 0) {
-      $stmt = $connectDB->prepare("INSERT INTO CART_LIST (CusID, NumID, ProID, Qty) VALUES (?, ?, ?, ?)");
-      $stmt->bind_param("iiii", $id, $leastNum, $proID, $quantity);
-      $stmt->execute();
-      $stmt->close();
-    } else {
-      $onHandQty = checkQtyOnHand($proID);
-      $qtyUpdate = ($onHandQty + $quantity);
-      $stockQty = checkQty($proID);
-      if ($qtyUpdate >= $stockQty) {
-        $qtyUpdate = $stockQty;
+    $stockQty = checkQty($proID);
+    if ($stockQty != 0) {
+      $leastNum = leatestNum($id) == NULL ? 1 : (leatestNum($id)+1);
+      if (alreadyInCart($id, $proID) == 0) {
+        $stmt = $connectDB->prepare("INSERT INTO CART_LIST (CusID, NumID, ProID, Qty) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("iiii", $id, $leastNum, $proID, $quantity);
+        $stmt->execute();
+        $stmt->close();
+      } else {
+        $onHandQty = checkQtyOnHand($proID);
+        $qtyUpdate = ($onHandQty + $quantity);
+        $stockQty = checkQty($proID);
+        if ($qtyUpdate >= $stockQty) {
+          $qtyUpdate = $stockQty;
+        }
+  
+        if (isset($_POST['update']) && $_POST['update'] == 'true') {
+          $qtyUpdate = $quantity;
+        }
+        $statusUpdate = "OnHand";
+        $status = 'Ordered';
+        $stmt = $connectDB->prepare("UPDATE CART_LIST cl SET cl.Qty = ?, Status = ? WHERE cl.CusID = ? AND cl.ProID = ? AND cl.Status != ?");
+        $stmt->bind_param("isiis", $qtyUpdate, $statusUpdate, $id, $proID, $status);
+        $stmt->execute();
+        $stmt->close();
       }
-
-      if (isset($_POST['update']) && $_POST['update'] == 'true') {
-        $qtyUpdate = $quantity;
-      }
-      $statusUpdate = "OnHand";
-      $status = 'Ordered';
-      $stmt = $connectDB->prepare("UPDATE CART_LIST cl SET cl.Qty = ?, Status = ? WHERE cl.CusID = ? AND cl.ProID = ? AND cl.Status != ?");
-      $stmt->bind_param("isiis", $qtyUpdate, $statusUpdate, $id, $proID, $status);
-      $stmt->execute();
-      $stmt->close();
     }
   }
 
   function sessionCart($proID, $quantity) {
-    if (isset($_SESSION['cart'][$proID])) {
-      $_SESSION['cart'][$proID] += $quantity;
-      if ($_SESSION['cart'][$proID] >= checkQty($proID)) {
-        $_SESSION['cart'][$proID] = checkQty($proID);
+    $stockQty = checkQty($proID);
+    if ($stockQty != 0) {
+      if (isset($_SESSION['cart'][$proID])) {
+        $_SESSION['cart'][$proID] += $quantity;
+        if ($_SESSION['cart'][$proID] >= checkQty($proID)) {
+          $_SESSION['cart'][$proID] = checkQty($proID);
+        }
+      } else {
+        $_SESSION['cart'][$proID] = $quantity;
       }
-    } else {
-      $_SESSION['cart'][$proID] = $quantity;
-    }
 
-    if (isset($_POST['update']) && $_POST['update'] == 'true') {
-      $_SESSION['cart'][$proID] = $quantity;
+      if (isset($_POST['update']) && $_POST['update'] == 'true') {
+        $_SESSION['cart'][$proID] = $quantity;
+      }
     }
   }
 
@@ -107,6 +113,17 @@
   }
 
   function checkQty($proID) {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT p.StockQty FROM PRODUCT p WHERE p.ProID = ?");
+    $stmt->bind_param("i", $proID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $result = $result->fetch_assoc()['StockQty'];
+    $stmt->close();
+    return $result;
+  }
+
+  function getQtyPro($proID) {
     global $connectDB;
     $stmt = $connectDB->prepare("SELECT p.StockQty FROM PRODUCT p WHERE p.ProID = ?");
     $stmt->bind_param("i", $proID);
