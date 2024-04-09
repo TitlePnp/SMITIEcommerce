@@ -423,7 +423,7 @@ $proIds = array_filter($proIds);
                                 if (isset($quantityHidden)) {
                                     $qty['Qty'] = $quantityHidden;
                                 } else {
-                                    $qty = getQtyFromCart($CusID, $proId)->fetch_assoc();
+                                    $qty = getQtyFromCart($CusID)->fetch_assoc();
                                 }
                                 // $qty = getQtyFromCart($CusID, $proId)->fetch_assoc();
                                 $totalPrice += $row['PricePerUnit'] * $qty['Qty'];

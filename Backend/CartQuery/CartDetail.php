@@ -34,10 +34,20 @@
     return $result;
   }
 
-  function getQtyFromCart($CustomerID, $productID) {
+  function getQtyFromCart($CustomerID) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT Qty FROM CART_LIST WHERE ProID = ? AND CusID = ?");
-    $stmt->bind_param("is", $productID, $CustomerID);
+    //query last NumID form receiver_list where CusID = ?
+    $stmt = $connectDB->prepare("SELECT NumID FROM cart_list WHERE CusID = ? ORDER BY NumID DESC LIMIT 1;");
+    $stmt->bind_param("i", $CustomerID);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($NumID);
+    $stmt->fetch();
+    if ($NumID == null) {
+      $NumID = 1;
+    }     
+    $stmt = $connectDB->prepare("SELECT Qty FROM CART_LIST WHERE NumID = ? AND CusID = ?");
+    $stmt->bind_param("is", $NumID, $CustomerID);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();

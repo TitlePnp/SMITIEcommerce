@@ -174,7 +174,7 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                                     $order['Status'] = $Status;
                                 }
 
-                                if ($order['Status'] == 'Ordered') {
+                                if ($order['Status'] == 'Ordered' || $order['Status'] == 'COD') {
                                     // OrderedOrder($order, $order['InvoiceID']);
                                     echo "<form action='../OrderStatus/OrderStatus.php' method='POST'>";
                                     $result2 = getOrderListDetail($order['InvoiceID']);

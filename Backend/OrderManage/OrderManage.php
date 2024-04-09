@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 require_once "../../Components/ConnectDB.php";
 require_once "../../vendor/autoload.php";
 require_once "../../Backend/CartQuery/CartDetail.php";
+require_once '../ProductQuery/ProductInfo.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
 $dotenv->load();
@@ -208,4 +209,32 @@ function incrementInvoiceID($InvoiceID)
     $newInvoiceID = 'IN' . $incrementedNumber;
 
     return $newInvoiceID;
+}
+
+function cutStock($ProIds, $CusID) {
+    global $connectDB;
+    if ($CusID != 1) {
+        foreach ($ProIds as $proId) {
+            $result = selectProductByID($proId);
+            $row = $result->fetch_assoc();
+            $qtyQuery = getQtyFromCart($CusID)->fetch_assoc();
+            $qty = $qtyQuery['Qty'];
+            $setQty = $row['StockQty'] - $qty;
+            $stmt = $connectDB->prepare("UPDATE product SET StockQty =  ? WHERE ProID = ?;");
+            $stmt->bind_param("ii", $setQty, $proId);
+            $stmt->execute();
+            $stmt->close();
+        }
+    } else if ($CusID == 1) {
+        foreach ($ProIds as $proId) {
+            $result = selectProductByID($proId);
+            $row = $result->fetch_assoc();
+            $qty = $_SESSION['cart'][$proId];
+            $setQty = $row['StockQty'] - $qty;
+            $stmt = $connectDB->prepare("UPDATE product SET StockQty = ? WHERE ProID = ?;");
+            $stmt->bind_param("ii", $setQty , $proId);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
 }

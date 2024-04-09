@@ -32,7 +32,7 @@
 </head>
 <body>
   <!-- SECTION 1 -->
-  <nav class="sticky top-0 bg-[#062639] z-10 text-sm font-semibold tracking-wider" style="font-family: 'Kodchasan', semibold,serif;">
+  <nav class="sticky top-0 bg-[#062639] z-20 text-sm font-semibold tracking-wider" style="font-family: 'Kodchasan', semibold,serif;">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 relative flex h-12 items-center justify-between">
       <!-- logo -->
       <div>
