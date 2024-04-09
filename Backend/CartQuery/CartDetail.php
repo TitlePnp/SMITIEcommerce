@@ -5,12 +5,13 @@
   $_SESSION['productOnCart'] = 0;
   function showCartSession($proID) {
     global $connectDB;
+    $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT p.ProName, p.Author, p.Description, p.PricePerUnit, p.StockQty, p.ImageSource, pt.TypeName  
       FROM PRODUCT p
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID
-      WHERE p.ProID = ?");
-    $stmt->bind_param("i", $proID);
+      WHERE p.ProID = ? AND p.StockQty != 0");
+    $stmt->bind_param("ii", $proID, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -21,13 +22,14 @@
     global $connectDB;
     $statusDone = 'Ordered';
     $statusCancel = 'Cancel';
+    $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT cl.ProID, cl.Qty, p.ProName, p.Author, p.Description, p.PricePerUnit, p.StockQty, p.ImageSource, pt.TypeName
       FROM CART_LIST cl
       JOIN PRODUCT p ON cl.ProID = p.ProID
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID
-      WHERE cl.CusID = ? AND cl.Status != ? AND cl.Status != ?");
-    $stmt->bind_param("iss", $id, $statusDone, $statusCancel);
+      WHERE cl.CusID = ? AND cl.Status != ? AND cl.Status != ? AND p.StockQty != ?");
+    $stmt->bind_param("issi", $id, $statusDone, $statusCancel, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
