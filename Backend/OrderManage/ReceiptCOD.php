@@ -38,6 +38,21 @@
     $lastID = (int) substr($result, 1);
     $lastID++;
     $newID = "R" . $lastID;
+    while (checkRecIDExists($newID)) {
+      $lastID++;
+      $newID = "R" . $lastID;
+    }
     return $newID;
+  }
+
+  function checkRecIDExists($recID) {
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT COUNT(*) AS RecIDExists FROM RECEIPT WHERE RecID = ?");
+    $stmt->bind_param("s", $recID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $fetchResult = $result->fetch_assoc();
+    $stmt->close();
+    return $fetchResult['RecIDExists'] > 0;
   }
 ?>
