@@ -103,5 +103,15 @@
     $stmt->bind_param("ss", $recID, $invoiceID);
     $stmt->execute();
     $stmt->close();
+    updateInvoice($invoiceID);
+  }
+
+  function updateInvoice($invoiceID) {
+    global $connectDB;
+    $status = 'Cpmpleted';
+    $stmt = $connectDB->prepare("UPDATE INVOICE_ORDER SET Status = ? WHERE InvoiceID = ?");
+    $stmt->bind_param("ss", $status, $invoiceID);
+    $stmt->execute();
+    $stmt->close();
   }
 ?>
