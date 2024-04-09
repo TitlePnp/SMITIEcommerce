@@ -4,6 +4,7 @@
   ini_set('display_errors', 1);
   require '../../Components/ConnectDB.php';
   require '../../Backend/Authorized/GetID.php';
+  require_once '../../Backend/OrderManage/OrderManage.php';
   date_default_timezone_set('Asia/Bangkok');
   $invoiceID = "";
   $id = 1;
@@ -29,6 +30,7 @@
       $stmt->bind_param("ssisssss", $recID, $date, $id, $payerID, $invoiceID, $imgContent, $channel, $invoiceID);
       $stmt->execute();
       insertReceiptList($invoiceID, $recID);
+      cutStockByInvoice($invoiceID);
       $_SESSION['success'] = "อัปโหลดรูปภาพการชำระเงินสำเร็จ รอการตรวจสอบจากทางร้าน";
       header("Location: ../../Frontend/UploadPage/Upload.php");
     } else {
@@ -106,12 +108,5 @@
     updateInvoice($invoiceID);
   }
 
-  function updateInvoice($invoiceID) {
-    global $connectDB;
-    $status = 'Cpmpleted';
-    $stmt = $connectDB->prepare("UPDATE INVOICE_ORDER SET Status = ? WHERE InvoiceID = ?");
-    $stmt->bind_param("ss", $status, $invoiceID);
-    $stmt->execute();
-    $stmt->close();
-  }
+
 ?>

@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 require_once "../../Components/ConnectDB.php";
 require_once "../../vendor/autoload.php";
 require_once "../../Backend/CartQuery/CartDetail.php";
+require_once '../ProductQuery/ProductInfo.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
 $dotenv->load();
@@ -75,7 +76,8 @@ function insertPayer($payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel
 {
     global $connectDB;
     $stmt = $connectDB->prepare("INSERT INTO payer(PayerTaxID, PayerFName, PayerLName, PayerSex, PayerTel, PayerAddress, PayerProvince, PayerPostcode, CusID, TAG) VALUES (?,?,?,?,?,?,?,?,?,?);");
-    $stmt->bind_param("ssssssssis", $payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID, $PayerTag);    $stmt->execute();
+    $stmt->bind_param("ssssssssis", $payerTaxID, $payerFName, $payerLName, $payerSex, $payerTel, $payerAddress, $payerProvince, $payerPostcode, $CusID, $PayerTag);
+    $stmt->execute();
     $stmt->close();
 }
 
@@ -210,12 +212,62 @@ function incrementInvoiceID($InvoiceID)
     return $newInvoiceID;
 }
 
+function cutStock($ProIds, $CusID)
+{
+    global $connectDB;
+    if ($CusID != 1) {
+        foreach ($ProIds as $proId) {
+            $result = selectProductByID($proId);
+            $row = $result->fetch_assoc();
+            $qtyQuery = getQtyFromCart($CusID)->fetch_assoc();
+            $qty = $qtyQuery['Qty'];
+            $setQty = $row['StockQty'] - $qty;
+            $stmt = $connectDB->prepare("UPDATE product SET StockQty =  ? WHERE ProID = ?;");
+            $stmt->bind_param("ii", $setQty, $proId);
+            $stmt->execute();
+            $stmt->close();
+        }
+    } else if ($CusID == 1) {
+        foreach ($ProIds as $proId) {
+            $result = selectProductByID($proId);
+            $row = $result->fetch_assoc();
+            $qty = $_SESSION['cart'][$proId];
+            $setQty = $row['StockQty'] - $qty;
+            $stmt = $connectDB->prepare("UPDATE product SET StockQty = ? WHERE ProID = ?;");
+            $stmt->bind_param("ii", $setQty, $proId);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
+}
 
-function updateInvoice($invoiceID) {
+function cutStockByInvoice($InvoiceID)
+{
+    global $connectDB;
+    $stmt = $connectDB->prepare("SELECT ProID, Qty FROM invoice_list WHERE InvoiceID = ?");
+    $stmt->bind_param("s", $InvoiceID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $proId = $row['ProID'];
+        $qty = $row['Qty'];
+        $productResult = selectProductByID($proId);
+        $productRow = $productResult->fetch_assoc();
+        $setQty = $productRow['StockQty'] - $qty;
+        $stmt = $connectDB->prepare("UPDATE product SET StockQty = ? WHERE ProID = ?");
+        $stmt->bind_param("ii", $setQty, $proId);
+        $stmt->execute();
+    }
+    $stmt->close();
+}
+
+
+function updateInvoice($invoiceID)
+{
     global $connectDB;
     $status = 'Cpmpleted';
     $stmt = $connectDB->prepare("UPDATE INVOICE_ORDER SET Status = ? WHERE InvoiceID = ?");
     $stmt->bind_param("ss", $status, $invoiceID);
     $stmt->execute();
     $stmt->close();
-  }
+}

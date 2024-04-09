@@ -3,6 +3,7 @@ require '../../Backend/Authorized/UserAuthorized.php';
 require '../../Backend/Authorized/ManageHeader.php';
 require '../../vendor/autoload.php';
 require_once "../../Backend/ProductQuery/ProductInfo.php";
+require_once "../../Backend/ProductQuery/ProductDetail.php";
 
 ?>
 
@@ -195,8 +196,10 @@ require_once "../../Backend/ProductQuery/ProductInfo.php";
                     </div>
                     <div class="w-full border-l-2 p-2">
                         <?php
-                        $result = selectProduct('One Piece 98');
+                        $result = selectProduct('One piece 98');
                         $row = $result->fetch_assoc();
+                        $stockOnOrder = sumProductOnOrder($row['ProID']);
+                        $stockAvailable = $row['StockQty'] - $stockOnOrder;
                         echo "<h1 class='text-2xl font-bold'>" . $row['ProName'] . "</h1>";
                         echo "<p class='text-md'><b>ผู้เขียน:</b> " . $row['Author'] . "</p>";
                         echo "<p class='text-md'><b>หมวดหมู่:</b> " . $row['TypeName'] . "</p>";
@@ -208,10 +211,10 @@ require_once "../../Backend/ProductQuery/ProductInfo.php";
                         echo "<div class='flex items-center'>";
                         echo "<p class='text-base font-normal mr-3'>จำนวน: </p>";
                         echo "<button type='button' class='decrease hover:bg-slate-200 border border-gray-300 h-8 w-8 border-r-0 flex items-bottom justify-center'>-</button>";
-                        echo "<input type='number' min='1' max='{$row['StockQty']}' value='1' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>";
+                        echo "<input type='number' min='1' max='{$stockAvailable}' value='1' class='quantity bg-white text-gray-900 text-sm w-16 h-8 border border-gray-300  text-center'>";
                         echo "<button type='button' class='increase hover:bg-slate-200 border border-gray-300 h-8 w-8 border-l-0 flex items-bottom justify-center'>+</button>";
                         echo "</div>";
-                        echo "<p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$row['StockQty']} เล่ม</p>";
+                        echo "<p class='text-sm font-normal ml-14 mt-3 text-neutral-600'>มีสินค้าทั้งหมด {$stockAvailable} เล่ม</p>";
                         echo "<div class='flex'>";
                         echo "<input type='hidden' name='proID' value='{$row['ProID']}'>";
                         echo "<input type='hidden' name='quantityHidden' value=''>";
