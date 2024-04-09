@@ -168,6 +168,12 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                             echo "</div>";
                         } else if ($result->num_rows != 0) {
                             while ($order = $result->fetch_assoc()) {
+                                $Status = getReceiptStatus($order["InvoiceID"]);
+                                if ($Status == "No Receipt") {
+                                } else {
+                                    $order['Status'] = $Status;
+                                }
+
                                 if ($order['Status'] == 'Ordered') {
                                     // OrderedOrder($order, $order['InvoiceID']);
                                     echo "<form action='../OrderStatus/OrderStatus.php' method='POST'>";

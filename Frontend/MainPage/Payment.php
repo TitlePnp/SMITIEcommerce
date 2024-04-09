@@ -62,7 +62,7 @@ use \Firebase\JWT\JWT;
             </div>
             <div class="flex justify-between items-center">
                 <p>เลขคำสั่งซื้อ: <?php echo $inoviceID ?></p>
-                <form action="../../Frontend/PDF/Invoice.php" method="POST">
+                <form action="../../Frontend/PDF/Invoice.php" method="POST" target="_blank">
                     <input type="hidden" name="InvoiceID" value="<?php echo $inoviceID ?>">
                     <button type="submit" class="block rounded-md border bg-red-500 px-4 py-2 text-white outline-none hover:shadow-md"><i class='bx bxs-file-pdf mr-2' style='color:#ffffff'></i>ใบแจ้งหนี้</button>
                 </form>
