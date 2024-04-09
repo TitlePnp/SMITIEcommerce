@@ -5,10 +5,9 @@ ini_set('display_errors', 1);
 
   function selectProduct($name) {
     global $connectDB;
-    $status = "Active";
     $qty = 0;
-    $stmt = $connectDB->prepare("SELECT * FROM product p, product_type pt WHERE p.Proname = ? AND p.Status = ? AND p.StockQty != ?");
-    $stmt->bind_param("ssi", $name, $status, $qty);
+    $stmt = $connectDB->prepare("SELECT * FROM product p, product_type pt WHERE p.Proname = ? AND p.StockQty != ?");
+    $stmt->bind_param("si", $name, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -27,10 +26,9 @@ ini_set('display_errors', 1);
 
   function selectShowProduct($limit) {
     global $connectDB;
-    $status = "Active";
     $qty = 0;
-    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID WHERE p.Status = ? AND p.StockQty != ? ORDER BY p.ProID LIMIT ?");
-    $stmt->bind_param("sii", $status, $qty, $limit);
+    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID WHERE p.StockQty != ? ORDER BY p.ProID LIMIT ?");
+    $stmt->bind_param("ii", $qty, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -39,13 +37,12 @@ ini_set('display_errors', 1);
 
   function countProduct($type) {
     global $connectDB;
-    $status = "Active";
     $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT COUNT(p.ProID) AS total
       FROM PRODUCT p JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE pt.TypeName = ? AND p.Status = ? AND p.StockQty != ?");
-    $stmt->bind_param("ssi", $type, $status, $qty);
+      WHERE pt.TypeName = ? AND p.StockQty != ?");
+    $stmt->bind_param("si", $type, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $result = $result->fetch_assoc()['total'];
@@ -55,16 +52,15 @@ ini_set('display_errors', 1);
 
   function showProductSplitPage($type, $offset, $limit) {
     global $connectDB;
-    $status = "Active";
     $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT p.ProID, p.ProName, p.Author, p.PricePerUnit, p.ImageSource 
       FROM PRODUCT p 
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE pt.TypeName = ? AND p.Status = ? AND p.StockQty != ?
+      WHERE pt.TypeName = ? AND p.StockQty != ?
       ORDER BY p.ProID 
       LIMIT ?, ?");
-    $stmt->bind_param("ssiii", $type, $status, $qty, $offset, $limit);
+    $stmt->bind_param("siii", $type, $qty, $offset, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
@@ -79,10 +75,10 @@ ini_set('display_errors', 1);
       "SELECT p.ProID, p.ProName, p.Author, p.PricePerUnit, p.ImageSource 
       FROM PRODUCT p 
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE p.ProName LIKE ? AND p.Status = ? AND p.StockQty != ?
+      WHERE p.ProName LIKE ? AND p.StockQty != ?
       ORDER BY p.ProID");
     $search = "%$search%";
-    $stmt->bind_param("ssi", $search, $status, $qty);
+    $stmt->bind_param("si", $search, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $count = $result->num_rows;
@@ -95,16 +91,15 @@ ini_set('display_errors', 1);
 
   function searchByAuthor($search) {
     global $connectDB;
-    $status = "Active";
     $qty = 0;
     $stmt = $connectDB->prepare(
       "SELECT p.ProID, p.ProName, p.Author, p.PricePerUnit, p.ImageSource 
       FROM PRODUCT p 
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID 
-      WHERE p.Author LIKE ? AND p.Status = ? AND p.StockQty != ?
+      WHERE p.Author LIKE ? AND p.StockQty != ?
       ORDER BY p.ProID");
     $search = "%$search%";
-    $stmt->bind_param("ssi", $search, $status, $qty);
+    $stmt->bind_param("si", $search, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
     $count = $result->num_rows;
