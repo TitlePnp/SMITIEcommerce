@@ -19,6 +19,8 @@ $authUrl = $client->createAuthUrl();
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+    <title>SMITI Shop: Sign In</title>
+
     <style>
         * {
             margin: 0;

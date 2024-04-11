@@ -1,8 +1,12 @@
 <?php
 require_once '../../vendor/autoload.php';
-$client_ID = '62789548374-1jkuhe614c9usvbugpqhbid2keebmqm2.apps.googleusercontent.com';
-$client_Secret = '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';
-$redirect_URI = 'http://localhost/SmitiShop/Backend/GoogleAuthen/GoogleManage.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+$dotenv->load();
+
+$client_ID = $_ENV['Google_Client_ID'];
+$client_Secret = $_ENV['Google_Client_Secret'];
+$redirect_URI = $_ENV['Google_Redirect'];
 
 $client = new Google_Client();
 $client->setClientId($client_ID);

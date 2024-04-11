@@ -176,9 +176,9 @@ $authUrl = $client->createAuthUrl();
             </div>
 
         </div>
-    </div>
+        <p id="ShowUserEntropy"></p>
 
-    <p id="ShowUserEntropy"></p>
+    </div>
 
     <script>
         const usernameBox = document.getElementById('usernameBox');
@@ -256,9 +256,57 @@ $authUrl = $client->createAuthUrl();
         const mediumIndicator = document.getElementById('mediumIndicator');
         const highIndicator = document.getElementById('highIndicator');
 
+        var userEntropy = document.getElementById('ShowUserEntropy');
+
+        const lowerCase = /[a-z]/;
+        const upperCase = /[A-Z]/;
+        const digit = /[0-9]/;
+        const symbol = /[!@#$%^&*?]/;
+        var charPossible = 0;
+
+        var lower = false;
+        var upper = false;
+        var num = false;
+        var sym = false;
+
         passwordBox.addEventListener('input', () => {
             const password = passwordBox.value;
-            const entropy = Math.log2(Math.pow(94, password.length));
+
+            if (lowerCase.test(password) && !lower) {
+                charPossible += 26;
+                lower = true;
+            } else if (!lowerCase.test(password) && lower) {
+                charPossible -= 26;
+                lower = false;
+            }
+
+            if (upperCase.test(password) && !upper) {
+                charPossible += 26;
+                upper = true;
+            } else if (!upperCase.test(password) && upper) {
+                charPossible -= 26;
+                upper = false;
+            }
+
+            if (digit.test(password) && !num) {
+                charPossible += 10;
+                num = true;
+            } else if (!digit.test(password) && num) {
+                charPossible -= 10;
+                num = false;
+            }
+
+            if (symbol.test(password) && !sym) {
+                charPossible += 33;
+                sym = true;
+            } else if (!symbol.test(password) && sym) {
+                charPossible -= 33;
+                sym = false;
+            }
+
+            const entropy = password.length * Math.log2(charPossible);
+
+            // userEntropy.innerHTML = "Entropy: " + entropy + " charPossible: " + charPossible + " password length: " + password.length;   
 
             if (password.length === 0) {
                 lowIndicator.style.backgroundColor = 'rgb(107 114 128)';
@@ -266,18 +314,18 @@ $authUrl = $client->createAuthUrl();
                 highIndicator.style.backgroundColor = 'rgb(107 114 128)';
 
                 userEntropyPass = false;
-            } else if (entropy < 48) {
+            } else if (entropy < 46) {
                 lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
                 mediumIndicator.style.backgroundColor = 'rgb(107 114 128)';
                 highIndicator.style.backgroundColor = 'rgb(107 114 128)';
 
                 userEntropyPass = false;
-            } else if (entropy < 79) {
+            } else if (entropy < 52) {
                 lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
                 mediumIndicator.style.backgroundColor = 'rgb(249 115 22)';
                 highIndicator.style.backgroundColor = 'rgb(107 114 128)';
 
-                userEntropyPass = false;
+                userEntropyPass = true;
             } else {
                 lowIndicator.style.backgroundColor = 'rgb(239 68 68)';
                 mediumIndicator.style.backgroundColor = 'rgb(249 115 22)';
