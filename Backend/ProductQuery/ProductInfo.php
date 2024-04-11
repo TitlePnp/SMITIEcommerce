@@ -27,7 +27,7 @@ ini_set('display_errors', 1);
   function selectShowProduct($limit) {
     global $connectDB;
     $qty = 0;
-    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID WHERE p.StockQty != ? ORDER BY p.ProID LIMIT ?");
+    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID WHERE p.StockQty != ? ORDER BY RAND() LIMIT ?");
     $stmt->bind_param("ii", $qty, $limit);
     $stmt->execute();
     $result = $stmt->get_result();

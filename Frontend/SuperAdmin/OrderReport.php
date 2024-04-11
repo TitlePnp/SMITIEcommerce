@@ -214,6 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         function Search() {
             SearchForm.action = "OrderReport.php";
+            SearchForm.target = "_self";
             SearchForm.submit();
         }
 

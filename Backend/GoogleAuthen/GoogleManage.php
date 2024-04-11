@@ -27,7 +27,7 @@ if (isset($_GET['code'])) {
     $google_oauth = new Google_Service_Oauth2($client);
 
     $google_oauth_account_info = $google_oauth->userinfo->get();
-    var_dump($google_oauth_account_info);
+    // var_dump($google_oauth_account_info);
     $email = $google_oauth_account_info->email;
     $name = $google_oauth_account_info->name;
     $userId = $google_oauth_account_info->id;
@@ -39,10 +39,10 @@ if (isset($_GET['code'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        var_dump($result);
+        // var_dump($result);
         $row = $result->fetch_assoc();
         if ($row['Role'] == 'SuperAdmin' || $row['Role'] == 'Admin') {
-            $_SESSION['email'] = $email;
+            $_SESSION['email'] = $email; 
             $_SESSION['name'] = $name;
             $_SESSION['tokenGoogle'] = $userId;
             require_once "../Log/LogManage.php";

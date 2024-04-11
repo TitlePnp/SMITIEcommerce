@@ -36,8 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $payment_channel = "None";
         $result = getReportAllTime();
         $allReccord = true;
-    }
-    else if (isset($_POST['payment_channel'])) {
+    } else if (isset($_POST['payment_channel'])) {
         $payment_channel = $_POST['payment_channel'];
         $payment_channel = implode(",", $payment_channel);
         $ShowPaymentStatus = true;
@@ -159,6 +158,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else if ($ShowPaymentStatus && !$ShowStatusStatus) {
         ?>
             <h2 class="header">รายงานคำสั่งซื้อค้าประเภทการชำระ <?php echo $ShowPaymentStatus ?></h2>
+        <?php
+        } else { ?>
+            <h2 class="header">รายงานคำสั่งซื้อ</h2>
         <?php
         }
         ?>
