@@ -6,7 +6,7 @@ ini_set('display_errors', 1);
   function selectProduct($name) {
     global $connectDB;
     $qty = 0;
-    $stmt = $connectDB->prepare("SELECT * FROM product p, product_type pt WHERE p.Proname = ? AND p.StockQty != ?");
+    $stmt = $connectDB->prepare("SELECT * FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID  WHERE p.Proname = ? AND p.StockQty != ?");
     $stmt->bind_param("si", $name, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
