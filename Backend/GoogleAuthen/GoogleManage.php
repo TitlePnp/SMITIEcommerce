@@ -32,7 +32,7 @@ if (isset($_GET['code'])) {
     $name = $google_oauth_account_info->name;
     $userId = $google_oauth_account_info->id;
 
-    $stmt = $connectDB->prepare("SELECT * FROM `customer_account` WHERE `GoogleId` = ?");
+    $stmt = $connectDB->prepare("SELECT * FROM `CUSTOMER_ACCOUNT` WHERE `GoogleId` = ?");
     $stmt->bind_param("s", $userId);
     $stmt->execute();
 
@@ -74,17 +74,17 @@ if (isset($_GET['code'])) {
         // header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
         // print_r($_SESSION);
     } else {
-        $stmt = $connectDB->prepare("INSERT INTO customer(CusFName, CusLName, Sex, Tel, Address) VALUES 
+        $stmt = $connectDB->prepare("INSERT INTO CUSTOMER(CusFName, CusLName, Sex, Tel, Address) VALUES 
     (?,'','','','')");
         $stmt->bind_param("s", $name);
         $stmt->execute();
 
-        $sql = "SELECT CusID FROM customer ORDER BY CusID DESC LIMIT 1";
+        $sql = "SELECT CusID FROM CUSTOMER ORDER BY CusID DESC LIMIT 1";
         $result = $connectDB->query($sql);
         $row = $result->fetch_assoc();
         $cusID = $row['CusID'];
 
-        $stmt = $connectDB->prepare("INSERT INTO customer_account(UserName, Email, Password, GoogleId, Role, CusID)
+        $stmt = $connectDB->prepare("INSERT INTO CUSTOMER_ACCOUNT(UserName, Email, Password, GoogleId, Role, CusID)
     VALUES (?, ?, '', ?, 'User', ?)");
 
         $stmt->bind_param("ssss", $name, $email, $userId, $cusID);

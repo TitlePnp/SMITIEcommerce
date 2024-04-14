@@ -1,12 +1,12 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-  require_once "../../Components/ConnectDB.php";
+  require "../../Components/ConnectDB.php";
 
   function selectProduct($name) {
     global $connectDB;
     $qty = 0;
-    $stmt = $connectDB->prepare("SELECT * FROM product p, product_type pt WHERE p.Proname = ? AND p.StockQty != ?");
+    $stmt = $connectDB->prepare("SELECT * FROM PRODUCT p, PRODUCT_TYPE pt WHERE p.Proname = ? AND p.StockQty != ?");
     $stmt->bind_param("si", $name, $qty);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -16,7 +16,7 @@ ini_set('display_errors', 1);
 
   function selectProductByID($id) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT * FROM product p, product_type pt WHERE p.ProID = ?");
+    $stmt = $connectDB->prepare("SELECT * FROM PRODUCT p, PRODUCT_TYPE pt WHERE p.ProID = ?");
     $stmt->bind_param("s", $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -27,7 +27,7 @@ ini_set('display_errors', 1);
   function selectShowProduct($limit) {
     global $connectDB;
     $qty = 0;
-    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM product p JOIN product_type pt ON p.TypeID = pt.TypeID WHERE p.StockQty != ? ORDER BY RAND() LIMIT ?");
+    $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.Description, p.PricePerUnit, p.ImageSource, pt.TypeName FROM PRODUCT p JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID WHERE p.StockQty != ? ORDER BY RAND() LIMIT ?");
     $stmt->bind_param("ii", $qty, $limit);
     $stmt->execute();
     $result = $stmt->get_result();

@@ -39,7 +39,7 @@
   function getQtyFromCart($CustomerID) {
     global $connectDB;
     //query last NumID form receiver_list where CusID = ?
-    $stmt = $connectDB->prepare("SELECT NumID FROM cart_list WHERE CusID = ? ORDER BY NumID DESC LIMIT 1;");
+    $stmt = $connectDB->prepare("SELECT NumID FROM CART_LIST WHERE CusID = ? ORDER BY NumID DESC LIMIT 1;");
     $stmt->bind_param("i", $CustomerID);
     $stmt->execute();
     $stmt->store_result();

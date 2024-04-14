@@ -23,17 +23,17 @@ CREATE TABLE CUSTOMER_ACCOUNT (
 
 -- ตารางเก็บข้อมูลคนจ่ายเงิน --
 CREATE TABLE PAYER (
-    PayerID     INT             AUTO_INCREMENT  PRIMARY KEY,
-    PayerTaxID       CHAR(255)        ,
-    PayerFName  VARCHAR(20)     NOT NULL,
-    PayerLName	VARCHAR(20)     NOT NULL,
-    PayerSex			VARCHAR(1),
-    PayerTel			CHAR(10)        NOT NULL,
-    PayerAddress		VARCHAR(200)     NOT NULL,
-    PayerProvince    VARCHAR(20) NOT NULL,
-    PayerPostcode    VARCHAR(5) NOT NULL,
-    CusID       INT             NOT NULL,
-    TAG         VARCHAR(255),
+    PayerID         INT             AUTO_INCREMENT  PRIMARY KEY,
+    PayerTaxID      CHAR(255),
+    PayerFName      VARCHAR(20)     NOT NULL,
+    PayerLName	    VARCHAR(20)     NOT NULL,
+    PayerSex		VARCHAR(1),
+    PayerTel		CHAR(10)        NOT NULL,
+    PayerAddress    VARCHAR(200)    NOT NULL,
+    PayerProvince   VARCHAR(20)     NOT NULL,
+    PayerPostcode   VARCHAR(5)      NOT NULL,
+    TAG             VARCHAR(255),
+    CusID           INT             NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 );
 -- ตารางเก็บรายชื่อผู้จ่ายเงิน (สำหรับลูกค้า) --
@@ -48,15 +48,15 @@ CREATE TABLE PAYER_LIST (
 
 -- ตารางเก็บข้อมูลผู้รับ --
 CREATE TABLE RECEIVER (
-    RecvID		INT	        AUTO_INCREMENT  PRIMARY KEY,
-    RecvFName	VARCHAR(20) NOT NULL,
-    RecvLName	VARCHAR(20)	NOT NULL,
+    RecvID		    INT	        AUTO_INCREMENT  PRIMARY KEY,
+    RecvFName	    VARCHAR(20) NOT NULL,
+    RecvLName	    VARCHAR(20)	NOT NULL,
     RecvSex			VARCHAR(1),
     RecvTel			CHAR(10)	NOT NULL,
     RecvAddress		VARCHAR(80)	NOT NULL,
     RecvProvince    VARCHAR(20) NOT NULL,
-    RecvPostcode    VARCHAR(5) NOT NULL,
-    CusID       INT         NOT NULL,
+    RecvPostcode    VARCHAR(5)  NOT NULL,
+    CusID           INT         NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 );
 -- ตารางเก็บรายชื่อผู้รับ (สำหรับลูกค้า) --
@@ -77,8 +77,9 @@ CREATE TABLE RECEIVER_LIST (
 --
 -- ตารางเก็บข้อมูลประเภทของสินค้า --
 CREATE TABLE PRODUCT_TYPE (
-    TypeID      INT     AUTO_INCREMENT      PRIMARY KEY,
-    TypeName    VARCHAR(255)    NOT NULL
+    TypeID      INT             AUTO_INCREMENT      PRIMARY KEY,
+    TypeName    VARCHAR(255)    NOT NULL,
+    ThaiType    VARCHAR(255)    NOT NULL
 );
 
 CREATE TABLE PRODUCT (
@@ -91,7 +92,7 @@ CREATE TABLE PRODUCT (
     StockQty        INT             NOT NULL,
     ImageSource     VARCHAR(255)	NOT NULL,
     Status          VARCHAR(10)     NOT NULL    DEFAULT 'Active',
-    First_Day       DATETIME         NOT NULL,
+    First_Day       DATETIME        NOT NULL,
     Update_Day      DATETIME ,
     TypeID          INT             NOT NULL,
     FOREIGN KEY (TypeID) REFERENCES PRODUCT_TYPE(TypeID)
@@ -175,8 +176,8 @@ CREATE TABLE RECEIPT_LIST (
 -- ตารางเก็บข้อมูลการใช้งานของผู้ใช้ --
 CREATE TABLE ACCESS_LOG (
     CusID		INT             NOT NULL,
-    IPAddr      VARCHAR(50)    NOT NULL,
     NumID		INT             NOT NULL,
+    IPAddr      VARCHAR(50)     NOT NULL,
     Action		VARCHAR(80)     NOT NULL, 
     Period	    DATETIME        NOT NULL,
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
@@ -185,11 +186,11 @@ CREATE TABLE ACCESS_LOG (
 
 -- ตารางเก็บตะกร้าสินค้า -- 
 CREATE TABLE CART_LIST (
-    CusID       INT            NOT NULL,
-    NumID       INT         NOT NULL,
-    ProID       INT            NOT NULL,
-    Qty            INT            NOT NULL,
-    Status        VARCHAR(10)    DEFAULT 'OnHand',
+    CusID       INT             NOT NULL,
+    NumID       INT             NOT NULL,
+    ProID       INT             NOT NULL,
+    Qty         INT             NOT NULL,
+    Status      VARCHAR(10)     DEFAULT 'OnHand',
     FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
     FOREIGN KEY (ProID) REFERENCES PRODUCT(ProID),
     CONSTRAINT CartList PRIMARY KEY (CusID, NumID)
@@ -197,10 +198,10 @@ CREATE TABLE CART_LIST (
 
 -- ตารางเก็บ OTP สำหรับรีเซ็ตรหัสผ่าน --
 CREATE TABLE OTP_RECOVER (
-    CusID       INT         NOT NULL,
-    EMAIL       VARCHAR(255)    NOT NULL,
-    OTP         VARCHAR(10)     NOT NULL,
+    CusID           INT         NOT NULL,
+    EMAIL           VARCHAR(255)    NOT NULL,
+    OTP             VARCHAR(10)     NOT NULL,
     START_TIME      DATETIME    NOT NULL,
-    END_TIME        DATETIME    NOT NULL
-    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID),
+    END_TIME        DATETIME    NOT NULL,
+    FOREIGN KEY (CusID) REFERENCES CUSTOMER(CusID)
 )

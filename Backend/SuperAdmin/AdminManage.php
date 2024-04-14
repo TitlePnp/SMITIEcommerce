@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $Email = $_POST['Email'];
             $UserName = $_POST['UserName'];
             $Role = $_POST['Role'];
-            $stmt = $connectDB->prepare("UPDATE Customer_account SET Role = ? WHERE Email = ? AND UserName = ?");
+            $stmt = $connectDB->prepare("UPDATE CUSTOMER_ACCOUNT SET Role = ? WHERE Email = ? AND UserName = ?");
             $stmt->bind_param("sss", $Role, $Email, $UserName);
             $stmt->execute();
             $stmt->close();
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         try {
             $Email = $_POST['Email'];
             $UserName = $_POST['UserName'];
-            $stmt = $connectDB->prepare("UPDATE Customer_account SET Role = 'User'  WHERE Email = ? AND UserName = ?");
+            $stmt = $connectDB->prepare("UPDATE CUSTOMER_ACCOUNT SET Role = 'User'  WHERE Email = ? AND UserName = ?");
             $stmt->bind_param("ss", $Email, $UserName);
             $stmt->execute();
             $stmt->close();
