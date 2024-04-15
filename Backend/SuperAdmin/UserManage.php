@@ -6,7 +6,7 @@ function getAllAdmin()
     global $connectDB;
     $stmt = $connectDB->prepare("
     SELECT * 
-    FROM Customer_account 
+    FROM CUSTOMER_ACCOUNT 
     WHERE Role = 'Admin' OR Role = 'SuperAdmin' 
     ORDER BY CASE Role 
         WHEN 'SuperAdmin' THEN 1
@@ -24,7 +24,7 @@ function getAllUser()
     global $connectDB;
     $stmt = $connectDB->prepare("
     SELECT ca.CusID, ca.Email, ca.UserName, c.CusFName, c.CusLName, c.Tel 
-    FROM Customer_account ca JOIN Customer c ON ca.CusID = c.CusID 
+    FROM CUSTOMER_ACCOUNT ca JOIN CUSTOMER c ON ca.CusID = c.CusID 
     WHERE Role = 'User'");
     $stmt->execute();
     $result = $stmt->get_result();
@@ -36,7 +36,7 @@ function searchUser($SearchVal)
     global $connectDB;
     $stmt = $connectDB->prepare("
     SELECT ca.CusID, ca.Email, ca.UserName, c.CusFName, c.CusLName, c.Tel
-    FROM Customer_account ca JOIN Customer c ON ca.CusID = c.CusID
+    FROM CUSTOMER_ACCOUNT ca JOIN CUSTOMER c ON ca.CusID = c.CusID
     WHERE ca.Email LIKE ? OR ca.UserName LIKE ? OR ca.CusID LIKE ? OR c.CusFName LIKE ? OR c.CusLName LIKE ?
     ");
     $stmt->bind_param("sssss", $SearchVal, $SearchVal, $SearchVal, $SearchVal, $SearchVal);
@@ -50,7 +50,7 @@ function getAllLog()
     global $connectDB;
     $stmt = $connectDB->prepare("
     SELECT * 
-    FROM Access_log 
+    FROM ACCESS_LOG 
     ORDER BY Period DESC
     ");
     $stmt->execute();
@@ -63,7 +63,7 @@ function searchLog($SearchVal) {
     global $connectDB;
     $stmt = $connectDB->prepare("
     SELECT *
-    FROM Access_log
+    FROM ACCESS_LOG
     WHERE CusID LIKE ? OR IPAddr LIKE ? OR Action LIKE ? OR Period LIKE ?
     ");
     $stmt->bind_param("ssss", $SearchVal, $SearchVal, $SearchVal, $SearchVal);

@@ -34,7 +34,7 @@ function insertLog($Action, $Period)
         $userIP = "127.0.0.1";
     }
     $NumID = findNumIDLog($CusID);
-    $stmt = $connectDB->prepare("INSERT INTO access_log(CusID, IPAddr, NumID, Action, Period) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $connectDB->prepare("INSERT INTO ACCESS_LOG(CusID, IPAddr, NumID, Action, Period) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("isiss", $CusID, $userIP, $NumID, $Action, $Period);
     $stmt->execute();
     $stmt->close();
@@ -43,7 +43,7 @@ function insertLog($Action, $Period)
 function findNumIDLog($CusID)
 {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT NumID FROM access_log WHERE CusID = ? ORDER BY NumID DESC LIMIT 1");
+    $stmt = $connectDB->prepare("SELECT NumID FROM ACCESS_LOG WHERE CusID = ? ORDER BY NumID DESC LIMIT 1");
     $stmt->bind_param("i", $CusID);
     $stmt->execute();
     $result = $stmt->get_result();

@@ -6,25 +6,25 @@ function getGoogleUserInfo($googleID)
     global $connectDB;
     $stmt = $connectDB->prepare("
     SELECT 
-        customer_account.CusID, 
-        customer_account.UserName, 
-        customer_account.Role, 
-        customer_account.Email,
-        customer.CusFName, 
-        customer.CusLName, 
-        customer.Sex, 
-        customer.Tel, 
-        customer.Address, 
-        customer.Province,
-        customer.Postcode
+        CUSTOMER_ACCOUNT.CusID, 
+        CUSTOMER_ACCOUNT.UserName, 
+        CUSTOMER_ACCOUNT.Role, 
+        CUSTOMER_ACCOUNT.Email,
+        CUSTOMER.CusFName, 
+        CUSTOMER.CusLName, 
+        CUSTOMER.Sex, 
+        CUSTOMER.Tel, 
+        CUSTOMER.Address, 
+        CUSTOMER.Province,
+        CUSTOMER.Postcode
     FROM 
-        customer_account 
+        CUSTOMER_ACCOUNT 
     INNER JOIN 
-        customer 
+        CUSTOMER 
     ON 
-        customer_account.CusID = customer.CusID 
+        CUSTOMER_ACCOUNT.CusID = CUSTOMER.CusID 
     WHERE 
-        customer_account.GoogleID = ?
+        CUSTOMER_ACCOUNT.GoogleID = ?
 ");
     $stmt->bind_param("s", $googleID);
     $stmt->execute();
@@ -40,28 +40,28 @@ function getGoogleUserInfo($googleID)
 function getUserInfoFromCusID($CusID)
 {
     global $connectDB;
-    // Get user info from customer
+    // Get user info from CUSTOMER
     $stmt = $connectDB->prepare("
     SELECT 
-        customer_account.CusID, 
-        customer_account.UserName, 
-        customer_account.Role,
-        customer_account.Email, 
-        customer.CusFName, 
-        customer.CusLName, 
-        customer.Sex, 
-        customer.Tel, 
-        customer.Address,
-        customer.Province,
-        customer.Postcode
+        CUSTOMER_ACCOUNT.CusID, 
+        CUSTOMER_ACCOUNT.UserName, 
+        CUSTOMER_ACCOUNT.Role,
+        CUSTOMER_ACCOUNT.Email, 
+        CUSTOMER.CusFName, 
+        CUSTOMER.CusLName, 
+        CUSTOMER.Sex, 
+        CUSTOMER.Tel, 
+        CUSTOMER.Address,
+        CUSTOMER.Province,
+        CUSTOMER.Postcode
     FROM 
-        customer_account 
+        CUSTOMER_ACCOUNT 
     INNER JOIN 
-        customer 
+        CUSTOMER 
     ON 
-        customer_account.CusID = customer.CusID 
+        CUSTOMER_ACCOUNT.CusID = CUSTOMER.CusID 
     WHERE 
-        customer_account.CusID = ?
+        CUSTOMER_ACCOUNT.CusID = ?
 ");
     $stmt->bind_param("s", $CusID);
     $stmt->execute();
@@ -73,7 +73,7 @@ function getUserInfoFromCusID($CusID)
 function getCusID($googleID)
 {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT CusID FROM customer_account WHERE GoogleID = ?");
+    $stmt = $connectDB->prepare("SELECT CusID FROM CUSTOMER_ACCOUNT WHERE GoogleID = ?");
     $stmt->bind_param("s", $googleID);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -84,7 +84,7 @@ function getCusID($googleID)
 function getAllAddress($CusID)
 {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT c.Address, c.Province, c.Postcode, p.PayerAddress, p.PayerProvince, p.PayerPostcode FROM customer c JOIN Payer p ON c.CusID = ?");
+    $stmt = $connectDB->prepare("SELECT c.Address, c.Province, c.Postcode, p.PayerAddress, p.PayerProvince, p.PayerPostcode FROM CUSTOMER c JOIN Payer p ON c.CusID = ?");
     $stmt->bind_param("s", $CusID);
     $stmt->execute();
     $result = $stmt->get_result();

@@ -38,7 +38,7 @@ function recommendProduct($proID, $type)
 function sumProductOnOrder($proID)
 {
   global $connectDB;
-  $stmt = $connectDB->prepare("SELECT SUM(Qty) FROM invoice_list il JOIN invoice_order iv ON il.InvoiceID = iv.InvoiceID WHERE il.ProID = ? AND iv.Status = 'Ordered'");
+  $stmt = $connectDB->prepare("SELECT SUM(Qty) FROM INVOICE_LIST il JOIN INVOICE_ORDER iv ON il.InvoiceID = iv.InvoiceID WHERE il.ProID = ? AND iv.Status = 'Ordered'");
   $stmt->bind_param("i", $proID);
   $stmt->execute();
   $result = $stmt->get_result();

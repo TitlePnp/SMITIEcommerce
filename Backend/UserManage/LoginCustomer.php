@@ -15,7 +15,7 @@ use \Firebase\JWT\jwt;
 $username = $_POST['username'];
 $password = $_POST['userpassword'];
 
-$stmt = $connectDB->prepare("SELECT `Password`, `Role`, `CusID` FROM customer_account WHERE UserName = ?");
+$stmt = $connectDB->prepare("SELECT `Password`, `Role`, `CusID` FROM CUSTOMER_ACCOUNT WHERE UserName = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();

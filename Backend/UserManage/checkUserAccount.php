@@ -3,7 +3,7 @@ require "../../Components/ConnectDB.php";
 
 function checkUsername($username) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT UserName FROM `customer_account` WHERE UserName = ?");
+    $stmt = $connectDB->prepare("SELECT UserName FROM `CUSTOMER_ACCOUNT` WHERE UserName = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
 
@@ -18,7 +18,7 @@ function checkUsername($username) {
 
 function checkEmail($email) {
     global $connectDB;
-    $stmt = $connectDB->prepare("SELECT Email FROM `customer_account` WHERE Email = ?");
+    $stmt = $connectDB->prepare("SELECT Email FROM `CUSTOMER_ACCOUNT` WHERE Email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
 

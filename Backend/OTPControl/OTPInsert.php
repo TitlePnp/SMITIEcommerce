@@ -14,7 +14,7 @@ $mail = new PHPMailer(true);
 
 try {
 
-    $stmt = $connectDB->prepare("SELECT CusID FROM `customer_account` WHERE Email = ?");
+    $stmt = $connectDB->prepare("SELECT CusID FROM `CUSTOMER_ACCOUNT` WHERE Email = ?");
     $stmt->bind_param("s", $Email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -27,7 +27,7 @@ try {
     $EndTime = date("Y-m-d H:i:s", strtotime('+5 minutes'));
 
 
-    $stmt = $connectDB->prepare("INSERT INTO otp_recover(CusID, EMAIL, OTP, START_TIME, END_TIME) VALUES(?, ?, ?, ?, ?)");
+    $stmt = $connectDB->prepare("INSERT INTO OTP_RECOVER(CusID, EMAIL, OTP, START_TIME, END_TIME) VALUES(?, ?, ?, ?, ?)");
     $stmt->bind_param("issss", $CusID, $Email, $OTP, $StartTime, $EndTime);
     $stmt->execute();
 
