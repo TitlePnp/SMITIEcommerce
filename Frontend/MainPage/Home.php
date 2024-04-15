@@ -1,7 +1,22 @@
 <?php
+require '../../vendor/autoload.php';
+// require_once "../../Backend/UserManage/JWTCheck.php";
+// require '../../Backend/UserManage/SessionManage.php';
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
+// $dotenv->load();
+// use \Firebase\JWT\jwt;
+// use Firebase\JWT\Key;
+// $key = $_ENV['JWT_KEY'];
+// try {
+//     global $key;
+//     $jwt = $_SESSION['tokenJWT'];
+//     $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
+// } catch (Firebase\JWT\ExpiredException $e) {
+//     clearSession();
+//     header("location: ../../Frontend/MainPage/Home.php");
+// }
 require '../../Backend/Authorized/UserAuthorized.php';
 require '../../Backend/Authorized/ManageHeader.php';
-require '../../vendor/autoload.php';
 require_once "../../Backend/ProductQuery/ProductInfo.php";
 require_once "../../Backend/ProductQuery/ProductDetail.php";
 
@@ -160,12 +175,12 @@ require_once "../../Backend/ProductQuery/ProductDetail.php";
         }*/
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         input[type="number"] {
-        -moz-appearance: textfield;
+            -moz-appearance: textfield;
         }
     </style>
 
@@ -366,7 +381,7 @@ require_once "../../Backend/ProductQuery/ProductDetail.php";
                     ?>
                 </div>
             </section>
-            
+
         </div>
 
         <?php

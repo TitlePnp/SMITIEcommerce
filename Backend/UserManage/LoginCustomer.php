@@ -4,6 +4,7 @@ require '../../vendor/autoload.php';
 require '../../Backend/Profile/GetInfo.php';
 require_once "../Log/LogManage.php";
 
+
 date_default_timezone_set('Asia/Bangkok');
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
@@ -34,7 +35,8 @@ if ($result->num_rows > 0) {
             "user" => $username,
             "role" => $row['Role'],
             "iat" => time(),
-            "exp" => time() + (60 * 240)
+            // "exp" => time() + (60 * 240)
+            "exp" => time() + (15)
         );
 
         $jwt = JWT::encode($payload, $key, 'HS256');
