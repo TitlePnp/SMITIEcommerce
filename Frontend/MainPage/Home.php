@@ -4,7 +4,7 @@ require '../../vendor/autoload.php';
 // require '../../Backend/UserManage/SessionManage.php';
 // $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
 // $dotenv->load();
-// use \Firebase\JWT\jwt;
+// use \Firebase\JWT\JWT;
 // use Firebase\JWT\Key;
 // $key = $_ENV['JWT_KEY'];
 // try {

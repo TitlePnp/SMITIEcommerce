@@ -6,7 +6,7 @@ require_once "../vendor/autoload.php";
 // $dotenv->load();
 
 // use Firebase\JWT\Key;
-// use \Firebase\JWT\jwt;
+// use \Firebase\JWT\JWT;
 
 // $key = $_ENV['JWT_KEY'];
 
@@ -76,7 +76,7 @@ echo "ข้อมูลต้นฉบับ: " . $originalData . "\n";
 // $dotenv->load();
 
 // use Firebase\JWT\Key;
-// use \Firebase\JWT\jwt;
+// use \Firebase\JWT\JWT;
 
 // $key = $_ENV['JWT_KEY'];
 

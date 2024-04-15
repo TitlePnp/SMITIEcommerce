@@ -11,7 +11,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.
 $dotenv->load();
 
 use Firebase\JWT\Key;
-use \Firebase\JWT\jwt;
+use \Firebase\JWT\JWT;
 
 $username = $_POST['username'];
 $password = $_POST['userpassword'];
@@ -35,8 +35,7 @@ if ($result->num_rows > 0) {
             "user" => $username,
             "role" => $row['Role'],
             "iat" => time(),
-            // "exp" => time() + (60 * 240)
-            "exp" => time() + (15)
+            "exp" => time() + (60 * 240)
         );
 
         $jwt = JWT::encode($payload, $key, 'HS256');

@@ -9,7 +9,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.
 $dotenv->load();
 
 use Firebase\JWT\Key;
-use \Firebase\JWT\jwt;
+use \Firebase\JWT\JWT;
 
 $key = $_ENV['JWT_KEY'];
 
