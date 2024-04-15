@@ -1,5 +1,5 @@
 <?php
-require "../../Components/connectDB.php";
+require "../../Components/ConnectDB.php";
 require '../../vendor/autoload.php';
 require '../../Backend/Profile/GetInfo.php';
 require_once "../Log/LogManage.php";
