@@ -17,7 +17,6 @@ if (isset($_SESSION["tokenJWT"])) {
     $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
     $CusID = $decoded->cusid;
     $userInfo = getUserInfoFromCusID($CusID);
-    var_dump($CusID);
 } else if (isset($_SESSION["tokenGoogle"])) {
     $userInfo = getGoogleUserInfo($_SESSION["tokenGoogle"]);
     $CusID = $userInfo['CusID'];

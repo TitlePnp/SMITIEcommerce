@@ -4,7 +4,6 @@
   require '../../Components/ConnectDB.php';
   require '../../Backend/Authorized/GetID.php';
   $id = $_POST['id'];
-  echo $id;
   $fName = $_POST['firstName'];
   $lName = $_POST['lastName'];
   $sex = isset($_POST['sex']) ? $_POST['sex'] : "" ;

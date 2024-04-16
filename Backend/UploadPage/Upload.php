@@ -107,6 +107,4 @@
     $stmt->close();
     updateInvoice($invoiceID);
   }
-
-
 ?>

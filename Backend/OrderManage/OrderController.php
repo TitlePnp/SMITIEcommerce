@@ -83,6 +83,8 @@ try {
         $taxID = NULL;
         $havePayer = getPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID);
         $taxID = "";
+        $tag = "";
+        $ciphertext = NULL;
         if ($havePayer == null) {
             insertPayer($taxID, $PayerFName, $PayerLName, $PayerSex, $PayerTel, $PayerAddr, $PayerProvince, $PayerPostcode, $CusID, $tag);
             $lastPayerId = getLastPayerID($CusID);
@@ -113,7 +115,6 @@ try {
         updateInvoice($newInvoiceID);
     }
     updateOnHand($ProIds);
-    echo "Success";
 
     if ($PaymentMethod == "Transfer") {
         $_SESSION['InvoiceID'] = $newInvoiceID;

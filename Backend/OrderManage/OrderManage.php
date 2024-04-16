@@ -265,7 +265,7 @@ function cutStockByInvoice($InvoiceID)
 function updateInvoice($invoiceID)
 {
     global $connectDB;
-    $status = 'Cpmpleted';
+    $status = 'Completed';
     $stmt = $connectDB->prepare("UPDATE INVOICE_ORDER SET Status = ? WHERE InvoiceID = ?");
     $stmt->bind_param("ss", $status, $invoiceID);
     $stmt->execute();

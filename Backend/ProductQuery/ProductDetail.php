@@ -21,14 +21,15 @@ function mainProduct($proID)
 function recommendProduct($proID, $type)
 {
   global $connectDB;
+  $qty = 0;
   $stmt = $connectDB->prepare(
     "SELECT p.ProID ,p.ProName, p.Author, p.Description, p.PricePerUnit, p.StockQty, p.ImageSource, p.Status, pt.TypeName 
       FROM PRODUCT p
       JOIN PRODUCT_TYPE pt ON p.TypeID = pt.TypeID
-      WHERE p.ProID != ? AND p.TypeID = pt.TypeID AND pt.TypeName = ?
+      WHERE p.ProID != ? AND p.TypeID = pt.TypeID AND pt.TypeName = ? AND p.StockQty != ?
       ORDER BY RAND()"
   );
-  $stmt->bind_param("is", $proID, $type);
+  $stmt->bind_param("isi", $proID, $type, $qty);
   $stmt->execute();
   $result = $stmt->get_result();
   $stmt->close();

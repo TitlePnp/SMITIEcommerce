@@ -154,9 +154,9 @@
   <div class="invoice-box">
     <table>
       <tr class="top">
-		<td colspan="5">
-		  <table>
-			<tr>
+		    <td colspan="5">
+		      <table>
+			      <tr>
               <td class="title">
                 <img src="../../Pictures/logo2.png" alt="logo" style="width: 10%;" />
               </td>
@@ -227,17 +227,21 @@
         $noVat = 0;
         $vat = 0;
         $total = 0;
+        $transfer = false;
         while($row = $product->fetch_assoc()) {
           $proName = mb_strlen($row['ProName']) > 30 ? mb_substr($row['ProName'], 0, 30) . '...' : $row['ProName'];
           $totalOnProduct = $row['Qty'] * $row['PricePerUnit'];
           $noVat = $row['TotalPrice'];
           $vat = $row['VAT'];
           $total = $noVat + $vat;
-          $generator = new Generator();
-          $qrCode = $generator->generate(
-            target: "098-888-8888",
-            amount: number_format($total, 2)
-        );
+          if ($row['Channel'] == "Transfer") {
+            $transfer = true;
+            $generator = new Generator();
+            $qrCode = $generator->generate(
+              target: "098-888-8888",
+              amount: number_format($total, 2)
+            );
+          }
       ?>
 	  <tr class="item">
         <td>
@@ -272,10 +276,12 @@
       <td class="black center"><?php echo number_format($total, 2);?></td>
     </tr>
 	</table>
-    <img src="../../Pictures/PromptPay.png" alt="PromptPay Logo" style="margin-top: 10px; height: 26px; width: auto;"><br />
-    <?php echo '<img src="' . $qrCode->asDataUri() . '" style="height: 80px; width: auto;"/>'; ?>
-    <p class="address">สามารถชำระเงินผ่าน QR Code ด้านบน<br/>
-    โปรดเก็บหลักฐานการชำระเงิน เช่น สลิปการโอนเงิน และแจ้งการชำระ โดยระบุเลขที่เอกสารใบแจ้งหนี้นี้</p>
+    <?php if ($transfer) { ?>
+      <img src="../../Pictures/PromptPay.png" alt="PromptPay Logo" style="margin-top: 10px; height: 26px; width: auto;"><br />
+      <?php echo '<img src="' . $qrCode->asDataUri() . '" style="height: 80px; width: auto;"/>'; ?>
+      <p class="address">สามารถชำระเงินผ่าน QR Code ด้านบน<br/>
+      โปรดเก็บหลักฐานการชำระเงิน เช่น สลิปการโอนเงิน และแจ้งการชำระ โดยระบุเลขที่เอกสารใบแจ้งหนี้นี้</p>
+    <?php } ?>
   </div>
 </body>
 </html>

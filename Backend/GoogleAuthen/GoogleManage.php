@@ -8,26 +8,21 @@ require '../../Components/ConnectDB.php';
 require 'Google_OAuth.php';
 require '../../Backend/Profile/GetInfo.php';
 
-
-
 if (isset($_GET['code'])) {
 
     if (isset($token['error'])) {
         // Redirect to login page
-        header('Location: http://localhost/SmitiShop/Frontend/SignIn_Page/SignIn.php');
+        header('Location: http://smiti.shop/SmitiShop/Frontend/SignIn_Page/SignIn');
         exit;
     }
 
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
     $_SESSION['tokenGoogle'] = $token['access_token'];
-    //echo $token['access_token'];
     $client->setAccessToken($token['access_token']);
-    //var_dump($client->getAccessToken());
 
     $google_oauth = new Google_Service_Oauth2($client);
 
     $google_oauth_account_info = $google_oauth->userinfo->get();
-    // var_dump($google_oauth_account_info);
     $email = $google_oauth_account_info->email;
     $name = $google_oauth_account_info->name;
     $userId = $google_oauth_account_info->id;
@@ -47,10 +42,9 @@ if (isset($_GET['code'])) {
             $_SESSION['tokenGoogle'] = $userId;
             require_once "../Log/LogManage.php";
             insertLog("Login with Google" . $row['Role'] . "", date("Y-m-d H:i:s"));
-            header('Location: http://localhost/SmitiShop/Frontend/Admin/DashBoard.php');
+            header('Location: http://smiti.shop/SmitiShop/Frontend/Admin/DashBoard');
             exit();
         } else if ($row['Role'] == 'User') {
-            echo "User";
             $_SESSION['email'] = $email;
             $_SESSION['name'] = $name;
             $_SESSION['tokenGoogle'] = $userId;
@@ -60,12 +54,12 @@ if (isset($_GET['code'])) {
                 if ($row['CusFName'] == null || $row['CusLName'] == null) {
                     require_once "../Log/LogManage.php";
                     insertLog("Login with Google", date("Y-m-d H:i:s"));
-                    header('Location: http://localhost/SmitiShop/Frontend/Profile/Information.php');
+                    header('Location: http://smiti.shop/SmitiShop/Frontend/Profile/Information');
                     exit();
                 } else {
                     require_once "../Log/LogManage.php";
                     insertLog("Login with Google", date("Y-m-d H:i:s"));
-                    header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
+                    header('Location: http://smiti.shop/SmitiShop/Frontend/MainPage/Home');
                     exit();
                 }
             }
@@ -95,8 +89,7 @@ if (isset($_GET['code'])) {
         $_SESSION['tokenGoogle'] = $userId;
         require_once "../Log/LogManage.php";
         insertLog("Login with Google", date("Y-m-d H:i:s"));
-        header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
+        header('Location: http://smiti.shop/SmitiShop/Frontend/MainPage/Home');
         // print_r($_SESSION);
-
     }
 }

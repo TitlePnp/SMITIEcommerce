@@ -4,7 +4,6 @@
   require '../../Components/ConnectDB.php';
   if(isset($_POST['ReceiptID'])){
     $receiptID = $_POST['ReceiptID'];
-    echo $receiptID;
   } else {
     header("Location: ../../Frontend/MainPage/Home.php");
   }

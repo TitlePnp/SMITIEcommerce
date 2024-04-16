@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute();
             $stmt->close();
             $connectDB->close();
-            echo "Success";
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -25,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute();
             $stmt->close();
             $connectDB->close();
-            echo "Success";
         } catch (Exception $e) {
             echo $e->getMessage();
         }

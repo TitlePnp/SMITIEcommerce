@@ -16,8 +16,6 @@
   }
 
   function removeFromCart($id, $proID) {
-    echo "removeFromCart";
-    echo $proID;
     global $connectDB;
     $qty = 0;
     $newStatus = 'Cancel';

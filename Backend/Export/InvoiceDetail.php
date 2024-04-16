@@ -28,7 +28,6 @@
       "SELECT ir.PayerID
       FROM INVOICE_ORDER ir
       WHERE ir.InvoiceID = ?");
-      echo $invoiceID;
     $stmt->bind_param("s", $invoiceID);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -53,7 +52,7 @@
   function ProductDetail($invoiceID) {
     global $connectDB;
     $stmt = $connectDB->prepare(
-      "SELECT p.ProName, p.Author, p.PricePerUnit, il.Qty, i.TotalPrice, i.VAT
+      "SELECT p.ProName, p.Author, p.PricePerUnit, il.Qty, i.TotalPrice, i.VAT, i.Channel
       FROM INVOICE_LIST il
       JOIN PRODUCT p ON il.ProID = p.ProID
       JOIN INVOICE_ORDER i ON il.InvoiceID = i.InvoiceID

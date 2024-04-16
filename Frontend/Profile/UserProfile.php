@@ -1,5 +1,5 @@
 <?php
-require_once "../../Backend/Authorized/UserAuthorized.php";
+require '../../Backend/Authorized/NoGuestAuthorized.php';
 require_once "../../Backend/Authorized/ManageHeader.php";
 require_once "../../Backend/UserManage/UserInfo.php";
 require_once "../../Backend/OrderManage/OrderQuery.php";
@@ -174,44 +174,7 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                                     $order['Status'] = $Status;
                                 }
 
-                                if ($order['Status'] == 'Ordered' || $order['Status'] == 'COD') {
-                                    // OrderedOrder($order, $order['InvoiceID']);
-                                    echo "<form action='../OrderStatus/OrderStatus.php' method='POST'>";
-                                    $result2 = getOrderListDetail($order['InvoiceID']);
-                                    echo '<ul role="list" class="divide-y divide-gray-100 hover:bg-gray-100 rounded-lg px-2">';
-                                    echo '    <li class="flex justify-between gap-x-6 py-5">';
-                                    echo '        <div class="flex min-w-0 gap-x-4">';
-                                    echo '        <div class="flex justify-center items-center">';
-                                    echo "            <i class='bx bxs-cart-alt text-2xl text-blue-400' ></i>";
-                                    echo "           </div>";
-                                    echo '            <div class="min-w-0 flex-auto">';
-                                    echo "                <p class='text-sm font-semibold leading-6 text-gray-900'>เลขคำสั่งซื้อ: {$order['InvoiceID']}</p>";
-
-                                    echo "                 <div class='flex flex-row'>";
-                                    $count = 0;
-                                    while ($orderList = $result2->fetch_assoc()) {
-                                        $count++;
-                                        if ($count > 3) {
-                                            echo "<p class='mt-1 truncate text-sm text-gray-500 mr-1'>...</p>";
-                                            break;
-                                        }
-                                        echo "<p class='mt-1 truncate text-sm text-gray-500 mr-1'>{$orderList['ProName']}, </p>";
-                                    };
-                                    echo "                 </div>";
-                                    echo '            </div>';
-                                    echo '        </div>';
-                                    echo '        <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">';
-                                    echo "<div class='flex'>";
-                                    echo "           <p class='text-sm leading-6 text-gray-900 mr-2'>สถานะ:</p>";
-                                    echo "           <p class='text-sm leading-6  text-blue-500'>{$order['Status']}</p>";
-                                    echo "</div>";
-                                    echo '            <button type="submit"><p class="mt-1 text-xs leading-5 hover:text-blue-500 cursor-pointer text-gray-500">กดเพื่อดูรายละเอียดเพิ่มเติม</p></button>';
-                                    echo "<input type='hidden' name='invoiceID' value='" . $order['InvoiceID'] . "'>";
-                                    echo '        </div>';
-                                    echo '    </li>';
-                                    echo '</ul>';
-                                    echo "</form>";
-                                } else if ($order['Status'] == 'Completed') {
+                                if ($order['Status'] == 'Completed') {
                                     // CompleteOrder($order, $order['InvoiceID']);
                                     $result2 = getOrderListDetail($order['InvoiceID']);
                                     echo "<form action='../OrderStatus/OrderStatus.php' method='POST'>";
@@ -283,7 +246,44 @@ $orders = showOrderSplitPage($CusID, $startOrder, $ordersPerPage);
                                     echo '    </li>';
                                     echo '</ul>';
                                     echo "</form>";
-                                }
+                                } else {
+                                    // OrderedOrder($order, $order['InvoiceID']);
+                                    echo "<form action='../OrderStatus/OrderStatus.php' method='POST'>";
+                                    $result2 = getOrderListDetail($order['InvoiceID']);
+                                    echo '<ul role="list" class="divide-y divide-gray-100 hover:bg-gray-100 rounded-lg px-2">';
+                                    echo '    <li class="flex justify-between gap-x-6 py-5">';
+                                    echo '        <div class="flex min-w-0 gap-x-4">';
+                                    echo '        <div class="flex justify-center items-center">';
+                                    echo "            <i class='bx bxs-cart-alt text-2xl text-blue-400' ></i>";
+                                    echo "           </div>";
+                                    echo '            <div class="min-w-0 flex-auto">';
+                                    echo "                <p class='text-sm font-semibold leading-6 text-gray-900'>เลขคำสั่งซื้อ: {$order['InvoiceID']}</p>";
+
+                                    echo "                 <div class='flex flex-row'>";
+                                    $count = 0;
+                                    while ($orderList = $result2->fetch_assoc()) {
+                                        $count++;
+                                        if ($count > 3) {
+                                            echo "<p class='mt-1 truncate text-sm text-gray-500 mr-1'>...</p>";
+                                            break;
+                                        }
+                                        echo "<p class='mt-1 truncate text-sm text-gray-500 mr-1'>{$orderList['ProName']}, </p>";
+                                    };
+                                    echo "                 </div>";
+                                    echo '            </div>';
+                                    echo '        </div>';
+                                    echo '        <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">';
+                                    echo "<div class='flex'>";
+                                    echo "           <p class='text-sm leading-6 text-gray-900 mr-2'>สถานะ:</p>";
+                                    echo "           <p class='text-sm leading-6  text-blue-500'>{$order['Status']}</p>";
+                                    echo "</div>";
+                                    echo '            <button type="submit"><p class="mt-1 text-xs leading-5 hover:text-blue-500 cursor-pointer text-gray-500">กดเพื่อดูรายละเอียดเพิ่มเติม</p></button>';
+                                    echo "<input type='hidden' name='invoiceID' value='" . $order['InvoiceID'] . "'>";
+                                    echo '        </div>';
+                                    echo '    </li>';
+                                    echo '</ul>';
+                                    echo "</form>";
+                                } 
                             }
                         }
                         ?>
