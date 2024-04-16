@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'GoogleIdRole.php';
+require 'CheckTimeout.php';
 require_once '../../Backend/UserManage/UserInfo.php';
 require '../../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../Components', 'config.env');
