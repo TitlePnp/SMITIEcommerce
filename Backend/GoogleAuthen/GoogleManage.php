@@ -12,7 +12,7 @@ if (isset($_GET['code'])) {
 
     if (isset($token['error'])) {
         // Redirect to login page
-        header('Location: http://smiti.shop/SmitiShop/Frontend/SignIn_Page/SignIn');
+        header('Location: http://smiti.shop/Frontend/SignIn_Page/SignIn');
         exit;
     }
 
@@ -34,7 +34,6 @@ if (isset($_GET['code'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // var_dump($result);
         $row = $result->fetch_assoc();
         if ($row['Role'] == 'SuperAdmin' || $row['Role'] == 'Admin') {
             $_SESSION['email'] = $email; 
@@ -42,7 +41,7 @@ if (isset($_GET['code'])) {
             $_SESSION['tokenGoogle'] = $userId;
             require_once "../Log/LogManage.php";
             insertLog("Login with Google" . $row['Role'] . "", date("Y-m-d H:i:s"));
-            header('Location: http://smiti.shop/SmitiShop/Frontend/Admin/DashBoard');
+            header('Location: https://smiti.shop/Frontend/Admin/Dashboard');
             exit();
         } else if ($row['Role'] == 'User') {
             $_SESSION['email'] = $email;
@@ -54,19 +53,17 @@ if (isset($_GET['code'])) {
                 if ($row['CusFName'] == null || $row['CusLName'] == null) {
                     require_once "../Log/LogManage.php";
                     insertLog("Login with Google", date("Y-m-d H:i:s"));
-                    header('Location: http://smiti.shop/SmitiShop/Frontend/Profile/Information');
+                    header('Location: https://smiti.shop/Frontend/Profile/Information');
                     exit();
                 } else {
                     require_once "../Log/LogManage.php";
                     insertLog("Login with Google", date("Y-m-d H:i:s"));
-                    header('Location: http://smiti.shop/SmitiShop/Frontend/MainPage/Home');
+                    header('Location: https://smiti.shop/Frontend/MainPage/Home');
                     exit();
                 }
             }
         }
 
-        // header('Location: http://localhost/SmitiShop/Frontend/MainPage/Home.php');
-        // print_r($_SESSION);
     } else {
         $stmt = $connectDB->prepare("INSERT INTO CUSTOMER(CusFName, CusLName, Sex, Tel, Address) VALUES 
     (?,'','','','')");
@@ -89,7 +86,7 @@ if (isset($_GET['code'])) {
         $_SESSION['tokenGoogle'] = $userId;
         require_once "../Log/LogManage.php";
         insertLog("Login with Google", date("Y-m-d H:i:s"));
-        header('Location: http://smiti.shop/SmitiShop/Frontend/MainPage/Home');
-        // print_r($_SESSION);
+        header('Location: https://smiti.shop/Frontend/MainPage/Home');
+        exit();
     }
 }

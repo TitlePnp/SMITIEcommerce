@@ -51,7 +51,7 @@ function sumProductOnOrder($proID)
 function getQtyWarningProduct() {
   //get Qty of each product orderby less qty
   global $connectDB;
-  $stmt = $connectDB->prepare("SELECT ProID, ProName, StockQty FROM product WHERE StockQty < 5  ORDER BY StockQty ASC LIMIT 10");
+  $stmt = $connectDB->prepare("SELECT ProID, ProName, StockQty FROM PRODUCT WHERE StockQty < 5  ORDER BY StockQty ASC LIMIT 10");
   $stmt->execute();
   $result = $stmt->get_result();
   $stmt->close();
@@ -61,9 +61,9 @@ function getQtyWarningProduct() {
 function getQtyPaidStatusCompareStockQty(){
   global $connectDB;
   $stmt = $connectDB->prepare("SELECT p.ProID, p.ProName, p.StockQty, r.InvoiceID, SUM(il.Qty) as Qty 
-  FROM product p 
-  JOIN invoice_list il ON p.ProID = il.ProID 
-  JOIN receipt r ON r.InvoiceID = il.InvoiceID 
+  FROM PRODUCT p 
+  JOIN INVOICE_LIST il ON p.ProID = il.ProID 
+  JOIN RECEIPT r ON r.InvoiceID = il.InvoiceID 
   WHERE r.Status = 'COD' OR r.Status = 'Paid' 
   GROUP BY p.ProID, p.ProName, p.StockQty, r.InvoiceID -- เพิ่ม r.InvoiceID เข้าไปใน GROUP BY
   ORDER BY r.InvoiceID

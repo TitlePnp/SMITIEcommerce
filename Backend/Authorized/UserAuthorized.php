@@ -16,7 +16,7 @@ if (isset($_SESSION['tokenJWT'])) {
   $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
   $role = $decoded->role;
   if ($role == "Admin") {
-    header('Location: ../../Frontend/Admin/DashBoard.php');
+    header('Location: ../../Frontend/Admin/Dashboard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
     header('Location: ../../Frontend/SuperAdmin/SuperAdminDashboard.php');
@@ -25,7 +25,7 @@ if (isset($_SESSION['tokenJWT'])) {
 } elseif (isset($_SESSION['tokenGoogle'])) {  
   $role = getRole($_SESSION['tokenGoogle']);
   if ($role == "Admin") {
-    header('Location: ../../Frontend/Admin/DashBoard.php');
+    header('Location: ../../Frontend/Admin/Dashboard.php');
     exit();
   } elseif ($role == "SuperAdmin") {
     header('Location: ../../Frontend/SuperAdmin/SuperAdminDashboard.php');

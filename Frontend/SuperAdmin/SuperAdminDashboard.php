@@ -52,7 +52,11 @@ date_default_timezone_set('Asia/Bangkok');
             <?php
             $TotalIncomeResult = getSumAllProductSell();
             $TotalIncome = $TotalIncomeResult['Income'];
-            $TotalIncome = number_format($TotalIncome, 2);
+            if ($TotalIncome == null) {
+              $TotalIncome = 0;
+            } else {
+              $TotalIncome = number_format($TotalIncome, 2);
+            }
             echo "<p class='text-2xl font-semibold text-green-400'>" . $TotalIncome . "</p>";
             echo "<p class='text-base font-medium ml-2'>บาท</p>";
             ?>
@@ -72,7 +76,11 @@ date_default_timezone_set('Asia/Bangkok');
             <?php
             $TotalProductSellResult = getSumQtyAllProductSell();
             $TotalProductSell = $TotalProductSellResult['Qty'];
-            $TotalProductSell = number_format($TotalProductSell);
+            if ($TotalProductSell == null) {
+              $TotalProductSell = 0;
+            } else {
+              $TotalProductSell = number_format($TotalProductSell);
+            }
             echo "<p class='text-2xl font-medium text-cyan-500'>" . $TotalProductSell . "</p>";
             echo "<p class='text-base font-medium ml-2'>รายการ</p>";
             ?>

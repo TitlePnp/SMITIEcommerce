@@ -1,1 +1,5 @@
 DirectoryIndex Frontend/MainPage/Home.php
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]

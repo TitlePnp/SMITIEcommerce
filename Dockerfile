@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8
+ARG PHP_VERSION=8.2
 FROM php:${PHP_VERSION}-apache
 RUN apt-get update && \
     apt-get install -y \
@@ -10,5 +10,6 @@ RUN apt-get update && \
     && docker-php-ext-install mysqli \
     && groupadd -r apache \
     && useradd -r -g apache apache-user
+RUN a2enmod rewrite    
 USER apache-user
 COPY . /var/www/html/
