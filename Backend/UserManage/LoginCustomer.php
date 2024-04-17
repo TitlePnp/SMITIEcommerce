@@ -37,8 +37,8 @@ if ($result->num_rows > 0) {
             "iat" => time(),
             "exp" => time() + (60 * 240)
         );
-
         $jwt = JWT::encode($payload, $key, 'HS256');
+        setcookie('tokenJWT', $jwt, time() + (60 * 240), "/", "", false, true);
 
         $_SESSION['tokenJWT'] = $jwt;
         $noData = getInfo($CusID);
